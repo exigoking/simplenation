@@ -1,0 +1,7 @@
+<div class="suggestions">
+          		{% if suggestions %}
+					{% for suggestion in suggestions %}
+					<p class="suggestion" id = "suggestion-{{suggestion.id}}"><a href="{% url 'term' suggestion.slug %}">{{ suggestion.name }}</a></p>
+					{% endfor %}
+				{% endif %}
+</div>

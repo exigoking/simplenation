@@ -1,0 +1,42 @@
+{% extends 'simplenation/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Sign in{% endblock %}
+
+{% block body_block %}
+
+	<h4>Sign in</h4>
+	{% if messages %}
+	<ul class="messages">
+	    {% for message in messages %}
+	    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+	        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+	        {{ message }}
+	    </li>
+	    {% endfor %}
+	</ul>
+	{% endif %}
+
+	{% if user.is_authenticated %}
+
+	<h3> Dear {{ user.username }}, you are currently logged in</h3>
+	{% else %}
+	<form id="login_form" method="post" action="{% url 'signin' %}"/>
+	
+		{% csrf_token %}
+		<input type="text" name="username" value="" size="35" placeholder="Enter username" />
+		<br />
+		<input type="password" name="password" value="" size="35" placeholder="Enter password" />
+		<br />	
+
+		<input type="submit" name="submit" value="Sign in" />
+		<input type="hidden" name="next" value="{{ next }}">
+	</form>
+
+	<p><a href="{% url 'reset_password' %}">Forgot your password?</a></p>
+	<p><a href="{% url 'register' %}?next={{ request.get_full_path|urlencode }}">Sign up</a></p>
+	{% endif %}
+{% endblock %}
+
+

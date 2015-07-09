@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+
+
+		{% if terms_tag_filtered %}
+			<ul>
+				{% for term in terms_tag_filtered %}
+				<li><a href="{% url 'term' term.slug %}">{{ term.name }}</a></li>
+				{% endfor %}
+			</ul>
+		{% endif %}
+

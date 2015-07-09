@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+
+
+	{% if tags %}
+		{% for tag in tags %}
+		<div id="tag-filter-{{ tag.id }}" class="tag-filtering" style="display:inline;">
+		<button type='submit' id='tag-choose-{{ tag.id }}' class='tag-choose' data-tagid='{{tag.id}}' data-tagname='{{tag.name}}'> {{tag.name}} </button><button id="tag-unchoose-{{tag.id}}" data-tagname="{{tag.name}}" data-tagid="{{tag.id}}" type="submit" class="tag-unchoose">x</button>
+		</div>
+		{% endfor %}
+	{% else %}
+		<p>{{ no_tags_message }}</p>
+	{% endif %}

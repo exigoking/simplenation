@@ -1,0 +1,227 @@
+[Fri Jun 26 22:40:36 2015] [info] mod_wsgi (pid=4881): Attach interpreter ''.
+[Fri Jun 26 22:40:36 2015] [info] mod_wsgi (pid=4881): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Fri Jun 26 22:40:36 2015] [info] mod_wsgi (pid=4881): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Fri Jun 26 22:40:36 2015] [info] mod_wsgi (pid=4882): Attach interpreter ''.
+[Fri Jun 26 22:40:36 2015] [info] mod_wsgi (pid=4882): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Fri Jun 26 22:40:36 2015] [info] mod_wsgi (pid=4882): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Fri Jun 26 22:40:37 2015] [info] mod_wsgi (pid=4882): Create interpreter 'dev.djangobook.com|'.
+[Fri Jun 26 22:40:37 2015] [info] mod_wsgi (pid=4882): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Fri Jun 26 22:40:37 2015] [info] mod_wsgi (pid=4882): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Fri Jun 26 22:40:37 2015] [info] [client 127.0.0.1] mod_wsgi (pid=4882, process='djangobook.com', application='dev.djangobook.com|'): Loading WSGI script '/Users/timurmalgazhdarov/Documents/djangobook/djangobook/wsgi.py'.
+[Fri Jun 26 22:40:39 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/simplenation-ajax.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 22:40:39 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/autocomplete/src/jquery.autocomplete.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 22:42:14 2015] [error] [client 127.0.0.1] (13)Permission denied: access to /simplenation/ denied (filesystem path '/Users/timurmalgazhdarov/Documents/djangobook/djangobook') because search permissions are missing on a component of the path
+[Fri Jun 26 22:42:31 2015] [info] mod_wsgi (pid=4881): Create interpreter 'dev.djangobook.com|'.
+[Fri Jun 26 22:42:32 2015] [info] mod_wsgi (pid=4881): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Fri Jun 26 22:42:32 2015] [info] mod_wsgi (pid=4881): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Fri Jun 26 22:42:32 2015] [info] [client 127.0.0.1] mod_wsgi (pid=4881, process='djangobook.com', application='dev.djangobook.com|'): Loading WSGI script '/Users/timurmalgazhdarov/Documents/djangobook/djangobook/wsgi.py'.
+[Fri Jun 26 22:42:40 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/autocomplete/src/jquery.autocomplete.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 22:42:40 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/simplenation-ajax.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 22:43:32 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/simplenation-ajax.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 22:43:32 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/autocomplete/src/jquery.autocomplete.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 22:43:42 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/simplenation-ajax.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 22:43:42 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/autocomplete/src/jquery.autocomplete.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 22:43:52 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/simplenation-ajax.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 22:43:52 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/autocomplete/src/jquery.autocomplete.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 22:43:55 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/simplenation-ajax.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 22:43:55 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/autocomplete/src/jquery.autocomplete.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 22:43:56 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/simplenation-ajax.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 22:43:56 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/autocomplete/src/jquery.autocomplete.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 22:43:57 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/simplenation-ajax.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 22:43:57 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/autocomplete/src/jquery.autocomplete.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 22:43:58 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/simplenation-ajax.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 22:43:58 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/autocomplete/src/jquery.autocomplete.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 22:43:59 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/simplenation-ajax.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 22:43:59 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/autocomplete/src/jquery.autocomplete.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 22:44:03 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/simplenation-ajax.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 22:44:03 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/autocomplete/src/jquery.autocomplete.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 22:44:04 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/simplenation-ajax.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 22:44:04 2015] [error] [client 127.0.0.1] client denied by server configuration: /Users/timurmalgazhdarov/Documents/djangobook/static/js/autocomplete/src/jquery.autocomplete.js, referer: http://dev.djangobook.com/simplenation/
+[Fri Jun 26 16:44:40 2015] [info] mod_wsgi (pid=4881): Shutdown requested 'djangobook.com'.
+[Fri Jun 26 16:44:40 2015] [info] mod_wsgi (pid=4882): Shutdown requested 'djangobook.com'.
+[Fri Jun 26 16:44:41 2015] [info] mod_wsgi (pid=4882): Stopping process 'djangobook.com'.
+[Fri Jun 26 16:44:41 2015] [info] mod_wsgi (pid=4882): Destroying interpreters.
+[Fri Jun 26 16:44:41 2015] [info] mod_wsgi (pid=4882): Destroy interpreter 'dev.djangobook.com|'.
+[Fri Jun 26 16:44:41 2015] [info] mod_wsgi (pid=4882): End interpreter 'dev.djangobook.com|'.
+[Fri Jun 26 16:44:41 2015] [info] mod_wsgi (pid=4881): Stopping process 'djangobook.com'.
+[Fri Jun 26 16:44:41 2015] [info] mod_wsgi (pid=4881): Destroying interpreters.
+[Fri Jun 26 16:44:41 2015] [info] mod_wsgi (pid=4881): Destroy interpreter 'dev.djangobook.com|'.
+[Fri Jun 26 16:44:41 2015] [info] mod_wsgi (pid=4881): End interpreter 'dev.djangobook.com|'.
+[Fri Jun 26 16:44:41 2015] [info] mod_wsgi (pid=4881): Cleanup interpreter ''.
+[Fri Jun 26 16:44:41 2015] [info] mod_wsgi (pid=4882): Cleanup interpreter ''.
+[Fri Jun 26 16:44:41 2015] [info] mod_wsgi (pid=4882): Terminating Python.
+[Fri Jun 26 16:44:41 2015] [info] mod_wsgi (pid=4881): Terminating Python.
+[Fri Jun 26 16:44:41 2015] [info] mod_wsgi (pid=4881): Python has shutdown.
+[Fri Jun 26 16:44:41 2015] [info] mod_wsgi (pid=4882): Python has shutdown.
+[Fri Jun 26 22:44:45 2015] [info] mod_wsgi (pid=4904): Attach interpreter ''.
+[Fri Jun 26 22:44:45 2015] [info] mod_wsgi (pid=4905): Attach interpreter ''.
+[Fri Jun 26 22:44:45 2015] [info] mod_wsgi (pid=4904): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Fri Jun 26 22:44:45 2015] [info] mod_wsgi (pid=4905): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Fri Jun 26 22:44:45 2015] [info] mod_wsgi (pid=4905): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Fri Jun 26 22:44:45 2015] [info] mod_wsgi (pid=4904): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Fri Jun 26 22:44:45 2015] [info] mod_wsgi (pid=4904): Create interpreter 'dev.djangobook.com|'.
+[Fri Jun 26 22:44:45 2015] [info] mod_wsgi (pid=4904): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Fri Jun 26 22:44:45 2015] [info] mod_wsgi (pid=4904): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Fri Jun 26 22:44:45 2015] [info] [client 127.0.0.1] mod_wsgi (pid=4904, process='djangobook.com', application='dev.djangobook.com|'): Loading WSGI script '/Users/timurmalgazhdarov/Documents/djangobook/djangobook/wsgi.py'.
+[Fri Jun 26 22:44:55 2015] [info] mod_wsgi (pid=4905): Create interpreter 'dev.djangobook.com|'.
+[Fri Jun 26 22:44:55 2015] [info] mod_wsgi (pid=4905): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Fri Jun 26 22:44:55 2015] [info] mod_wsgi (pid=4905): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Fri Jun 26 22:44:55 2015] [info] [client 127.0.0.1] mod_wsgi (pid=4905, process='djangobook.com', application='dev.djangobook.com|'): Loading WSGI script '/Users/timurmalgazhdarov/Documents/djangobook/djangobook/wsgi.py'.
+[Tue Jun 30 11:47:27 2015] [info] mod_wsgi (pid=84): Attach interpreter ''.
+[Tue Jun 30 11:47:27 2015] [info] mod_wsgi (pid=84): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Tue Jun 30 11:47:27 2015] [info] mod_wsgi (pid=84): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Tue Jun 30 11:47:27 2015] [info] mod_wsgi (pid=85): Attach interpreter ''.
+[Tue Jun 30 11:47:27 2015] [info] mod_wsgi (pid=85): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Tue Jun 30 11:47:27 2015] [info] mod_wsgi (pid=85): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Wed Jul 01 01:07:10 2015] [info] mod_wsgi (pid=84): Shutdown requested 'djangobook.com'.
+[Wed Jul 01 01:07:10 2015] [info] mod_wsgi (pid=85): Shutdown requested 'djangobook.com'.
+[Wed Jul 01 01:07:11 2015] [info] mod_wsgi (pid=84): Stopping process 'djangobook.com'.
+[Wed Jul 01 01:07:11 2015] [info] mod_wsgi (pid=85): Stopping process 'djangobook.com'.
+[Wed Jul 01 01:07:11 2015] [info] mod_wsgi (pid=85): Destroying interpreters.
+[Wed Jul 01 01:07:11 2015] [info] mod_wsgi (pid=84): Destroying interpreters.
+[Wed Jul 01 01:07:11 2015] [info] mod_wsgi (pid=85): Cleanup interpreter ''.
+[Wed Jul 01 01:07:11 2015] [info] mod_wsgi (pid=84): Cleanup interpreter ''.
+[Wed Jul 01 01:07:16 2015] [info] mod_wsgi (pid=84): Aborting process 'djangobook.com'.
+[Wed Jul 01 01:07:16 2015] [info] mod_wsgi (pid=85): Aborting process 'djangobook.com'.
+[Wed Jul 01 01:10:38 2015] [info] mod_wsgi (pid=135): Attach interpreter ''.
+[Wed Jul 01 01:10:38 2015] [info] mod_wsgi (pid=136): Attach interpreter ''.
+[Wed Jul 01 01:10:38 2015] [info] mod_wsgi (pid=136): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Wed Jul 01 01:10:38 2015] [info] mod_wsgi (pid=135): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Wed Jul 01 01:10:38 2015] [info] mod_wsgi (pid=135): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Wed Jul 01 01:10:38 2015] [info] mod_wsgi (pid=136): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Wed Jul 01 02:26:03 2015] [info] mod_wsgi (pid=135): Create interpreter 'dev.djangobook.com|'.
+[Wed Jul 01 02:26:04 2015] [info] mod_wsgi (pid=135): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Wed Jul 01 02:26:04 2015] [info] mod_wsgi (pid=135): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Wed Jul 01 02:26:04 2015] [info] [client fe80::1] mod_wsgi (pid=135, process='djangobook.com', application='dev.djangobook.com|'): Loading WSGI script '/Users/timurmalgazhdarov/Documents/djangobook/djangobook/wsgi.py'.
+[Wed Jul 01 02:26:19 2015] [info] mod_wsgi (pid=136): Create interpreter 'dev.djangobook.com|'.
+[Wed Jul 01 02:26:19 2015] [info] mod_wsgi (pid=136): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Wed Jul 01 02:26:19 2015] [info] mod_wsgi (pid=136): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Wed Jul 01 02:26:19 2015] [info] [client fe80::1] mod_wsgi (pid=136, process='djangobook.com', application='dev.djangobook.com|'): Loading WSGI script '/Users/timurmalgazhdarov/Documents/djangobook/djangobook/wsgi.py'.
+[Tue Jun 30 20:28:16 2015] [info] mod_wsgi (pid=136): Shutdown requested 'djangobook.com'.
+[Tue Jun 30 20:28:16 2015] [info] mod_wsgi (pid=136): Stopping process 'djangobook.com'.
+[Tue Jun 30 20:28:16 2015] [info] mod_wsgi (pid=136): Destroying interpreters.
+[Tue Jun 30 20:28:16 2015] [info] mod_wsgi (pid=136): Destroy interpreter 'dev.djangobook.com|'.
+[Tue Jun 30 20:28:16 2015] [info] mod_wsgi (pid=136): End interpreter 'dev.djangobook.com|'.
+[Tue Jun 30 20:28:16 2015] [info] mod_wsgi (pid=135): Shutdown requested 'djangobook.com'.
+[Tue Jun 30 20:28:16 2015] [info] mod_wsgi (pid=135): Stopping process 'djangobook.com'.
+[Tue Jun 30 20:28:16 2015] [info] mod_wsgi (pid=135): Destroying interpreters.
+[Tue Jun 30 20:28:16 2015] [info] mod_wsgi (pid=135): Destroy interpreter 'dev.djangobook.com|'.
+[Tue Jun 30 20:28:16 2015] [info] mod_wsgi (pid=135): End interpreter 'dev.djangobook.com|'.
+[Tue Jun 30 20:28:16 2015] [info] mod_wsgi (pid=136): Cleanup interpreter ''.
+[Tue Jun 30 20:28:16 2015] [info] mod_wsgi (pid=135): Cleanup interpreter ''.
+[Tue Jun 30 20:28:16 2015] [info] mod_wsgi (pid=136): Terminating Python.
+[Tue Jun 30 20:28:16 2015] [info] mod_wsgi (pid=135): Terminating Python.
+[Tue Jun 30 20:28:16 2015] [info] mod_wsgi (pid=135): Python has shutdown.
+[Tue Jun 30 20:28:16 2015] [info] mod_wsgi (pid=136): Python has shutdown.
+[Wed Jul 01 02:28:17 2015] [info] mod_wsgi (pid=1140): Attach interpreter ''.
+[Wed Jul 01 02:28:17 2015] [info] mod_wsgi (pid=1140): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Wed Jul 01 02:28:17 2015] [info] mod_wsgi (pid=1139): Attach interpreter ''.
+[Wed Jul 01 02:28:17 2015] [info] mod_wsgi (pid=1140): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Wed Jul 01 02:28:17 2015] [info] mod_wsgi (pid=1139): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Wed Jul 01 02:28:17 2015] [info] mod_wsgi (pid=1139): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Wed Jul 01 02:28:21 2015] [info] mod_wsgi (pid=1139): Create interpreter 'dev.djangobook.com|'.
+[Wed Jul 01 02:28:21 2015] [info] mod_wsgi (pid=1139): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Wed Jul 01 02:28:21 2015] [info] mod_wsgi (pid=1139): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Wed Jul 01 02:28:21 2015] [info] [client fe80::1] mod_wsgi (pid=1139, process='djangobook.com', application='dev.djangobook.com|'): Loading WSGI script '/Users/timurmalgazhdarov/Documents/djangobook/djangobook/wsgi.py'.
+[Wed Jul 01 02:28:24 2015] [info] mod_wsgi (pid=1140): Create interpreter 'dev.djangobook.com|'.
+[Wed Jul 01 02:28:24 2015] [info] mod_wsgi (pid=1140): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Wed Jul 01 02:28:24 2015] [info] mod_wsgi (pid=1140): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Wed Jul 01 02:28:24 2015] [info] [client fe80::1] mod_wsgi (pid=1140, process='djangobook.com', application='dev.djangobook.com|'): Loading WSGI script '/Users/timurmalgazhdarov/Documents/djangobook/djangobook/wsgi.py'.
+[Tue Jun 30 20:30:17 2015] [info] mod_wsgi (pid=1139): Shutdown requested 'djangobook.com'.
+[Tue Jun 30 20:30:17 2015] [info] mod_wsgi (pid=1140): Shutdown requested 'djangobook.com'.
+[Tue Jun 30 20:30:17 2015] [info] mod_wsgi (pid=1139): Stopping process 'djangobook.com'.
+[Tue Jun 30 20:30:17 2015] [info] mod_wsgi (pid=1139): Destroying interpreters.
+[Tue Jun 30 20:30:17 2015] [info] mod_wsgi (pid=1139): Destroy interpreter 'dev.djangobook.com|'.
+[Tue Jun 30 20:30:17 2015] [info] mod_wsgi (pid=1140): Stopping process 'djangobook.com'.
+[Tue Jun 30 20:30:17 2015] [info] mod_wsgi (pid=1140): Destroying interpreters.
+[Tue Jun 30 20:30:17 2015] [info] mod_wsgi (pid=1140): Destroy interpreter 'dev.djangobook.com|'.
+[Tue Jun 30 20:30:17 2015] [info] mod_wsgi (pid=1139): End interpreter 'dev.djangobook.com|'.
+[Tue Jun 30 20:30:17 2015] [info] mod_wsgi (pid=1140): End interpreter 'dev.djangobook.com|'.
+[Tue Jun 30 20:30:17 2015] [info] mod_wsgi (pid=1139): Cleanup interpreter ''.
+[Tue Jun 30 20:30:17 2015] [info] mod_wsgi (pid=1140): Cleanup interpreter ''.
+[Tue Jun 30 20:30:17 2015] [info] mod_wsgi (pid=1139): Terminating Python.
+[Tue Jun 30 20:30:17 2015] [info] mod_wsgi (pid=1140): Terminating Python.
+[Tue Jun 30 20:30:17 2015] [info] mod_wsgi (pid=1139): Python has shutdown.
+[Tue Jun 30 20:30:17 2015] [info] mod_wsgi (pid=1140): Python has shutdown.
+[Wed Jul 01 02:30:18 2015] [info] mod_wsgi (pid=1156): Attach interpreter ''.
+[Wed Jul 01 02:30:18 2015] [info] mod_wsgi (pid=1156): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Wed Jul 01 02:30:18 2015] [info] mod_wsgi (pid=1156): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Wed Jul 01 02:30:18 2015] [info] mod_wsgi (pid=1157): Attach interpreter ''.
+[Wed Jul 01 02:30:18 2015] [info] mod_wsgi (pid=1157): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Wed Jul 01 02:30:18 2015] [info] mod_wsgi (pid=1157): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Wed Jul 01 02:30:20 2015] [info] mod_wsgi (pid=1156): Create interpreter 'dev.djangobook.com|'.
+[Wed Jul 01 02:30:20 2015] [info] mod_wsgi (pid=1156): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Wed Jul 01 02:30:20 2015] [info] mod_wsgi (pid=1156): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Wed Jul 01 02:30:20 2015] [info] [client fe80::1] mod_wsgi (pid=1156, process='djangobook.com', application='dev.djangobook.com|'): Loading WSGI script '/Users/timurmalgazhdarov/Documents/djangobook/djangobook/wsgi.py'.
+[Wed Jul 01 02:30:21 2015] [info] mod_wsgi (pid=1157): Create interpreter 'dev.djangobook.com|'.
+[Wed Jul 01 02:30:21 2015] [info] mod_wsgi (pid=1157): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Wed Jul 01 02:30:21 2015] [info] mod_wsgi (pid=1157): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Wed Jul 01 02:30:21 2015] [info] [client fe80::1] mod_wsgi (pid=1157, process='djangobook.com', application='dev.djangobook.com|'): Loading WSGI script '/Users/timurmalgazhdarov/Documents/djangobook/djangobook/wsgi.py'.
+[Tue Jun 30 20:49:23 2015] [info] mod_wsgi (pid=1156): Shutdown requested 'djangobook.com'.
+[Tue Jun 30 20:49:23 2015] [info] mod_wsgi (pid=1157): Shutdown requested 'djangobook.com'.
+[Tue Jun 30 20:49:23 2015] [info] mod_wsgi (pid=1156): Stopping process 'djangobook.com'.
+[Tue Jun 30 20:49:23 2015] [info] mod_wsgi (pid=1156): Destroying interpreters.
+[Tue Jun 30 20:49:23 2015] [info] mod_wsgi (pid=1157): Stopping process 'djangobook.com'.
+[Tue Jun 30 20:49:23 2015] [info] mod_wsgi (pid=1157): Destroying interpreters.
+[Tue Jun 30 20:49:23 2015] [info] mod_wsgi (pid=1156): Destroy interpreter 'dev.djangobook.com|'.
+[Tue Jun 30 20:49:23 2015] [info] mod_wsgi (pid=1157): Destroy interpreter 'dev.djangobook.com|'.
+[Tue Jun 30 20:49:23 2015] [info] mod_wsgi (pid=1157): End interpreter 'dev.djangobook.com|'.
+[Tue Jun 30 20:49:23 2015] [info] mod_wsgi (pid=1156): End interpreter 'dev.djangobook.com|'.
+[Tue Jun 30 20:49:24 2015] [info] mod_wsgi (pid=1157): Cleanup interpreter ''.
+[Tue Jun 30 20:49:24 2015] [info] mod_wsgi (pid=1156): Cleanup interpreter ''.
+[Tue Jun 30 20:49:24 2015] [info] mod_wsgi (pid=1157): Terminating Python.
+[Tue Jun 30 20:49:24 2015] [info] mod_wsgi (pid=1156): Terminating Python.
+[Tue Jun 30 20:49:24 2015] [info] mod_wsgi (pid=1157): Python has shutdown.
+[Tue Jun 30 20:49:24 2015] [info] mod_wsgi (pid=1156): Python has shutdown.
+[Wed Jul 01 02:49:28 2015] [info] mod_wsgi (pid=1193): Attach interpreter ''.
+[Wed Jul 01 02:49:28 2015] [info] mod_wsgi (pid=1192): Attach interpreter ''.
+[Wed Jul 01 02:49:28 2015] [info] mod_wsgi (pid=1193): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Wed Jul 01 02:49:28 2015] [info] mod_wsgi (pid=1192): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Wed Jul 01 02:49:28 2015] [info] mod_wsgi (pid=1193): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Wed Jul 01 02:49:28 2015] [info] mod_wsgi (pid=1192): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Wed Jul 01 02:49:28 2015] [info] mod_wsgi (pid=1192): Create interpreter 'dev.djangobook.com|'.
+[Wed Jul 01 02:49:28 2015] [info] mod_wsgi (pid=1192): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Wed Jul 01 02:49:28 2015] [info] mod_wsgi (pid=1192): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Wed Jul 01 02:49:28 2015] [info] [client fe80::1] mod_wsgi (pid=1192, process='djangobook.com', application='dev.djangobook.com|'): Loading WSGI script '/Users/timurmalgazhdarov/Documents/djangobook/djangobook/wsgi.py'.
+[Wed Jul 01 02:50:06 2015] [info] mod_wsgi (pid=1193): Shutdown requested 'djangobook.com'.
+[Wed Jul 01 02:50:06 2015] [info] mod_wsgi (pid=1193): Stopping process 'djangobook.com'.
+[Wed Jul 01 02:50:06 2015] [info] mod_wsgi (pid=1193): Destroying interpreters.
+[Wed Jul 01 02:50:06 2015] [info] mod_wsgi (pid=1193): Cleanup interpreter ''.
+[Tue Jun 30 20:50:06 2015] [info] mod_wsgi (pid=1192): Shutdown requested 'djangobook.com'.
+[Tue Jun 30 20:50:06 2015] [info] mod_wsgi (pid=1192): Stopping process 'djangobook.com'.
+[Tue Jun 30 20:50:06 2015] [info] mod_wsgi (pid=1192): Destroying interpreters.
+[Tue Jun 30 20:50:06 2015] [info] mod_wsgi (pid=1192): Destroy interpreter 'dev.djangobook.com|'.
+[Tue Jun 30 20:50:06 2015] [info] mod_wsgi (pid=1192): End interpreter 'dev.djangobook.com|'.
+[Tue Jun 30 20:50:06 2015] [info] mod_wsgi (pid=1192): Cleanup interpreter ''.
+[Wed Jul 01 02:50:06 2015] [info] mod_wsgi (pid=1193): Terminating Python.
+[Tue Jun 30 20:50:06 2015] [info] mod_wsgi (pid=1192): Terminating Python.
+[Wed Jul 01 02:50:06 2015] [info] mod_wsgi (pid=1193): Python has shutdown.
+[Tue Jun 30 20:50:06 2015] [info] mod_wsgi (pid=1192): Python has shutdown.
+[Wed Jul 01 02:50:07 2015] [info] mod_wsgi (pid=1203): Attach interpreter ''.
+[Wed Jul 01 02:50:07 2015] [info] mod_wsgi (pid=1204): Attach interpreter ''.
+[Wed Jul 01 02:50:07 2015] [info] mod_wsgi (pid=1203): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Wed Jul 01 02:50:07 2015] [info] mod_wsgi (pid=1204): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Wed Jul 01 02:50:07 2015] [info] mod_wsgi (pid=1203): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Wed Jul 01 02:50:07 2015] [info] mod_wsgi (pid=1204): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Wed Jul 01 02:50:08 2015] [info] mod_wsgi (pid=1204): Create interpreter 'dev.djangobook.com|'.
+[Wed Jul 01 02:50:08 2015] [info] mod_wsgi (pid=1204): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Wed Jul 01 02:50:08 2015] [info] mod_wsgi (pid=1204): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Wed Jul 01 02:50:08 2015] [info] [client fe80::1] mod_wsgi (pid=1204, process='djangobook.com', application='dev.djangobook.com|'): Loading WSGI script '/Users/timurmalgazhdarov/Documents/djangobook/djangobook/wsgi.py'.
+[Wed Jul 01 02:52:04 2015] [info] mod_wsgi (pid=1203): Create interpreter 'dev.djangobook.com|'.
+[Wed Jul 01 02:52:04 2015] [info] mod_wsgi (pid=1203): Adding '/Users/timurmalgazhdarov/Documents/djangobook/' to path.
+[Wed Jul 01 02:52:04 2015] [info] mod_wsgi (pid=1203): Adding '/Users/timurmalgazhdarov/Documents/VirtualEnvs/venv-python2.7-django/lib/python2.7/site-packages' to path.
+[Wed Jul 01 02:52:04 2015] [info] [client fe80::1] mod_wsgi (pid=1203, process='djangobook.com', application='dev.djangobook.com|'): Loading WSGI script '/Users/timurmalgazhdarov/Documents/djangobook/djangobook/wsgi.py'.
+[Tue Jun 30 23:17:08 2015] [info] mod_wsgi (pid=1204): Shutdown requested 'djangobook.com'.
+[Tue Jun 30 23:17:08 2015] [info] mod_wsgi (pid=1204): Stopping process 'djangobook.com'.
+[Tue Jun 30 23:17:08 2015] [info] mod_wsgi (pid=1204): Destroying interpreters.
+[Tue Jun 30 23:17:08 2015] [info] mod_wsgi (pid=1204): Destroy interpreter 'dev.djangobook.com|'.
+[Tue Jun 30 23:17:08 2015] [info] mod_wsgi (pid=1204): End interpreter 'dev.djangobook.com|'.
+[Tue Jun 30 23:17:08 2015] [info] mod_wsgi (pid=1203): Shutdown requested 'djangobook.com'.
+[Tue Jun 30 23:17:08 2015] [info] mod_wsgi (pid=1203): Stopping process 'djangobook.com'.
+[Tue Jun 30 23:17:08 2015] [info] mod_wsgi (pid=1203): Destroying interpreters.
+[Tue Jun 30 23:17:08 2015] [info] mod_wsgi (pid=1203): Destroy interpreter 'dev.djangobook.com|'.
+[Tue Jun 30 23:17:08 2015] [info] mod_wsgi (pid=1203): End interpreter 'dev.djangobook.com|'.
+[Tue Jun 30 23:17:10 2015] [info] mod_wsgi (pid=1204): Cleanup interpreter ''.
+[Tue Jun 30 23:17:10 2015] [info] mod_wsgi (pid=1203): Cleanup interpreter ''.
+[Tue Jun 30 23:17:13 2015] [info] mod_wsgi (pid=1203): Aborting process 'djangobook.com'.
+[Tue Jun 30 23:17:13 2015] [info] mod_wsgi (pid=1204): Aborting process 'djangobook.com'.

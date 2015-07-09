@@ -1,0 +1,62 @@
+{% extends 'simplenation/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Main{% endblock %}
+
+{% block body_block %}
+
+	<h4>Learn</h4>
+	<div class='not-found'><p></p></div>
+	<div class="container-terms-for-learners">
+	{% if terms_for_learners %}
+		<ul>
+			{% for term in terms_for_learners %}
+			<li><a href="{% url 'term' term.slug %}">{{ term.name }}</a></li>
+			{% endfor %}
+		</ul>
+	{% else %}
+		<strong> There are no explanations here yet! </strong>
+	{% endif %}
+	</div>
+	<br />
+	<br />
+
+	<h4>Explain</h4>
+	<div class='tag-choose-container'>
+	{% if tags %}
+		{% for tag in tags %}
+		<div id="tag-filter-{{ tag.id }}" class="tag-filtering" style="display:inline">
+		<button type='submit' id='tag-choose-{{ tag.id }}' class='tag-choose' data-tagid='{{tag.id}}' data-tagname='{{tag.name}}'> {{tag.name}} </button><button id="tag-unchoose-{{tag.id}}" data-tagname="{{tag.name}}" data-tagid="{{tag.id}}" type="submit" class="tag-unchoose">x</button>
+		</div>
+		{% endfor %}
+	{% else %}
+		<p>{{ no_tags_message }}</p>
+	{% endif %}
+		
+	</div>
+	<div id='no-tags-message'><p></p></div>
+
+	<div class='search-tags'>
+		<input type='text' name='search_tag_item' placeholder='Find tags you want...' class='search-tag-input' id='search-tag-input-id'>
+		<button type="submit" class="search-tag-button" > + </button> 
+	</div>
+
+	<div class="container-tag-filtered-terms-index">
+	{% if terms_for_explainers %}
+		<ul>
+			{% for term in terms_for_explainers %}
+			<li><a href="{% url 'term' term.slug %}">{{ term.name }}</a></li>
+			{% endfor %}
+		</ul>
+	{% else %}
+		<strong> There are no terms here yet! </strong>
+	{% endif %}	
+	</div>
+
+
+
+
+{% endblock %}
+
+

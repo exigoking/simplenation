@@ -1,0 +1,27 @@
+{% extends 'simplenation/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}{{ term_name }}{% endblock %}
+
+{% block body_block %}
+
+
+<div class="tags-container">
+		<div id="tag-set-{{ term.name }}">
+		{% if tags %}  
+		{% for tag in tags %}
+			{% if tag.name %}
+			
+			<a href="#">{{ tag.name }}</a><button id="tags-remove-{{tag.id}}" data-tagname="{{tag.name}}" type="submit" data-signal="remove" data-termid="{{term.id}}" class="tags-remove"> X</button>
+			{% endif %}
+		{% endfor %}
+		{% endif %}
+		</div>
+
+		<br />
+		<input id="tags-input-new" type="text" name="tag_name" placeholder="Add a tag and hit enter...">
+		<button id="tags-add-new"as type="submit" data-signal="add" data-termid="{{term.id}}" class="tags-add"> + </button>	
+</div>
+
+{% endblock %}

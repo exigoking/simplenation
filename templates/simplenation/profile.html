@@ -1,0 +1,135 @@
+{% extends 'simplenation/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}{{ profile_name }}{% endblock %}
+
+{% block body_block %}
+	{% autoescape off %}
+	{% if user.is_authenticated %}
+		{% if user.username == profile_name %}
+		<h4>Your profile</h4>
+		<div class="profile-circular-mask"><img class="alignnone" src="{{ author.picture.url }}" alt="" width="58" height="58" style="border-radius: 50%;"/></div>
+		<p><a href="{% url 'edit_profile' author.slug %}">Edit your profile</a></p>
+		<p>Username: {{ profile_name }}</p>
+		<p>Bio: {{ profile_bio }} </p>
+		<p>Score: {{ author.score }}</p>
+		<p>Rank: {{ author.ranking }}</p>
+		<p>Favourites: </p>
+			{% if favorees %}
+				{% for favoree in favorees %}
+					<p>{{ favoree.username }}</p>
+				{% endfor %}
+			{% endif %}
+		<table style="text-align: left; width: 1001px; height: 52px; padding: 1px;" >
+			<tbody>
+				<tr>
+					<td style="vertical-align: top;">#<br>
+					</td>
+					<td style="vertical-align: top;">Term<br>
+					</td>
+					<td style="vertical-align: top;">Explanation<br>
+					</td>
+					<td style="vertical-align: top;">Time posted<br>
+					</td>
+					<td style="vertical-align: top;">Likes<br>
+					</td>
+				</tr>
+				{% if explanations %}
+					{% for explanation in explanations %}
+						{% if explanation %}
+				<tr>
+					<td style="vertical-align: center;"><br>
+					</td>
+					<td style="vertical-align: center;"><a href="{% url 'term' explanation.term.slug %}">{{ explanation.term.name }}</a><br>
+					</td>
+					<td style="vertical-align: center;">{{ explanation.body|truncatewords:3}}<br>
+					</td>
+					<td style="vertical-align: center;">{{ explanation.post_date}}<br>
+					</td>
+					<td style="vertical-align: center;"> {{ explanation.likes }}<br>
+					</td>
+						{%endif%}
+					{% endfor %}
+				</tr>
+				{%endif%}
+			</tbody>
+		</table>
+
+			
+				
+					
+
+					 
+					
+				
+				
+
+		{% else %} <!-- IF the user is not profile owner -->
+		<h4>{{ profile_name }}</h4>
+
+		<div class="profile-circular-mask"><img class="alignnone" src="{{ author.picture.url }}" alt="" width="58" height="58" style="border-radius: 50%;"/></div>
+		<p>Username: {{ profile_name }}</p>
+		<span><p>Bio: </p></span><span>{{ profile_bio }}</span>
+		<p>Score: {{ author.score }}</p>
+		<p>Rank: {{ author.ranking }}</p>
+		<p>Favourites: </p>
+			{% if favorees %}
+				{% for favoree in favorees %}
+					<p>{{ favoree.username }}</p>
+				{% endfor %}
+			{% endif %}
+		<button id="favourite-{{ favourite.id }}" data-favoree-id="{{ author.user.id }}" class="favourites_class" type="submit" name="add_favourites">{{ favor_button_text }}</button>
+		
+		<table style="text-align: left; width: 1001px; height: 52px; padding: 1px;" >
+			<tbody>
+				<tr>
+					<td style="vertical-align: top;">#<br>
+					</td>
+					<td style="vertical-align: top;">Term<br>
+					</td>
+					<td style="vertical-align: top;">Explanation<br>
+					</td>
+					<td style="vertical-align: top;">Time posted<br>
+					</td>
+					<td style="vertical-align: top;">Likes<br>
+					</td>
+				</tr>
+				{% if explanations %}
+					{% for explanation in explanations %}
+						{% if explanation %}
+				<tr>
+					<td style="vertical-align: center;"><br>
+					</td>
+					<td style="vertical-align: center;"><a href="{% url 'term' explanation.term.slug %}">{{ explanation.term.name }}</a><br>
+					</td>
+					<td style="vertical-align: center;">{{ explanation.body|truncatewords:3}}<br>
+					</td>
+					<td style="vertical-align: center;">{{ explanation.post_date}}<br>
+					</td>
+					<td style="vertical-align: center;"> {{ explanation.likes }}<br>
+					</td>
+						{%endif%}
+					{% endfor %}
+				</tr>
+				{%endif%}
+			</tbody>
+		</table>
+			
+		
+		{% endif %}			
+	{% else %} <!-- IF the user is not registered -->
+		<h4>{{ profile_name }}</h4>
+
+		<div class="profile-circular-mask"><img class="alignnone" src="{{ author.picture.url }}" alt="" width="58" height="58" style="border-radius: 50%;"/></div>
+		<p>Username: {{ profile_name }}</p>
+		<span><p>Bio: </p></span><span>{{ profile_bio }}</span>
+		<p>Score: {{ author.score }}</p>
+		<p>Rank: {{ author.ranking }}</p>
+
+
+	{% endif %}
+	{% endautoescape %}
+{% endblock %}
+
+

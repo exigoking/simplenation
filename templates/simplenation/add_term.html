@@ -1,0 +1,20 @@
+{% extends 'simplenation/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Add new term{% endblock %}i
+
+{% block body_block %}
+
+	<h4>Add new term</h4>
+	<form action="{% url 'add_term'%}" method="POST">
+		{% csrf_token %}
+		<table>
+			{{ term_form.as_table }}	
+		</table>
+		<input type="submit" name="add" value="Add" />
+	</form>
+
+{% endblock %}
+
+

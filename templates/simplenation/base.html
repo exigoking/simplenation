@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+
+
+{% load staticfiles %}
+
+<html>
+	<head>
+		<meta charset="utf-8">
+    	
+   	 	
+    	<meta name="description" content="">
+    	<meta name="author" content="">
+    	
+    	
+ 
+		<title>SimpleNation - {% block title %}Describe in your own words!{% endblock %}</title>
+		<!-- <link href="http://dev.djangobook.com/static/simplenation/simplenation.css" type="text/css" rel="stylesheet" />
+		<<link href="http://dev.djangobook.com/static/simplenation/index.css" type="text/css" rel="stylesheet" />
+		<link href="http://dev.djangobook.com/static/simplenation/standardize.css" type="text/css" rel="stylesheet" />
+		<link href="http://dev.djangobook.com/static/simplenation/index-grid.css" type="text/css" rel="stylesheet" />  -->
+
+      	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+		<script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script> 
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="{% static "js/simplenation-ajax.js" %}"></script>
+		<script src="{% static "js/autocomplete/src/jquery.autocomplete.js" %}"></script>
+		<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+      	<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+		
+
+		
+		
+		<script>
+		tinymce.init({
+			mode: 'textareas',
+		    plugins: [
+		        "visualblocks fullscreen",
+		        "paste"
+		    ],
+		    width: 600,
+		    
+		    toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent"
+		});
+		</script>
+		 
+		
+		
+	</head>
+
+	<body class="body page-index clearfix">
+		
+      <div class="container">
+        <div id="navbar-universal" class="container container-1">
+        <div class="container container-2"></div>
+  		<div class="container container-3"></div>
+        <p class="text text-1"><a href="{% url 'index' %}">Simplenation</a></p>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="hover">
+             <p class="navbar-link navbar-link-2"><a href="{% url 'index' %}">Home</a></p>
+            </li>
+            {% if user.is_authenticated %}
+            	{% if user.author %}
+            	<li>
+            	 <p class="navbar-link navbar-link-1"><a href="{% url 'profile' user.author.slug %}">Profile</a></p>
+           		</li>
+           		<li>
+            	 <p class="navbar-link navbar-link-1"><a href="{% url 'signout' %}">Sign out</a></p>
+           		</li>
+           		<li>
+            	 <div class="notification-block">
+
+            	 	<p class="navbar-link navbar-link-1">
+
+            	 		<a class="notification-button" href="{% url 'recent_notifications' %}"> Notifications </a>
+            	 		<text class="notification-indicator"></text>
+            	 	</p>
+            	 	
+           		 		
+           		 </div>
+           		</li>
+           		{% endif %}
+            {% else %}
+            	<li>
+             	<p class="navbar-link navbar-link-1"><a href="{% url 'signin' %}?next={{ request.get_full_path|urlencode }}">Sign in</a></p>
+           		</li>
+            {% endif %}
+          </ul>
+          <form class="navbar-form navbar-left text-left" action="{% url 'search' %}" method="post" role="search" style=""> 
+
+            <div class="global-search">
+              {% csrf_token %}
+              <input class="global-search-input" name="search_item" placeholder="Search..." type="text" autocomplete="off">
+          	  <button type="submit" class="global-search-button">Submit</button> 
+          	</div>
+          </form>
+          	<div class="suggestions">
+          		{% if suggestions %}
+					{% for suggestion in suggestions %}
+					<p class="suggestion" id = "suggestion-{{suggestion.id}}"><a href="{% url 'term' suggestion.slug %}">{{ suggestion.name }}</a></p>
+					{% endfor %}
+				{% endif %}
+          	</div>
+          
+        </div>
+      </div>
+		
+	  {% if search_active %}
+	  <div class="search-results">
+				{% if search_results %}
+					{% for search_result in search_results %}
+    			
+    					<p class="search-result"><a href="{% url 'term' search_result.slug %}">{{ search_result.name }}</a></p>
+
+
+
+					{% endfor %}
+				{% else %}
+					<p><strong> I could not find "{{ search_item }}", so sorry. </strong></p>
+					{% if user.is_authenticated %}
+						<p> Please add this term </p>
+						<form action="{% url 'add_term'%}" method="POST">
+							{% csrf_token %}
+							<input type="text" name="name" value="{{ search_item }}">
+							<input type="submit" name="add" value="Add" />
+						</form>
+						
+					{% else %}
+						<p class="sign-in"><a href="{% url 'signin' %}?next={% url 'add_term' %}">Sign in</a> to add this term</p>
+					{% endif %}
+				{% endif %}
+	   </div>
+	   {% else %}
+	   <div>
+			{% block body_block %}{% endblock%}
+	   </div>
+	   {% endif %}
+		<!-- {% if user.is_authenticated %}
+		<a href="{% url 'signout' %}">Sign out</a><br />
+		<a href="{% url 'add_term' %}">Add term</a><br />
+			{% if user.author %}
+				<a href="{% url 'profile' user.author.slug %}">Profile</a><br />
+			{% endif %}
+		{% else %}
+		<a href="{% url 'register' %}">Sign up</a><br/>
+		<a href="{% url 'signin' %}">Sign in</a><br/>
+		<a href="{% url 'add_term' %}">Add new term</a><br/>
+		{% endif %} -->
+		</hr>
+
+	</body>
+</html>

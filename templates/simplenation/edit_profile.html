@@ -1,0 +1,30 @@
+{% extends 'simplenation/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Edit profile-{{ author.user.username }}{% endblock %}
+
+{% block body_block %}
+
+		{% if user.username == author.user.username %}
+		<h4>Edit your profile</h4>
+		<form id="edit_profile" method="post" action="{% url 'edit_profile' author.slug %}" enctype="multipart/form-data">
+			{% csrf_token %}
+
+			<div class="profile-circular-mask"><img class="alignnone" src="{{ author.picture.url }}" alt="" width="58" height="58" style="border-radius: 50%;"/></div>
+			<input type="file" name="picture" >
+			
+			<strong>{{ existing_username_error }}</strong>
+			<p>Username: <input type="text" name="username" size="40" value="{{ profile_name }}"> </p>
+			<p>Email: <input type="text" name="email" size="40" value="{{ profile_email }}"></p>
+			<p>Bio: <textarea name="bio" value="">{{ profile_bio }}</textarea></p>	
+			<button type="submit">Save</button>
+			
+		</form>
+		
+		{% endif %}
+
+	
+{% endblock %}
+
+

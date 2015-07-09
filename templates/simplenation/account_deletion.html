@@ -1,0 +1,18 @@
+{% extends 'simplenation/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Delete account{% endblock %}i
+
+{% block body_block %}
+
+	<h4>Dear {{ username }}, are you sure, you want to leave us?</h4>
+	<form action="{% url 'account_deletion' account_deletion_key %}" method="POST">
+		{% csrf_token %}
+		<input type="submit" name="yes" value="Yes" />
+		<input type="submit" name="no" value="No" />
+	</form>
+
+	
+
+{% endblock %}

@@ -1,0 +1,348 @@
+body {
+  background-color: rgb(255, 255, 255);
+  font: 400 1em/2.28 Georgia;
+  color: rgb(237, 237, 237);
+}
+
+.after-nav-container {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 616px;
+  margin: 67px auto 0;
+}
+
+.navbar-link {
+  position: fixed;
+  top: 2px;
+  width: 5.5%;
+  min-height: 26px;
+  font-size: 1em;
+  font: 400 1em/2.28 Georgia;
+  font-weight: 400;
+  text-align: center;
+  color: rgb(237, 237, 237);
+}
+
+.navbar-link:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.search-result-container {
+  float: left;
+  width: 46%;
+  height: 37px;
+  font: 400 1em/2.28 Georgia;
+  margin-left: 23.58333%;
+  background-color: rgba(4, 4, 4, 0.15);
+  box-shadow: -1px -2px 5px rgba(0, 0, 0, .5);
+  margin-bottom: 10px;
+  padding-left: 10px;
+}
+
+.search-result-container .container {
+  float: left;
+  clear: both;
+  width: 144.6835786307%;
+  margin: 29px 0 0 -44.68237%;
+}
+
+.search-result-container .text {
+  float: left;
+  width: 32.334384858%;
+  min-height: 37px;
+  margin-left: 6.31346%;
+  line-height: 2.1;
+
+}
+
+.text {
+  font-size: 1em;
+  font-weight: 400;
+  color: rgb(0, 0, 0);
+}
+
+._button {
+  display: block;
+  position: fixed;
+  top: 5px;
+  left: 63.3333333333%;
+  z-index: 8;
+  width: 5.0833333333%;
+  height: 31px;
+  border-radius: 3px;
+  background-color: rgb(0, 57, 45);
+  font: 400 0.813em/1.38 Helvetica;
+  text-align: center;
+  color: rgb(250, 250, 250);
+}
+
+._button:hover {
+  background-color: rgb(0, 0, 0);
+  color: rgb(245, 245, 245);
+}
+
+._input {
+  display: block;
+  position: fixed;
+  top: 5px;
+  left: 26.0833333333%;
+  z-index: 7;
+  width: 36.75%;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 4px;
+  background-color: rgb(242, 242, 242);
+  font: 400 0.813em/1.38 Helvetica;
+  color: rgb(5, 5, 5);
+}
+
+.container-1 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  width: 100%;
+  height: 42px;
+  background-color: rgb(0, 133, 119);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
+}
+
+.container-2 {
+  position: relative;
+  float: left;
+  z-index: 4;
+  width: 45.25%;
+  height: 39px;
+  margin: -14px 0 0 100%;
+}
+
+.navbar-link-1 {
+  left: 81.3333333333%;
+  z-index: 10;
+}
+
+.navbar-link-2 {
+  left: 75.9166666666%;
+  z-index: 9;
+}
+
+.text-1 {
+  position: fixed;
+  top: 9px;
+  left: 13.6666666666%;
+  z-index: 6;
+  width: 8.3333333333%;
+  min-height: 24px;
+  font-family: Helvetica;
+  line-height: 1.38;
+  text-align: center;
+}
+
+.text a {
+  border-top-width: 0;
+  border-right-width: 0;
+  border-bottom-width: 0;
+  border-left-width: 0;
+  border-color: transparent;
+  border-style: none;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  background-color: transparent;
+  font-style: normal;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  word-spacing: inherit;
+  opacity: 1;
+  word-break: normal;
+  word-wrap: normal;
+  white-space: normal;
+}
+
+.navbar-link a,
+.text span {
+  border-top-width: 0;
+  border-right-width: 0;
+  border-bottom-width: 0;
+  border-left-width: 0;
+  border-color: transparent;
+  border-style: none;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  background-color: transparent;
+  font-family: inherit;
+  font-style: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  text-transform: inherit;
+  text-decoration: inherit;
+  letter-spacing: inherit;
+  word-spacing: inherit;
+  color: inherit;
+  opacity: 1;
+  word-break: normal;
+  word-wrap: normal;
+  white-space: normal;
+}
+
+.text-1 a {
+  font-family: Georgia;
+  text-transform: none;
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+}
+
+.text-2 a {
+  font-family: inherit;
+  font-size: inherit;
+  text-transform: inherit;
+  text-decoration: inherit;
+  color: inherit;
+}
+
+@media(max-width: 940px) {
+  .after-nav-container {
+    position: relative;
+    z-index: 3;
+  }
+
+  .after-nav-container .search-result-container {
+    width: 99.9937059415%;
+    margin-left: 23.58211%;
+  }
+
+  .search-result-container .container {
+    width: 144.6843331025%;
+    margin-top: 4px;
+    margin-left: -44.68382%;
+  }
+
+  .search-result-container .text {
+    margin-left: 6.31358%;
+  }
+
+  ._button {
+    top: 10px;
+    left: 63.2978723404%;
+    width: 5.744680851%;
+  }
+
+  ._input {
+    top: 10px;
+    left: 28.2978723404%;
+    width: 34.0425531914%;
+  }
+
+  .container-2 {
+    position: relative;
+    z-index: 4;
+  }
+
+  .navbar-link-1 {
+    left: 80.2077792553%;
+  }
+
+  .navbar-link-2 {
+    top: 3px;
+    left: 73.5771276595%;
+  }
+
+  .text-1 {
+    top: 10px;
+  }
+}
+
+@media(max-width: 720px) {
+  body {
+    font-size: 1em;
+  }
+
+  .after-nav-container {
+    position: relative;
+    z-index: 3;
+  }
+
+  .after-nav-container .search-result-container {
+    width: 99.9917827355%;
+    margin-left: 23.5829%;
+  }
+
+  .search-result-container .container {
+    width: 144.6850474586%;
+    margin-left: -44.68487%;
+  }
+
+  .search-result-container .text {
+    margin-left: 6.31348%;
+  }
+
+  ._button {
+    left: 63.3333333333%;
+    width: 7.0833333333%;
+  }
+
+  ._input {
+    left: 33.1944444444%;
+    width: 29.3055555555%;
+  }
+
+  .container-2 {
+    position: relative;
+    z-index: 4;
+  }
+
+  .navbar-link-1 {
+    top: 3px;
+    left: 81.5060763888%;
+    width: 8.4722222222%;
+  }
+}
+
+@media(max-width: 640px) {
+  .after-nav-container {
+    position: relative;
+    z-index: 3;
+  }
+
+  .after-nav-container .search-result-container {
+    width: 99.9953776462%;
+    margin-left: 23.58154%;
+  }
+
+  .search-result-container .container {
+    width: 144.6863588036%;
+    margin-left: -44.6848%;
+  }
+
+  .search-result-container .text {
+    margin-left: 6.31378%;
+  }
+
+  ._button {
+    left: 63.28125%;
+    width: 8.75%;
+  }
+
+  .container-2 {
+    position: relative;
+    z-index: 4;
+  }
+
+  .navbar-link-1 {
+    left: 81.69921875%;
+  }
+
+  .navbar-link-2 {
+    left: 73.59375%;
+    width: 7.03125%;
+  }
+
+  .navbar-link a {
+    font-size: 0.875em;
+  }
+}

@@ -1,0 +1,45 @@
+{% extends 'simplenation/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %} Notifications {% endblock %} 
+
+
+{% block body_block %}
+      {% autoescape off %}
+
+
+      <div class="notification-menu">
+ 			<h4>Header for notifications</h4>
+ 			{% if notifications %}
+ 				{% for notification in notifications %}
+ 					{% if notification.typeof == 'challenge_notification'%}
+ 						<div class="notification-menu-block">
+ 					
+ 						<p>{{ notification.sender.username }} has challenged you to explain {{ notification.term.name }} {{ notification.humanized_created_at }}</p>
+ 						</div>
+ 					{% elif notification.typeof == 'like_notification' %}
+ 						<div class="notification-menu-block">
+ 					
+ 						<p>{{ notification.sender.username }} has liked your explanation for {{notification.definition.term.name}} {{ notification.humanized_created_at }}</p>
+ 						</div>
+
+ 					{% elif notification.typeof == 'term_creation' %}
+ 						<div class="notification-menu-block">
+ 					
+ 						<p> You have created new term: {{ notification.term }} {{ notification.humanized_created_at }}</p>
+ 						</div>
+ 					{% elif notification.typeof == 'explanation_notification' %}
+ 						<div class="notification-menu-block">
+ 					
+ 						<p>{{ notification.sender.username }} has explained term {{ notification.definition.term.name }} {{ notification.humanized_created_at }}</p>
+ 						</div>
+ 					{% endif %}
+                        {% endfor %}
+ 			{% else %}
+ 			<p> You have no notifications. </p>
+ 			{% endif %}
+ 	</div>
+
+      {% endautoescape %}
+{% endblock %}

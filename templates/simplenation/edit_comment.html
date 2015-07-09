@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+
+	<div class="exp-container-parent" id='exp-container-{{explanation.id}}'>
+			
+			<span>
+				<div class="profile-circular-mask"><img class="alignnone" src="{{ explanation.author.picture.url }}" alt="" width="58" height="58" style="border-radius: 50%;"/></div>
+				<strong>{{ explanation.author }} score: {{ explanation.author.score }} rank: {{explanation.author.ranking }}</strong> proposed <strong>{{ explanation.last_posted }}</strong>      
+			</span>
+			{% autoescape off %}
+			<p>
+			 <div id="exp-body-{{explanation.id}}" class='exp-body'>{{ explanation.body }}</div>
+			</p> 
+			{% endautoescape %}
+
+			<p>
+			{% if user.is_authenticated %}	
+						<button id="likes-{{ explanation.id }}" data-likeflag="liked" data-expid="{{ explanation.id }}" class="likes_class" type="submit" name="like" >{{explanation.like_text}}</button>
+
+						<div class="report-container" id="report-container-{{ explanation.id }}">
+						{% if explanation.reporter == user.id %}
+							<p>Successfully reported</p>
+						{% else %}
+							<button id="reports-{{ explanation.id }}" data-expid="{{ explanation.id }}" class="reports_class" type="submit" name="report" >Report Inappropriate</button>
+						{% endif %}
+
+						</div>
+			{% endif %}
+
+			{% if user.username == explanation.author.user.username %}
+					<!-- Edit explanation logic -->
+
+					<button id="edit-{{ explanation.id }}" data-editid="{{explanation.id}}" class="edit_class" type="submit" name="edit">Edit</button>
+
+					<div id="edit-form-{{ explanation.id }}" class="edit_form" style="display:none">
+
+						<textarea id="edit-input-{{ explanation.id }}" name="body" cols="92" rows="10" max_length="512" style="width:40%" class="edit-input" data-signal="edit">{{ explanation.body }}</textarea>
+   						<button type="submit" class='edit-button'>Edit</button>
+
+   						<button id="delete-button-{{ explanation.id }}" data-signal="delete" type="submit" name="delete_method" value="Delete" >Delete</button>
+					</div>
+
+									
+			{% endif %}
+
+			</p>
+			<div id="likes-count-{{ explanation.id }}" class="likes-count">{{ explanation.likes }} <strong>likes</strong></div>
+
+			
+		<br />
+	</div>

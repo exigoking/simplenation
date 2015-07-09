@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+
+
+		{% if reported %}
+			<p>Successfully reported</p>
+		{% else %}
+			<button id="reports-{{ explanation.id }}" data-expid="{{ explanation.id }}" class="reports_class" type="submit" name="report" >Report Inappropriate</button>
+		{% endif %}
+

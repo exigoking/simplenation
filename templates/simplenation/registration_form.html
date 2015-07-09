@@ -1,0 +1,44 @@
+{% extends 'simplenation/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Sign up{% endblock %}
+
+{% block body_block %}
+
+	<h4>Sign up</h4>
+	
+	<form id="user_form" method="post" action="{% url 'register' %}"
+		enctype="multipart/form-data">
+		{% csrf_token %}
+
+    <div class="fieldWrapper">    
+        {{ user_form.email.errors }}            
+        {{ user_form.email }}
+    </div>    
+    <br>
+    <div class="fieldWrapper">
+    	{{user_form.errors.values.0}}                
+        {{ user_form.username }}
+    </div>
+    <br>
+    <div class="fieldWrapper">        
+        {{user_form.errors.values.1}}            
+        <label>Password</label><br>                    
+        {{ user_form.password1 }}
+    </div>
+    <br>
+    <div class="fieldWrapper">           
+        <label>Password again</label><br>
+        {{ user_form.password2 }}
+    </div>            
+    <br></br>
+		{{ profile_form.as_p }}
+	
+		<input type="submit" name="submit" value="Sign up" />
+		<input type="hidden" name="next" value="{{ next }}">
+	</form>
+
+{% endblock %}
+
+
