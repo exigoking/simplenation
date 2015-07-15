@@ -9,25 +9,9 @@ from django.db.models import Count
 from simplenation.managers import FavouriteManager, ChallengeManager, NotificationManager, LikeManager
 from django.utils.translation import ugettext_lazy as _
 from djangobook import settings
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
 
-
-class Term(models.Model):
-	"""
-    A term is a word that needs a definition or definitions.
-    A term can be created by any registered user @simplenation.
-    """
-	name = models.CharField(max_length=128, unique=True)
-	views = models.IntegerField(default=0)
-	slug = models.SlugField(unique=True)
-	tags = TaggableManager()
-	
-	def save(self, *args, **kwargs):
-		self.slug = slugify(self.name)
-		self.name = self.name.title()
-		super(Term, self).save(*args, **kwargs)
-	
-	def __unicode__(self):
-		return self.name
 
 class Author(models.Model):
 	"""
@@ -52,7 +36,25 @@ class Author(models.Model):
 
 	def __unicode__(self):
 		return self.user.username
+
+class Term(models.Model):
+	"""
+    A term is a word that needs a definition or definitions.
+    A term can be created by any registered user @simplenation.
+    """
+	name = models.CharField(max_length=128, unique=True)
+	views = models.IntegerField(default=0)
+	slug = models.SlugField(unique=True)
+	author = models.ForeignKey(Author, null=True)
+	tags = TaggableManager()
 	
+	def save(self, *args, **kwargs):
+		self.slug = slugify(self.name)
+		self.name = self.name.title()
+		super(Term, self).save(*args, **kwargs)
+	
+	def __unicode__(self):
+		return self.name
 
 class Definition(models.Model):
 	"""
@@ -73,6 +75,20 @@ class Definition(models.Model):
 
 	def __unicode__(self):
 		return self.term.name
+
+
+
+class Picture(models.Model):
+	definition=models.ForeignKey(Definition,related_name='pictures_for_explanation')
+	term=models.ForeignKey(Term,related_name='pictures_for_term', null=True)
+	image=models.ImageField(upload_to="pictures/")
+	image_thumbnail = ProcessedImageField(upload_to="thumbnail_pictures/",processors=[ResizeToFill(100, 100)],format='JPEG',options={'quality': 100})
+	deleted=models.BooleanField(default=False)
+	created_at = models.DateTimeField(auto_now_add=True)
+	updated_at = models.DateTimeField(auto_now=True)
+
+	def __unicode__(self):
+		return 'Picture with id {0}'.format(self.id)
 
 
 class Like(models.Model):

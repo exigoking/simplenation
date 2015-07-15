@@ -12,9 +12,9 @@ def index(request):
 	terms_for_learners = Term.objects.order_by('-views')[:15]
 	context_dict = {'terms_for_learners': terms_for_learners}
 
-	terms_for_explainers = Term.objects.annotate(exp_count=Count('definition')).order_by('exp_count')
+	terms_for_explainers = Term.objects.annotate(exp_count=Count('definition')).order_by('exp_count')[:15]
 	context_dict['terms_for_explainers'] = terms_for_explainers
-	tags = Tag.objects.annotate(term_count = Count('taggit_taggeditem_items')).order_by('-term_count')[:20]
+	tags = Tag.objects.annotate(term_count = Count('taggit_taggeditem_items')).order_by('-term_count')[:15]
 	if tags:
 		context_dict['tags'] = tags
 	else:
@@ -45,6 +45,26 @@ def autocomplete_search(request):
 	html = render_to_string('simplenation/autocomplete_results.html', context_dict)
 	return HttpResponse(html)
 
+def autocomplete_tag_search(request):
+	context_dict = {}
+	
+	params=json.loads(request.body)
+
+	search_item = params['search_item']
+
+	if search_item:
+		
+		tags = Tag.objects.filter(name__icontains=search_item)
+		if tags:
+			context_dict['tag_suggestions'] = tags
+		else:
+			HttpResponse("I cannot find it")
+
+	else:
+		context_dict['tag_suggestions'] = None
+		
+	html = render_to_string('simplenation/autocomplete_tag_results.html', context_dict)
+	return HttpResponse(html)
 
 def search(request):
 
@@ -71,3 +91,4 @@ def search(request):
 	context_dict['search_active'] = search_active
 
 	return render(request, 'simplenation/index.html', context_dict)
+

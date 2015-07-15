@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
-from simplenation.models import Term, Author, Definition, Like, Report, Notification
+from simplenation.models import Term, Author, Definition, Like, Report, Notification, Picture
 from simplenation.forms import UserForm, ProfileForm, DefinitionForm, TermForm, PasswordResetRequestForm, SetPasswordForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -49,6 +49,7 @@ def edit_exp(request):
 			return HttpResponse(html)
 
 		elif signal == 'delete':
+			Picture.objects.filter(definition = explanation).delete()
 			explanation.delete()
 			return HttpResponse('Success-deleted')
 		else:
@@ -83,11 +84,12 @@ def add_like(request):
 			like.save()
 			explanation.likes = explanation.likes + 1
 			explanation.save()
-			explanation.author.score = explanation.author.score + Decimal('0.01')
+			explanation.author.score = explanation.author.score + Decimal('0.03')
 			explanation.author.num_of_likes = explanation.author.num_of_likes + 1
 			explanation.author.save()
 			likes = explanation.likes
-			Notification(typeof = 'like_notification', sender = request.user, receiver = explanation.author, definition = explanation).save()
+			if request.user != explanation.author.user:
+				Notification(typeof = 'like_notification', sender = request.user, receiver = explanation.author.user, definition = explanation).save()
 		else:
 			return HttpResponse("You have already liked this explanation.")
 	else:
@@ -112,7 +114,7 @@ def remove_like(request):
 			like.delete()
 			explanation.likes = explanation.likes - 1
 			explanation.save()
-			explanation.author.score = explanation.author.score - Decimal('0.01')
+			explanation.author.score = explanation.author.score - Decimal('0.03')
 			explanation.author.num_of_likes = explanation.author.num_of_likes - 1
 			explanation.author.save()
 			likes = explanation.likes
@@ -149,7 +151,7 @@ def like_explanation(request):
 						like.delete()
 						explanation.likes = explanation.likes - 1
 						explanation.save()
-						author.score = author.score - Decimal('0.01')
+						author.score = author.score - Decimal('0.03')
 						author.num_of_likes = author.num_of_likes - 1
 						author.save()
 						
@@ -159,7 +161,7 @@ def like_explanation(request):
 						explanation.likes = explanation.likes + 1
 						like.save()
 						explanation.save()
-						author.score = author.score + Decimal('0.01')
+						author.score = author.score + Decimal('0.03')
 						author.num_of_likes = author.num_of_likes + 1
 						author.save()
 						
@@ -170,7 +172,7 @@ def like_explanation(request):
 			like.save()
 			explanation.likes = explanation.likes + 1
 			explanation.save()
-			author.score = author.score + Decimal('0.01')
+			author.score = author.score + Decimal('0.03')
 			author.num_of_likes = author.num_of_likes + 1
 			author.save()
 

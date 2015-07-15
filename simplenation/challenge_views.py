@@ -41,3 +41,6 @@ def challenge(request):
         HttpResponse("Invalid Form.")
 
     return HttpResponse("You have challenged "+ challengee.username + " to explain " + term.name)
+
+
+

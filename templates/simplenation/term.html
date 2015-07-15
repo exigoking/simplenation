@@ -8,6 +8,7 @@
 
 
 	<h2>{{ term.name }}</h2>
+	<p>{{term.views}} Views</p>
 	<div class="tags-container-parent">
 	<div class="tags-container">
 		{% if tags %}
@@ -15,7 +16,7 @@
 		{% for tag in tags %}
 			{% if tag.name %}
 			 
-			<a class="tag-name" id="tag-name-{{tag.name}}" href="#">{{ tag.name }}</a>
+			<a class="tag-name" id="tag-name-{{tag.name}}" href="{% url 'single_tag_view' tag.slug %}">{{ tag.name }}</a>
 			{% if user.is_authenticated %}
 				<button id="tags-remove-{{tag.id}}" data-tagname="{{tag.name}}" data-tagid="{{tag.id}}" type="submit" data-signal="remove" data-termid="{{term.id}}" class="tags-remove"> X</button>
 			{% endif %}
@@ -53,7 +54,7 @@
 		
 		{% for explanation in explanations %}
 
-			<div class="exp-container-parent" id='exp-container-{{explanation.id}}'>
+			<div class="exp-container-parent" id='exp-container-{{explanation.id}}' data-expid='{{ explanation.id }}'>
 			
 			<span>
 				<div class="profile-circular-mask"><img class="alignnone" src="{{ explanation.author.picture.url }}" alt="" width="58" height="58" style="border-radius: 50%;"/></div>
@@ -62,8 +63,44 @@
 			{% autoescape off %}
 			<p>
 			 <div id="exp-body-{{explanation.id}}" class='exp-body'>{{ explanation.body }}</div>
+			 {% if user.username == explanation.author.user.username %}
+				 <button id="edit-{{ explanation.id }}" data-editid="{{explanation.id}}" class="edit_class" type="submit" name="edit">Edit</button>
+				
+				<!-- Edit explanation logic -->
+				<div id="edit-form-{{ explanation.id }}" class="edit_form" style="display:none">
+
+					<textarea id="edit-input-{{ explanation.id }}" name="body" cols="92" rows="10" maxlength="512" style="width:40%" class="edit-input" data-signal="edit">{{ explanation.body }}</textarea>
+						<button type="submit" class='edit-button'>Edit</button>
+						<button id="delete-button-{{ explanation.id }}" data-signal="delete" type="submit" name="delete_method" value="Delete" >Delete</button>
+				</div>
 			</p> 
+									
+			{% endif %}
+
 			{% endautoescape %}
+			
+			<div class="pictures-container" id="pictures-container-{{explanation.id}}">
+			{% if pictures %}
+					{% for picture in pictures %}
+					
+						{% if picture.definition == explanation  %}
+							<img src="{{ picture.image_thumbnail.url }}" width="100" height="100"/>
+							{% if user.username == explanation.author.user.username %}
+								<button id="remove-picture-{{picture.id}}" data-pictureid="{{picture.id}}" class="remove-picture" data-expid="{{explanation.id}}">X</button>
+							{% endif %}
+						{% endif %}
+					
+					{% endfor %}
+			{% endif %}
+
+			{% if user.username == explanation.author.user.username %}
+				<form class="picture-add-form" id="picture-form-{{explanation.id}}" action="{% url 'add_picture' explanation.id %}" method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+					<input class="picture-add" type="file" name="pictures" id = "picture-of-{{explanation.id}}" data-expid="{{explanation.id}}">
+					<button id = "add-picture-{{explanation.id}}" class="add-picture" style="display:none;">Upload</button>
+				</form>
+			{% endif %}
+			</div>
 
 			<p>
 			{% if user.is_authenticated %}	
@@ -79,22 +116,6 @@
 						</div>
 			{% endif %}
 
-			{% if user.username == explanation.author.user.username %}
-					<!-- Edit explanation logic -->
-
-					<button id="edit-{{ explanation.id }}" data-editid="{{explanation.id}}" class="edit_class" type="submit" name="edit">Edit</button>
-
-					<div id="edit-form-{{ explanation.id }}" class="edit_form" style="display:none">
-
-						<textarea id="edit-input-{{ explanation.id }}" name="body" cols="92" rows="10" max_length="512" style="width:40%" class="edit-input" data-signal="edit">{{ explanation.body }}</textarea>
-   						<button type="submit" class='edit-button'>Edit</button>
-
-   						<button id="delete-button-{{ explanation.id }}" data-signal="delete" type="submit" name="delete_method" value="Delete" >Delete</button>
-					</div>
-
-									
-			{% endif %}
-
 			</p>
 			<div id="likes-count-{{ explanation.id }}" class="likes-count">{{ explanation.likes }} <strong>likes</strong></div>
 
@@ -107,13 +128,16 @@
 	{% endif %}
 		
 	{% if user.is_authenticated %}	
-		<form action="{% url 'term' term.slug %}" method="POST">
+		<form class="explanation-post-form" action="{% url 'term' term.slug %}" method="POST" enctype="multipart/form-data">
 			<h3>Your explanation</h3>
 			{% csrf_token %}
-			<textarea id="exp_input" name="body" placeholder="Explain in your own words..." cols="92" rows="10" max_length="512" style="width:40%"></textarea>
+			<textarea id="exp_input" name="body" placeholder="Explain using as FEW words and pictures as POSSIBLE" cols="92" rows="3" maxlength="512" style="width:40%"></textarea>
+			<div class="add-post-pictures">
+				<input class="add-post-picture" id="add-post-picture-0" type="file" name="pictures">
+			</div>
 			<br />
-			<input type="submit" name="add" value="Add" />
-
+			<input type="submit" name="add" value="POST" />
+		
 		</form>
 	{% else %}
 		<br />

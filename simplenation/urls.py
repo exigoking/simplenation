@@ -2,13 +2,14 @@ from django.conf.urls import patterns, url
 from djangobook import views
 from simplenation import views
 from simplenation.user_views import PasswordResetRequestView, PasswordResetConfirmView
-from simplenation import general_views, user_views, term_views, explanation_views, favourite_views, challenge_views, notification_views
+from simplenation import general_views, user_views, term_views, explanation_views, favourite_views, challenge_views, notification_views, picture_views
 
 urlpatterns = patterns('',
 	# Calls to General Controller
 	url(r'^$', general_views.index, name = 'index'),
 	url(r'^search/', general_views.search, name = 'search'),
 	url(r'^autocomplete_search/$', general_views.autocomplete_search, name = 'autocomplete_search'),
+	url(r'^autocomplete_tag_search/$', general_views.autocomplete_tag_search, name = 'autocomplete_tag_search'),
 
 	# Calls to User Controller
 	url(r'^registration_form/$', user_views.register, name='register'),
@@ -27,6 +28,8 @@ urlpatterns = patterns('',
 	url(r'^add_tags_to_term/$', term_views.add_tags_to_term, name='add_tags_to_term'),
 	url(r'^tag_select/$', term_views.tag_select, name='tag_select'),
 	url(r'^search_tags/$', term_views.search_tags, name='search_tags'),
+	url(r'^single_tag_view/(?P<tag_slug>[\w\-]+)/$', term_views.single_tag_view, name='single_tag_view'),
+
 	
 	# Calls to Explanation Controller
 	url(r'^edit_exp/$', explanation_views.edit_exp, name='edit_exp'),
@@ -45,5 +48,10 @@ urlpatterns = patterns('',
 	# Calls to Notification Controller
 	url(r'^are_new_notifications/$', notification_views.are_new_notifications, name='are_new_notifications'),
 	url(r'^recent_notifications/$', notification_views.recent_notifications, name='recent_notifications'),
+
+	# Calls to Picture Controller
+	url(r'^add_picture/(?P<explanation_id>[\w\-]+)/$', picture_views.add_picture, name='add_picture'),
+	url(r'^remove_picture/$', picture_views.remove_picture, name='remove_picture'),
+
  
 )

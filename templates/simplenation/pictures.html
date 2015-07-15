@@ -1,0 +1,21 @@
+
+	{% if pictures %}
+		{% for picture in pictures %}
+		
+			{% if picture.definition == explanation  %}
+				<img src="{{ picture.image_thumbnail.url }}" width="100" height="100"/>
+				{% if user.username == explanation.author.user.username %}
+					<button id="remove-picture-{{picture.id}}" data-pictureid="{{picture.id}}" class="remove-picture" data-expid="{{explanation.id}}">X</button>
+				{% endif %}
+			{% endif %}
+		
+		{% endfor %}
+	{% endif %}
+
+	{% if user.username == explanation.author.user.username %}
+		<form id="picture-form-{{explanation.id}}" action="{% url 'add_picture' explanation.id %}" method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			<input type="file" name="pictures" id = "picture-of-{{explanation.id}}">
+			<button id = "add-picture-{{explanation.id}}" class="add-picture" style="display:none;">Upload</button>
+		</form>
+	{% endif %}

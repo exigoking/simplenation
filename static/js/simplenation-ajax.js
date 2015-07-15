@@ -1,6 +1,8 @@
 $(document).ready(function(){
 	
-	are_new_notifications();
+	if ($(".notification-block").length){
+		are_new_notifications();
+	}
 
     var dialog_opt = $( ".challenge-dialog" ).dialog({
 	       	autoOpen: false,
@@ -56,26 +58,13 @@ $(document).ready(function(){
 
 	setInterval(function(){
 
-			are_new_notifications();
+			if ($(".notification-block").length){
+				are_new_notifications();
+			}
 
-	}, 30000);
+	}, 50000);
 
 	
-	// $("body").click(function(e){
- //    	if(e.target.className !== "notification-menu")
- //    	{
- //      		$(".notification-menu").hide();
- //    	}
- //  	});
-
-
-	// $('.notification-block').on('click', '.notification-button', function(){
-
-	// 		recent_notifications();
-	// 		$('.notification-menu').show('slow');
-			
-
-	// });
 
 
 	function autocomplete_search(search_item){
@@ -111,10 +100,24 @@ $(document).ready(function(){
 
 
 
-	// Logic to handle TAG SEARCH on the front-end
-	$('.search-tags').on('click', '.search-tag-button', function(){
-		
-			var search_tag_item = $('#search-tag-input-id').val();
+	function autocomplete_tag_search(search_item){
+			var obj = { 'search_item':search_item }
+			$.ajax({
+			           type: "POST",
+			           url: "/simplenation/autocomplete_tag_search/",
+			           contentType: 'application/json; charset=utf-8',
+			           data: JSON.stringify(obj),
+			           success: function(data) {
+								$('.tag-suggestions').html(data);
+			            },
+			            error: function(rs, e) {
+			                   alert(rs.responseText);
+			            }
+			});
+
+	}
+
+	function tag_search(search_tag_item){
 			$.ajax({
 			           type: "GET",
 			           url: "/simplenation/search_tags/",
@@ -140,43 +143,56 @@ $(document).ready(function(){
 													
 												}
 											}
-										})
+										});
 									});
 								}
+
 			            },
 			            error: function(rs, e) {
 			                   alert(rs.responseText);
 			            }
 			});
 
+	}
+	
+			
+
+	$('.tag-suggestions').on('click', '.tag-suggestion', function(){
+			var search_tag_item = $(this).attr('data-tagname');
+			tag_search(search_tag_item);
+			$('#search-tag-input-id').val('');
+			$('.tag-suggestions').empty();
 
 	});
+
+	$('.search-tags').on('click', '.search-tag-button', function(){
+			var search_tag_item = $('#search-tag-input-id').val();
+			tag_search(search_tag_item);
+	});
+
 	$('.search-tags').on('keyup', '.search-tag-input', function(e){
 		
 		
 		if (e.keyCode == 13)
 		{
-			
-			$('.search-tag-button').click();
+			var search_tag_item = $('#search-tag-input-id').val();
+			tag_search(search_tag_item);
 		}
 
-
+		else {
+			var search_item = $('.search-tag-input').val();
+			autocomplete_tag_search(search_item);
+		}
 	});
 
 
-		// Logic to handle tags on the index page
-		$('.tag-choose').each(function(){
-			$('.tag-choose-container').on('click', '#tag-choose-'+$(this).attr('data-tagid'), function(){
-				
-				var count = 0;
-				var tagname_outer = $(this).attr('data-tagname');
-				var tag_choose_list =  {};
-				var duplicate_prevent_count = 0;
-
-				$('.tag-choose').each(function(){
+	function chosen_tags_list(currently_pressed_tag){
+			var tag_choose_list = {};
+			var duplicate_prevent_count = 0;
+			var count = 0;
+			$('.tag-choose').each(function(){
 					if ($(this).css('font-weight') == 'bold') {
-						if($(this).attr('data-tagname') != tagname_outer){
-
+						if($(this).attr('data-tagname') != currently_pressed_tag){
 							count = count + 1;
 							var tagname = $(this).attr('data-tagname');
 							tag_choose_list['tag_name_' + count] = tagname;
@@ -185,31 +201,31 @@ $(document).ready(function(){
 							;
 						}
 
-
-					} else {
-						if($(this).attr('data-tagname') == tagname_outer){
+					} 
+					else {
+						if($(this).attr('data-tagname') == currently_pressed_tag){
 
 							if(duplicate_prevent_count == 0){
 								count = count + 1;
 								var tagname = $(this).attr('data-tagname');
 								tag_choose_list['tag_name_' + count] = tagname;
 								duplicate_prevent_count = duplicate_prevent_count + 1;
-							} else {
+							} 
+							else {
 								;
 							}
 
 						}
 					}
-				});
-				
-				
-				if ($(this).css('font-weight') == 'bold'){
-					$(this).css('font-weight','normal');
-				}else {
-					$(this).css('font-weight','bold');
-				}
+			});
 
-				if(count == 0)
+			return tag_choose_list;
+
+	}
+
+	function tag_filter(count, tag_choose_list){
+
+		if(count == 0)
 				{
 
 				var obj = { 'number_of_tags':count }
@@ -246,23 +262,38 @@ $(document).ready(function(){
 			            }
 				});
 				}
-				
-				
-				
-			});
-		});
 
-	$('.tag-unchoose').each(function(){
-			$('.tag-choose-container').on('click', '#tag-unchoose-'+$(this).attr('data-tagid'), function(){
-			
-			$('#tag-choose-'+$(this).attr('data-tagid')).remove();
-			$(this).remove();
+	}
+	// Logic to handle tags on the index page
+	$('.tag-choose-container').on('click', '.tag-choose', function(){
+				
+		var count = 0;
+		var currently_pressed_tag = $(this).attr('data-tagname');
+		var tag_choose_list =  {};
 
-			});
+		tag_choose_list = chosen_tags_list(currently_pressed_tag);
+		count = Object.keys(tag_choose_list).length;
+		
+		if ($(this).css('font-weight') == 'bold'){
+			$(this).css('font-weight','normal');
+		}else {
+			$(this).css('font-weight','bold');
+		}
+
+		tag_filter(count, tag_choose_list);				
+				
+				
 	});
 	
 
+	
+	$('.tag-choose-container').on('click', '.tag-unchoose', function(){
+	
+		$('#tag-choose-'+$(this).attr('data-tagid')).remove();
+		$(this).remove();
 
+	});
+	
 	
 
 	// Login to handle tag addition/removal on the term page
@@ -299,28 +330,27 @@ $(document).ready(function(){
 
 	});
 
-	// setInterval(function(){
-	// 	$('.tags-remove').each(function(){
-	// 		$('.tags-container-parent').on('click', '#tags-remove-'+$(this).attr('data-tagid'),  function(){
-	// 		var tagname = $(this).attr('data-tagname');
-	// 		var termid = $(this).attr('data-termid');
-	// 		var signal = $(this).attr('data-signal');
-			
-	// 		$.ajax({
-	// 		           type: "GET",
-	// 		           url: "/simplenation/add_tags_to_term/",
-	// 		           data: { 'term_id': termid, 'tag_name': tagname, 'signal':signal}, //'csrfmiddlewaretoken': '{{csrf_token}}'},
-	// 		           success: function(data) {
-	// 							$('.tags-container').load(location.href + ' .tags-container');
-	// 		            },
-	// 		            error: function(rs, e) {
-	// 		                   alert(rs.responseText);
-	// 		            }
-	// 		});
+		
+	$('.tags-container-parent').on('click', '.tags-remove',  function(){
+		var tagname = $(this).attr('data-tagname');
+		var termid = $(this).attr('data-termid');
+		var signal = $(this).attr('data-signal');
+		
+		$.ajax({
+		           type: "GET",
+		           url: "/simplenation/add_tags_to_term/",
+		           data: { 'term_id': termid, 'tag_name': tagname, 'signal':signal}, //'csrfmiddlewaretoken': '{{csrf_token}}'},
+		           success: function(data) {
+							$('.tags-container').load(location.href + ' .tags-container');
+		            },
+		            error: function(rs, e) {
+		                   alert(rs.responseText);
+		            }
+		});
 
-	// 		});
-	// 	});
-	// }, 900);
+	});
+		
+	
 
 
 	function add_favourites(favoree_id)
@@ -448,7 +478,6 @@ $(document).ready(function(){
 			           data: { 'explanation_id': $(this).attr('data-expid')}, //'csrfmiddlewaretoken': '{{csrf_token}}'},
 			           success: function(data) {
 								$('.report-container').html(data);
-								
 			                  
 			            },
 			            error: function(rs, e) {
@@ -459,35 +488,104 @@ $(document).ready(function(){
 	});
 
 
+	function add_picture(explanation_id){
+		var data = new FormData($('#picture-form-'+explanation_id).get(0));
+
+		$.ajax({
+    		url: $('#picture-form-'+explanation_id).attr('action'),
+    		type: $('#picture-form-'+explanation_id).attr('method'),
+    		data: data,
+    		cache: false,
+    		processData: false,
+    		contentType: false,
+    		success: function(data) {
+        		$('#pictures-container-'+explanation_id).html(data);
+    		},
+    		error: function(rs, e) {
+			    alert(rs.responseText);
+			}
+		});
+
+	}
+
+	function remove_picture(explanation_id, picture_id){
+		var obj = {'picture_id':picture_id }
+
+		jQuery.ajax({
+           type: "POST",
+           url: "/simplenation/remove_picture/",
+           contentType: 'application/json; charset=utf-8',
+           data: JSON.stringify(obj),
+           success: function(data) {
+				   $('#pictures-container-'+explanation_id).html(data);
+           },
+           error: function(rs, e) {
+                   alert(rs.responseText);
+           }
+          });
+
+		
+
+	}
+
+	// Logic to handle removal of pictures
+	$('.pictures-container').on('click', '.remove-picture',  function(){
+			var explanation_id = $(this).attr('data-expid');
+			var picture_id = $(this).attr('data-pictureid');
+			console.log("inside remove");
+			remove_picture(explanation_id, picture_id);
+	});
+
+
+	
+
+
+	// Logic to handle addition of pictures
+	$('.picture-add').each(function(){
+			var explanation_id = $(this).attr('data-expid');
+			$('#pictures-container-'+explanation_id).on('change', '#picture-of-'+explanation_id,  function(){
+					console.log("inside change");
+					add_picture(explanation_id);
+					
+			});
+	});
+
+	
+	$('.explanation-post-form').on( 'change', '.add-post-pictures', function(){
+			$('.add-post-pictures').append('<input class="add-post-picture" type="file" name="pictures" >');
+
+	});
 	// Logic to handle explanaiton edition/deletion on the front end	
 	$('.edit_class').each(function(){
 		var editid = $(this).attr('data-editid');
+		
 		$('#edit-'+editid).click(function(){
 			
 			
 			
 			if ($('#edit-form-'+editid).css('display') == 'none') {
-				$('#edit-form-'+editid).show('slow');
+				$('#exp-body-'+ editid).hide();
+				$('#edit-form-'+editid).show();
 				
 			} else {
-				$('#edit-form-'+editid).hide('slow');
-				
+				$('#edit-form-'+editid).hide();
+				$('#exp-body-'+ editid).show();
+			
 			}
 		});
 		
 			$('.edit-button').click(function(){
-				tinyMCE.triggerSave();
+				//tinyMCE.triggerSave();
 				
 				$.ajax({
 			           type: "POST",
 			           url: "/simplenation/edit_exp/",
 			           data: { 'explanation_id': editid, 'body':$('#edit-input-'+editid).val(),'signal':$('#edit-input-'+editid).attr('data-signal')},
 			           success: function(data) {
-			           			//alert(data);
-								$('#exp-container-'+editid).html(data);
+								location.reload();
 			            },
 			           error: function(rs, e) {
-			                   alert(rs.responseText);
+			                   alert("rs.responseText");
 			            }
           		});
 

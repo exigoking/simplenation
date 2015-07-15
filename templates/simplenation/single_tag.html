@@ -1,0 +1,28 @@
+{% extends 'simplenation/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Tagged Terms{% endblock %}i
+
+{% block body_block %}
+	<div class='tag-header-container'>
+	<p> {{ tag.name }}</p>
+	<p> Total number of tagged terms: {{ number_of_terms}} </p>
+		
+	</div>
+
+	<div class="container-tag-filtered-terms-index">
+	{% if terms_for_explainers %}
+		<ul>
+			{% for term in terms_for_explainers %}
+			<li><a href="{% url 'term' term.slug %}">{{ term.name }}</a></li>
+			{% endfor %}
+		</ul>
+	{% else %}
+		<strong> There are no terms here yet! </strong>
+	{% endif %}	
+	</div>
+
+
+
+{% endblock %}

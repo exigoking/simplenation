@@ -32,7 +32,7 @@
  					{% elif notification.typeof == 'explanation_notification' %}
  						<div class="notification-menu-block">
  					
- 						<p>{{ notification.sender.username }} has explained term {{ notification.definition.term.name }} {{ notification.humanized_created_at }}</p>
+ 						<p>{{ notification.sender.username }} has explained term {{ notification.term.name }} {{ notification.humanized_created_at }}</p>
  						</div>
  					{% endif %}
                         {% endfor %}

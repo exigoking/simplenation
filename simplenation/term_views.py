@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
-from simplenation.models import Term, Author, Definition, Like, Report, Favourite, Notification
+from simplenation.models import Term, Author, Definition, Like, Report, Favourite, Notification, Picture
 from simplenation.forms import UserForm, ProfileForm, DefinitionForm, TermForm, PasswordResetRequestForm, SetPasswordForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -25,28 +25,57 @@ from djangobook.settings import PROFANITY_CHECK_THRESHOLD
 from decimal import Decimal
 import json
 from datetime import datetime
+from imagekit.processors import ResizeToFill
+from django.db.models import Count
 
 def term(request, term_name_slug):
 	context_dict = {}
 	liked = False
 	reported = False
 	report_by_explanation_id = {}
-	
+	pictures = []
+
 	
 	try:
 		term = Term.objects.get(slug=term_name_slug)
 		explanations = Definition.objects.filter(term = term)
 		favorees = Favourite.objects.favorees_for_user(request.user)
+		pictures = Picture.objects.filter(term = term)
+
+		views = request.session.get('views_'+term.name)
+		if not views:
+			views = 1
+		reset_last_view_time = False
+
+		last_view = request.session.get('last_view_'+term.name)
+
+		if last_view:
+			last_view_time = datetime.strptime(last_view[:-7], "%Y-%m-%d %H:%M:%S")
+
+			if (datetime.now() - last_view_time).seconds > 120:
+			    views = views + 1
+			    reset_last_view_time = True
+		else:
+			reset_last_view_time = True
+
+		if reset_last_view_time:
+			request.session['last_view_'+term.name] = str(datetime.now())
+			request.session['views_'+term.name] = views
+
+		term.views = views
+		term.save()
+
 
 		if request.user.id:
 			likes = Like.objects.filter(user=request.user)
 			reports = Report.objects.filter(user = request.user)
 
 		tags = term.tags.all()
+
 		
 		for explanation in explanations:
 			explanation.last_posted = last_posted_date(explanation.post_date)
-
+			
 			if request.user.id:
 				like = likes.filter(definition=explanation)
 				if like:
@@ -60,6 +89,8 @@ def term(request, term_name_slug):
 				else:
 					pass
 
+		
+			
 
 			if explanation.times_reported > PROFANITY_CHECK_THRESHOLD:
 				explanation.delete()
@@ -71,11 +102,13 @@ def term(request, term_name_slug):
 		context_dict['term'] = term
 		context_dict['tags'] = tags
 		context_dict['favourites'] = favorees
-		
+		if pictures:
+				context_dict['pictures'] = pictures
 
 		if request.user.id:
 			if likes:
 				context_dict['likes'] = likes
+
 
 
 		context_dict['liked'] = liked
@@ -83,6 +116,7 @@ def term(request, term_name_slug):
 		if request.method == 'POST' and 'add' in request.POST:
 		
 			form = DefinitionForm(request.POST or None)
+			pictures = request.FILES.getlist('pictures')
 			if form.is_valid():
 				definition = form.save(commit=False)
 
@@ -94,6 +128,14 @@ def term(request, term_name_slug):
 				definition.term = term
 				definition.author = request.user.author
 				definition.save()
+
+				
+				for picture in pictures:
+					Picture(definition = definition, image = picture, image_thumbnail = picture, term=term).save()
+
+				if request.user != definition.term.author.user:
+					Notification(typeof = 'explanation_notification', sender = request.user, receiver = definition.term.author.user, term = term).save()
+
 				return HttpResponseRedirect('/simplenation/term/'+ term_name_slug)
 			else:
 				print form.errors	
@@ -252,8 +294,6 @@ def tag_select(request):
 
 
 	context_dict['terms_for_explainers'] = terms_tag_filtered
-	#else:
-	#	pass
 
 	
 	return render(request, 'simplenation/index.html', context_dict)
@@ -268,6 +308,7 @@ def add_term(request):
 		term_form = TermForm(request.POST or None)
 		if term_form.is_valid():
 			term = term_form.save(commit=False)
+			term.author = request.user.author
 			term.save()
 			Notification(typeof = 'term_creation', sender = request.user, receiver = request.user, term = term).save()
 			
@@ -279,3 +320,23 @@ def add_term(request):
 	
 	context_dict['term_form'] = term_form
 	return render(request, 'simplenation/add_term.html', context_dict)
+
+
+def single_tag_view(request, tag_slug):
+	context_dict = {}
+	tags = []
+	tag = Tag.objects.get(slug = tag_slug)
+
+	terms_for_explainers = Term.objects.filter(tags__name__in = [tag.name]).distinct()
+	number_of_terms = terms_for_explainers.count()
+	tags.append(tag)
+
+	context_dict['tag'] = tag
+	context_dict['terms_for_explainers'] = terms_for_explainers
+	context_dict['number_of_terms'] = number_of_terms
+
+	return render(request, 'simplenation/single_tag.html', context_dict)
+
+
+
+
