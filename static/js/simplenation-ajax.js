@@ -247,7 +247,7 @@ $(document).ready(function(){
 			var obj = {}
 			$.ajax({
 			           type: "GET",
-			           url: "/simplenation/recent_notifications/",
+			           url: "/recent_notifications/",
 			           contentType: 'application/json; charset=utf-8',
 			           data: JSON.stringify(obj),
 			           success: function(data) {
@@ -264,7 +264,7 @@ $(document).ready(function(){
 			var obj = {}
 			$.ajax({
 			           type: "GET",
-			           url: "/simplenation/are_new_notifications/",
+			           url: "/are_new_notifications/",
 			           contentType: 'application/json; charset=utf-8',
 			           data: JSON.stringify(obj),
 			           success: function(data) {

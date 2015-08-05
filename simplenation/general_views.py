@@ -15,6 +15,7 @@ def index(request):
 	session_registry = request.session.get('session_registry')
 	session_id = request.session.get('session_id')
 	pressed_tag_names = []
+	domain = request.META['HTTP_HOST']
 
 	if session_id:
 		current_session = Session.objects.get(id = session_id)
@@ -61,6 +62,7 @@ def index(request):
 	context_dict['terms_for_explainers'] = terms_for_explainers
 	context_dict['tags'] = tags
 	context_dict['pressed_tag_names'] = pressed_tag_names
+	context_dict['domain'] = domain
 
 	return render(request, 'simplenation/index.html', context_dict)
 

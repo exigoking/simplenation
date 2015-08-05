@@ -1,6 +1,8 @@
 
 $(document).ready(function(){
 	
+	var domain = "http://" + document.location.host;
+
 	$('html').bind('click', function(event) {
 
     	currentElement = $('#'+event.target.id);
@@ -385,7 +387,7 @@ $(document).ready(function(){
 		var obj = { 'tag_name':tag_name }
 				$.ajax({
 			           type: "POST",
-			           url: "/simplenation/tag_deselect/",
+			           url: domain + "/tag_deselect/",
 			           contentType: 'application/json; charset=utf-8',
 			           data: JSON.stringify(obj),
 			           success: function(data) {
@@ -412,7 +414,7 @@ $(document).ready(function(){
 			if (tagname){	
 				$.ajax({
 				           type: "GET",
-				           url: "/simplenation/add_tags_to_term/",
+				           url: domain + "/add_tags_to_term/",
 				           data: { 'term_id': termid, 'tag_name': tagname, 'signal':signal}, //'csrfmiddlewaretoken': '{{csrf_token}}'},
 				           success: function(data) {
 									$('.tags-container').load(location.href + ' .tags-container');
@@ -445,7 +447,7 @@ $(document).ready(function(){
 		
 		$.ajax({
 		           type: "GET",
-		           url: "/simplenation/add_tags_to_term/",
+		           url: domain + "/add_tags_to_term/",
 		           data: { 'term_id': termid, 'tag_name': tagname, 'signal':signal}, //'csrfmiddlewaretoken': '{{csrf_token}}'},
 		           success: function(data) {
 							$('.tags-container').load(location.href + ' .tags-container');
@@ -520,7 +522,7 @@ $(document).ready(function(){
 
 			  $.ajax({
 			           type: "GET",
-			           url: "/simplenation/report_explanation/",
+			           url: domain + "/report_explanation/",
 			           data: { 'explanation_id': $(this).attr('data-expid')}, //'csrfmiddlewaretoken': '{{csrf_token}}'},
 			           success: function(data) {
 								$('.report-container').html(data);
@@ -611,7 +613,7 @@ $(document).ready(function(){
 
 		$.ajax({
 			           type: "POST",
-			           url: "/simplenation/edit_exp/",
+			           url: domain + "/edit_exp/",
 			           data: { 'explanation_id': explanation_id, 'body':body,'signal': signal},
 			           success: function(data) {
 								location.reload();
@@ -650,7 +652,7 @@ $(document).ready(function(){
 
 				$.ajax({
 			           type: "POST",
-			           url: "/simplenation/edit_exp/",
+			           url: domain + "/edit_exp/",
 			           data: { 'explanation_id': explanation_id, 'signal': signal},
 			           success: function(data) {
 								location.reload();

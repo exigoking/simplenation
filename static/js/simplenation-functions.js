@@ -1,4 +1,4 @@
-
+var domain = "http://" + document.location.host;
 // Linkify: to convert all links within text to <a href=..></a>.
 (function($){
 
@@ -42,7 +42,7 @@ function challenge(challengee_id, term_id){
 	var obj = {'challengee_id':challengee_id, 'term_id':term_id}
 		$.ajax({
 		           type: "POST",
-		           url: "/simplenation/challenge/",
+		           url: domain + "/challenge/",
 		           contentType: 'application/json; charset=utf-8',
 		           data: JSON.stringify(obj),
 		           success: function(data) {
@@ -73,7 +73,7 @@ function challengee_list(term_id){
 	var obj = { 'term_id':term_id }
 	$.ajax({
 		           type: "POST",
-		           url: "/simplenation/challengee_list/",
+		           url: domain + "/challengee_list/",
 		           contentType: 'application/json; charset=utf-8',
 		           data: JSON.stringify(obj),
 		           success: function(data) {
@@ -109,7 +109,7 @@ function recent_notifications(){
 	var obj = {}
 	$.ajax({
 	           type: "GET",
-	           url: "/simplenation/recent_notifications/",
+	           url: domain + "/recent_notifications/",
 	           contentType: 'application/json; charset=utf-8',
 	           data: JSON.stringify(obj),
 	           success: function(data) {
@@ -128,7 +128,7 @@ function are_new_notifications(){
 	var obj = {}
 	$.ajax({
 	           type: "GET",
-	           url: "/simplenation/are_new_notifications/",
+	           url: domain + "/are_new_notifications/",
 	           contentType: 'application/json; charset=utf-8',
 	           data: JSON.stringify(obj),
 	           success: function(data) {
@@ -227,7 +227,7 @@ function autocomplete_search(search_item){
 		var obj = { 'search_item':search_item }
 		$.ajax({
 		           type: "POST",
-		           url: "/simplenation/autocomplete_search/",
+		           url: domain + "/autocomplete_search/",
 		           contentType: 'application/json; charset=utf-8',
 		           data: JSON.stringify(obj),
 		           success: function(data) {
@@ -257,7 +257,7 @@ function autocomplete_tag_search(search_item){
 	var obj = { 'search_item':search_item }
 	$.ajax({
 	           type: "POST",
-	           url: "/simplenation/autocomplete_tag_search/",
+	           url: domain + "/autocomplete_tag_search/",
 	           contentType: 'application/json; charset=utf-8',
 	           data: JSON.stringify(obj),
 	           success: function(data) {
@@ -289,7 +289,7 @@ function autocomplete_tag_search(search_item){
 function tag_search(search_tag_item){
 		$.ajax({
 		           type: "GET",
-		           url: "/simplenation/search_tags/",
+		           url: domain + "/search_tags/",
 		           data: { 'search_tag_item': search_tag_item }, //'csrfmiddlewaretoken': '{{csrf_token}}'},
 		           success: function(data) {
 		           			if(data == 'No tags found, sorry'){
@@ -370,14 +370,16 @@ function chosen_tags_list(currently_pressed_tag){
 // Note: only filters up to 5 tags.
 function tag_filter(count, tag_choose_list){
 	var static_src = $('.static-src').attr("href");
+	
 	$('.terms-filtered-container').html('<img src="'+ static_src +'images/loader.gif" width="30" height="30">');
+
 	if(count == 0)
 			{
 
 			var obj = { 'number_of_tags':count }
 			$.ajax({
 		           type: "POST",
-		           url: "/simplenation/tag_select/",
+		           url: domain + "/tag_select/",
 		           contentType: 'application/json; charset=utf-8',
 		           data: JSON.stringify(obj),
 		           success: function(data) {
@@ -396,7 +398,7 @@ function tag_filter(count, tag_choose_list){
 
 			$.ajax({
 		           type: "POST",
-		           url: "/simplenation/tag_select/",
+		           url: domain + "/tag_select/",
 		           contentType: 'application/json; charset=utf-8',
 		           data: JSON.stringify(obj),
 		           success: function(data) {
@@ -420,7 +422,7 @@ function update_favoree_list(favoree_id, term_id){
 	var obj = { 'term_id' : term_id}
 	$.ajax({
 		           type: "POST",
-		           url: "/simplenation/update_favoree_list/",
+		           url: domain + "/update_favoree_list/",
 		           contentType: 'application/json; charset=utf-8',
 		           data: JSON.stringify(obj),
 		           success: function(data) {
@@ -446,7 +448,7 @@ function add_favourites_to_challenge(favoree_id, term_id)
 	var obj = { 'favoree_id': favoree_id}
 	$.ajax({
 		           type: "POST",
-		           url: "/simplenation/add_favoree/",
+		           url: domain + "/add_favoree/",
 		           contentType: 'application/json; charset=utf-8',
 		           data: JSON.stringify(obj),
 		           success: function(data) {
@@ -472,7 +474,7 @@ function add_favourites(favoree_id)
 	var obj = { 'favoree_id': favoree_id}
 	$.ajax({
 		           type: "POST",
-		           url: "/simplenation/add_favoree/",
+		           url: domain + "/add_favoree/",
 		           contentType: 'application/json; charset=utf-8',
 		           data: JSON.stringify(obj),
 		           success: function(data) {
@@ -499,7 +501,7 @@ function remove_favourites(favoree_id)
 	var obj = { 'favoree_id': favoree_id}
 	$.ajax({
 		           type: "POST",
-		           url: "/simplenation/remove_favoree/",
+		           url: domain + "/remove_favoree/",
 		           contentType: 'application/json; charset=utf-8',
 		           data: JSON.stringify(obj),
 		           success: function(data) {
@@ -526,7 +528,7 @@ function add_like(explanation_id)
 
 	jQuery.ajax({
 		           type: "POST",
-		           url: "/simplenation/add_like/",
+		           url: domain + "/add_like/",
 		           contentType: 'application/json; charset=utf-8',
 		           data: JSON.stringify(obj),
 		           success: function(data) {
@@ -547,7 +549,7 @@ function remove_like(explanation_id)
 
 	jQuery.ajax({
 		           type: "POST",
-		           url: "/simplenation/remove_like/",
+		           url: domain + "/remove_like/",
 		           contentType: 'application/json; charset=utf-8',
 		           data: JSON.stringify(obj),
 		           success: function(data) {
@@ -567,7 +569,7 @@ function cancel_edition(explanation_id){
 
 	jQuery.ajax({
        type: "POST",
-       url: "/simplenation/cancel_edition/",
+       url: domain + "/cancel_edition/",
        contentType: 'application/json; charset=utf-8',
        data: JSON.stringify(obj),
        success: function(data) {
@@ -608,7 +610,7 @@ function remove_picture(explanation_id, picture_id){
 
 	jQuery.ajax({
        type: "POST",
-       url: "/simplenation/remove_picture/",
+       url: domain + "/remove_picture/",
        contentType: 'application/json; charset=utf-8',
        data: JSON.stringify(obj),
        success: function(data) {
@@ -663,7 +665,7 @@ function send_email_confirmation(){
 
 	jQuery.ajax({
        type: "POST",
-       url: "/simplenation/send_email_confirmation/",
+       url: domain + "/send_email_confirmation/",
        contentType: 'application/json; charset=utf-8',
        data: JSON.stringify(obj),
        success: function(data) {
