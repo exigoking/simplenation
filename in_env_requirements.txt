@@ -1,0 +1,12 @@
+django>=1.7.1
+django-taggit
+django-tinymce
+djangorestframework
+pygments
+django-imagekit
+Pillow
+requests
+mysql-python
+django-registration
+django-storages 
+boto
