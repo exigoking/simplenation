@@ -1,9 +1,0 @@
-django >=1.7
-imagekit
-django-registration
-django-taggit
-djangorestframework
-PIL
-Pillow
-pygments
-requests
