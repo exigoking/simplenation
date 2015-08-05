@@ -5,147 +5,211 @@
 {% block title %}{{ term_name }}{% endblock %}
 
 {% block body_block %}
+	<div class="term-header-container">
+    	<div class="w-clearfix term-title-and-stats">
+    		<a class="term-title" href="{% url 'term' term.slug %}">{{ term.name }}</a>
+    		{% if user.is_authenticated %}
+      			<a class="w-inline-block challenge-dialog-opener" href="#" data-termid="{{term.id}}"></a>
+      		{% endif %}
+    	</div>
+    	<div class="tags-container-parent">
+      		<div class="tags-container">
+      			{% if tags %}
+      			<div id="tag-set-{{ term.name }}">
+      				{% for tag in tags %}
+		      			<a id="tag-name-{{tag.name}}" class="term-tag" href="{% url 'single_tag_view' tag.slug %}">{{ tag.name }}</a>
+		      			{% if user.is_authenticated %}
+		      				{% if user.username == term.author.user.username %}
+		      					<a id="tags-remove-{{tag.id}}" class="term-tag delete" data-tagname="{{tag.name}}" data-tagid="{{tag.id}}" data-signal="remove" data-termid="{{term.id}}" href="#">x</a>
+		      				{% endif %}
+		      			{% endif %}
+		      		{% endfor %}
+		      	</div>
+		      	{% else %}
+		      		{% if user.is_authenticated %}
+						<p> Tag this Term so people can find it! </p>
+					{% endif %}
+				{% endif %}
+        		<div class="w-form add-tags-form-wrapper">
+        			{% if user.is_authenticated %}
+          			
+            			<input class="w-input tags-input" id="tags-input-new" type="text" name="tag_name" placeholder="Add a tag and hit enter...">
+            			<button class="w-button tags-add" id="tags-add-new" type="submit" data-signal="add" data-termid="{{term.id}}"></button>
+          			
+          			{% endif %}
+        		</div>
+      		</div>
+    	</div>
+ 	</div>
+ 	{% if user.is_authenticated %}
+  	<div class = "challenge-dialog" style="display:none;">
+	  	<div class="favorite-dialog-block">
+		   		
+		    	{% if favourites %}
+		      	<h6 class="small-list-heading">Favorites</h6>
+		      		{% for favorite in favourites %}
+				      	<div class="w-clearfix dialog-list-block">
+				      		<img class="dialog-list-image" src="{{ favorite.author.picture.url }}" width="40">
+				      		<a class="dialog-author-title" href="{% url 'profile' favorite.author.slug %}">{{ favorite.author }}</a>
+				        <div class="dialog-challenge-button" id="dialog-challenge-button-{{favorite.id}}" data-challengeeid = "{{favorite.id}}" data-termid="{{term.id}}"></div>
+		      			</div>
+		      		{% endfor %}
+		      	{% endif %}
+		      	{% if favourites_of_favourites %}
+		      	<h6 class="small-list-heading">People you may know</h6>
+		      		{% for favorite in favourites_of_favourites %}
+			      		<div class="w-clearfix dialog-list-block">
+			      			<img class="dialog-list-image" src="{{ favorite.author.picture.url }}" width="40">
+			      			<a class="dialog-author-title" href="{% url 'profile' favorite.author.slug %}">{{ favorite.author }}</a>
 
+			        		<div class="dialog-challenge-button" id="dialog-challenge-button-{{favorite.id}}" data-challengeeid = "{{favorite.id}}" data-termid="{{term.id}}"></div>
+			        		<div class="dialog-add-favorite" id="dialog-add-favorite-{{favorite.id}}" data-userid = "{{favorite.id}}" data-termid="{{term.id}}"></div>
+	      				</div>
+		      		{% endfor %}
+		      	{% endif %}
+		      	{% if top_contributors %}
+		      	<h6 class="small-list-heading">Top contributors</h6>
+		      		{% for contributor in top_contributors %}
+			      		<div class="w-clearfix dialog-list-block">
+			      			<img class="dialog-list-image" src="{{ contributor.picture.url }}" width="40">
+			      			<a class="dialog-author-title" href="{% url 'profile' contributor.slug %}">{{ contributor }}</a>
 
-	<h2>{{ term.name }}</h2>
-	<p>{{term.views}} Views</p>
-	<div class="tags-container-parent">
-	<div class="tags-container">
-		{% if tags %}
-		<div id="tag-set-{{ term.name }}">  
-		{% for tag in tags %}
-			{% if tag.name %}
-			 
-			<a class="tag-name" id="tag-name-{{tag.name}}" href="{% url 'single_tag_view' tag.slug %}">{{ tag.name }}</a>
-			{% if user.is_authenticated %}
-				<button id="tags-remove-{{tag.id}}" data-tagname="{{tag.name}}" data-tagid="{{tag.id}}" type="submit" data-signal="remove" data-termid="{{term.id}}" class="tags-remove"> X</button>
-			{% endif %}
-			{% endif %}
-		{% endfor %}
-		</div>
-		{% else %}
-			{% if user.is_authenticated %}
-				<p> Tag this Term so people can find it! </p>
-			{% endif %}
-		{% endif %}
-		{% if user.is_authenticated %}
-			<input id="tags-input-new" type="text" name="tag_name" placeholder="Add a tag and hit enter..." class='tags-input'>
-			<button id="tags-add-new"as type="submit" data-signal="add" data-termid="{{term.id}}" class="tags-add"> + </button>	
-		{% endif %}
+			        		<div class="dialog-challenge-button" id="dialog-challenge-button-{{contributor.user.id}}" data-challengeeid = "{{contributor.user.id}}" data-termid="{{term.id}}"></div>
+			        		<div class="dialog-add-favorite" id="dialog-add-favorite-{{contributor.user.id}}" data-userid = "{{contributor.user.id}}" data-termid="{{term.id}}"></div>
+	      				</div>
+		      		{% endfor %}
+
+		      	{% endif %}
+		    
+	   	</div>
 	</div>
-	</div>
-
-
-	<div class = "challenge-dialog">
-		{% if favourites %}
-			{% for favourite in favourites %}
-			<h3>Favourites</h3>
-			<p> {{ favourite.username }} </p>
-			{% endfor %}
-		{% endif %}
-	</div>
-	{% if user.is_authenticated %}
-		<button class = "challenge-dialog-opener">Challenge</button>
 	{% endif %}
-
-
 	{% if explanations %}
-	<h4>Proposed explanations</h4>
-		
+	<div class="explanations-container-parent">
 		{% for explanation in explanations %}
-
-			<div class="exp-container-parent" id='exp-container-{{explanation.id}}' data-expid='{{ explanation.id }}'>
-			
-			<span>
-				<div class="profile-circular-mask"><img class="alignnone" src="{{ explanation.author.picture.url }}" alt="" width="58" height="58" style="border-radius: 50%;"/></div>
-				<strong><a href="{% url 'profile' explanation.author.slug %}">{{ explanation.author }}</a> score: {{ explanation.author.score }} rank: {{explanation.author.ranking }}</strong> proposed <strong>{{ explanation.last_posted }}</strong>      
-			</span>
-			{% autoescape off %}
-			<p>
-			 <div id="exp-body-{{explanation.id}}" class='exp-body'>{{ explanation.body }}</div>
-			 {% if user.username == explanation.author.user.username %}
-				 <button id="edit-{{ explanation.id }}" data-editid="{{explanation.id}}" class="edit_class" type="submit" name="edit">Edit</button>
-				
-				<!-- Edit explanation logic -->
-				<div id="edit-form-{{ explanation.id }}" class="edit_form" style="display:none">
-
-					<textarea id="edit-input-{{ explanation.id }}" name="body" cols="92" rows="10" maxlength="512" style="width:40%" class="edit-input" data-signal="edit">{{ explanation.body }}</textarea>
-						<button type="submit" class='edit-button'>Edit</button>
-						<button id="delete-button-{{ explanation.id }}" data-signal="delete" type="submit" name="delete_method" value="Delete" >Delete</button>
-				</div>
-			</p> 
-									
-			{% endif %}
-
-			{% endautoescape %}
-			
-			<div class="pictures-container" id="pictures-container-{{explanation.id}}">
-			{% if pictures %}
+    	<div class="w-clearfix exp-container-parent" id='exp-container-{{explanation.id}}' data-expid='{{ explanation.id }}'>
+      		<div class="exp-body" id="exp-body-{{explanation.id}}">
+        		<p>{{ explanation.body }}</p>
+      		</div>
+      		{% autoescape off %}
+      		<div class="edit_form" id="edit-text-{{ explanation.id }}" style="display:none">
+        		<div class="w-form all-form-wrappers">
+          			<form id="email-form-3" name="email-form-3" data-name="Email Form 3">
+            			<textarea class="w-input edit-input" id="edit-input-{{ explanation.id }}" name="body" cols="92" rows="5" maxlength="2048" data-signal="edit">{{ explanation.body }}</textarea>
+          			</form>
+        		</div>
+      		</div>
+      		{% endautoescape %}
+      		<div class="pictures-container" id="pictures-container-{{explanation.id}}" >
+      		{% if pictures %}
+				{% for picture in pictures %}
+					{% if picture.definition == explanation  %}
+						{% if not picture.to_delete %}
+		    			<div class="picture-container" id="picture-container-{{picture.id}}" data-pictureid="{{picture.id}}" data-expid='{{ explanation.id }}'>
+		    				<img class="picture-thumbnail" id="picture-thumbnail-{{picture.id}}" data-pictureid="{{picture.id}}" data-expid='{{ explanation.id }}' src="{{ picture.image_thumbnail.url }}" alt="img{{picture.id}}">
+		    				{% if user.username == explanation.author.user.username %}
+		    					<button class="remove-picture" id="remove-picture-{{picture.id}}" data-pictureid="{{picture.id}}" data-expid="{{explanation.id}}" style="display:none; border: 0px;">x</button>
+		    				{% endif %}
+		    			</div>
+		    			{% endif %}
+					{% endif %}
+				{% endfor %}
+				<ul class="gallery-images" id="gallery-{{explanation.id}}" style="display:none;">
 					{% for picture in pictures %}
-					
 						{% if picture.definition == explanation  %}
-							<img src="{{ picture.image_thumbnail.url }}" width="100" height="100"/>
-							{% if user.username == explanation.author.user.username %}
-								<button id="remove-picture-{{picture.id}}" data-pictureid="{{picture.id}}" class="remove-picture" data-expid="{{explanation.id}}">X</button>
+							{% if not picture.to_delete %}
+							<li class="gallery-element-{{explanation.id}}" id="gallery-element-{{picture.id}}">
+								<img class="gallery-image" id="gallery-image-{{picture.id}}" src="{{picture.image.url}}" alt="img{{picture.id}}">
+								<div data-desc="{{ explanation.body }}"></div>
+							</li>
 							{% endif %}
 						{% endif %}
-					
 					{% endfor %}
-			{% endif %}
-
-			{% if user.username == explanation.author.user.username %}
-				<form class="picture-add-form" id="picture-form-{{explanation.id}}" action="{% url 'add_picture' explanation.id %}" method="POST" enctype="multipart/form-data">
+				</ul>
+		    {% endif %}
+	        {% if user.username == explanation.author.user.username %}
+	        	<div class="add-picture" id = "add-picture-of-{{explanation.id}}" data-expid="{{explanation.id}}" style="display:none">
+					<img class="add-picture-placeholder" src="{% static "images/add-photo@2x.png" %}">
+				</div>
+    			<div id="picture-edit-{{explanation.id}}" class="picture-edit-block" style="display:none">
+					<form class="picture-add-form" id="picture-form-{{explanation.id}}" action="{% url 'add_picture' explanation.id %}" method="POST" enctype="multipart/form-data" >
 					{% csrf_token %}
-					<input class="picture-add" type="file" name="pictures" id = "picture-of-{{explanation.id}}" data-expid="{{explanation.id}}">
-					<button id = "add-picture-{{explanation.id}}" class="add-picture" style="display:none;">Upload</button>
-				</form>
-			{% endif %}
+					<input class="picture-add" type="file" name="pictures" id = "picture-of-{{explanation.id}}" data-expid="{{explanation.id}}" style="display:none;">
+					</form>
+				</div>
+	        {% endif %}
+	        
+      		</div>
+      		{% if user.username == explanation.author.user.username %}
+      			<button class="edit_class" id="edit-{{ explanation.id }}" data-editid="{{explanation.id}}" style="background-color: transparent;border: 0px;">Edit</button>
+      		{% endif %}
+      		<div class="like-container">
+      			{% if user.is_authenticated %}
+        			<button class="w-inline-block like_class {{ explanation.like_text }}" id="likes-{{ explanation.id }}" data-likeflag="liked" data-expid="{{ explanation.id }}" style="background-color: transparent;border: 0px;"></button>
+        		{% else %}
+        			<button class="w-inline-block like_class not-registered" id="likes-{{ explanation.id }}" data-likeflag="liked" data-expid="{{ explanation.id }}" style="background-color: transparent;border: 0px;"></button>
+        		{% endif %}
+        		<div class="likes-count" id="likes-count-{{ explanation.id }}">{{ explanation.likes }}</div>
+      		</div>
+      		<div id="edit-option-{{ explanation.id }}" class="edit-option-buttons" style="display:none">
+      			<button class="delete-post-button" id="delete-button-{{ explanation.id }}" data-signal="delete" data-expid='{{ explanation.id }}' style="background-color: transparent;border: 0px;">Remove Post</button>
+      			<button class="edit-button" data-expid='{{ explanation.id }}' data-signal='edit' style="background-color: transparent;border: 0px;">Save</button>
+      			<button class="cancel-edit-button" data-expid='{{ explanation.id }}' style="background-color: transparent;border: 0px;">Cancel</button>
 			</div>
+      		
+      		<a class="w-inline-block exp-author" href="{% url 'profile' explanation.author.slug %}">
+      			<img class="author-img" src="{{ explanation.author.picture.url }}" width="30">
+       		 	<div class="author-title">{{ explanation.author.user.username|slice:":13" }}</div>
+        		<div class="author-stats">{{ explanation.author.score }}</div>
+        		<div class="author-stats">#{{ explanation.author.ranking }}</div>
+        		<div class="author-stats" style="color:#b0b0b0; font-size:11px;">{{ explanation.last_posted }}</div>
+      		</a>
+    	</div>
+    	{% endfor%}
+  	</div>
+  	{% else %}
+  	<div class="explanations-container-parent">
+  		<p style="text-align:left;">Be the first one to explain. Help people understand things faster.</p>
+  	</div>
+  	{% endif %}
+  	{% if user.is_authenticated %}
+  	<div class="w-form">
+    	<form class="explanation-post-form" action="{% url 'term' term.slug %}" method="POST" enctype="multipart/form-data">
+      		<h1 class="post-form-heading">Your Explanation</h1>
+      		{% csrf_token %}
+      		<textarea class="w-input post-input" id="exp_input" name="body" placeholder="Explain using as FEW words and/or pictures as POSSIBLE" cols="92" rows="7" maxlength="2048"></textarea>
+     		<div class="add-post-pictures">
+        		<div class="add-post-picture preview" id="preview-picture-0" style="display:none; overflow:hidden;">
+        			<img class="add-post-picture-placeholder preview" id="add-post-picture-preview-0" data-count="0" src="#">
+        			<button class="remove-post-picture" id="remove-post-picture-0" data-count="0" style="border: 0px;" type="button">x</button>
+        		</div>
+       			 <div class="add-post-picture" id="add-post-picture-wrapper-0">
+       			 	<input class="add-post-picture-input" id="add-post-picture-0" data-count="0" type="file" name="pictures" style="display:none;">
+       			 	<img class="add-post-picture-placeholder" id="add-post-picture-placeholder-0" data-count="0" src="{% static "images/add-photo@2x.png" %}">
+        		</div>
+      		</div>
+      		<input class="w-button post-button" name="add" type="submit" value="POST EXPLANATION">
+    	</form>
+  	</div>
+  	{% else %}
+  	<div class="explanation-post-form">
+  		<h1 class="post-form-heading">Your Explanation</h1>
+  		<textarea class="w-input post-input" id="exp_input" name="body" placeholder="Explain using as FEW words and/or pictures as POSSIBLE" cols="92" rows="7" maxlength="2048"></textarea>
+  		<div class="add-post-pictures">
+    		<div class="add-post-picture preview" id="preview-picture-0" style="display:none; overflow:hidden;">
+    			<img class="add-post-picture-placeholder preview" id="add-post-picture-preview-0" data-count="0" src="#">
+    			<button class="remove-post-picture" id="remove-post-picture-0" data-count="0" style="border: 0px;" type="button">x</button>
+    		</div>
+   			 <div class="add-post-picture" id="add-post-picture-wrapper-0">
+   			 	<input class="add-post-picture-input" id="add-post-picture-0" data-count="0" type="file" name="pictures" style="display:none;">
+   			 	<img class="add-post-picture-placeholder" id="add-post-picture-placeholder-0" data-count="0" src="{% static "images/add-photo@2x.png" %}">
+    		</div>
+  		</div>
+  		<input class="w-button post-button not-registered" name="add" type="submit" value="POST EXPLANATION">
 
-			<p>
-			{% if user.is_authenticated %}	
-						<button id="likes-{{ explanation.id }}" data-likeflag="liked" data-expid="{{ explanation.id }}" class="likes_class" type="submit" name="like" >{{explanation.like_text}}</button>
-
-						<div class="report-container" id="report-container-{{ explanation.id }}">
-						{% if explanation.reporter == user.id %}
-							<p>Successfully reported</p>
-						{% else %}
-							<button id="reports-{{ explanation.id }}" data-expid="{{ explanation.id }}" class="reports_class" type="submit" name="report" >Report Inappropriate</button>
-						{% endif %}
-
-						</div>
-			{% endif %}
-
-			</p>
-			<div id="likes-count-{{ explanation.id }}" class="likes-count">{{ explanation.likes }} <strong>likes</strong></div>
-
-			
-		<br />
-		</div>
-		{% endfor %}
-	{% else %}
-		<p> There are no explanations for {{ term_name }} yet! </p>
-	{% endif %}
-		
-	{% if user.is_authenticated %}	
-		<form class="explanation-post-form" action="{% url 'term' term.slug %}" method="POST" enctype="multipart/form-data">
-			<h3>Your explanation</h3>
-			{% csrf_token %}
-			<textarea id="exp_input" name="body" placeholder="Explain using as FEW words and pictures as POSSIBLE" cols="92" rows="3" maxlength="512" style="width:40%"></textarea>
-			<div class="add-post-pictures">
-				<input class="add-post-picture" id="add-post-picture-0" type="file" name="pictures">
-			</div>
-			<br />
-			<input type="submit" name="add" value="POST" />
-		
-		</form>
-	{% else %}
-		<br />
-
-		<p class="navbar-link navbar-link-1">Please dear guest, <a href="{% url 'signin' %}?next={{ request.get_full_path|urlencode }}">Sign In</a> or <a href="{% url 'register' %}?next={{ request.get_full_path|urlencode }}">Sign Up</a> to add an explanation.</p>
-
-
-	{% endif %}
+  	</div>
+  	{% endif %}
 {% endblock %}
+
 
 

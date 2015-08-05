@@ -6,7 +6,33 @@
 
 {% block body_block %}
 
-	<h4>Sign up</h4>
+<div class="sign-in-block"> 
+    <h3>Sign up</h3>
+    <div class="w-form">
+      <form class="w-clearfix sign-in-form registration-form" id="user_form" method="post" action="{% url 'register' %}"
+        enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if registration_error_message %}
+            <div class="form-error-msg">{{ registration_error_message }}</div>
+        {% elif user_form.email.errors %}
+            <div class="form-error-msg">{{ user_form.email.errors.as_text }}</div>
+        {% elif user_form.errors.values.0 %}
+            <div class="form-error-msg">{{ user_form.errors.values.0.as_text }}</div>
+        {% endif %}
+        <input class="w-input sign-in-input" id="email" type="text" placeholder="email" name="email">
+        <input class="w-input sign-in-input" id="username" type="text" placeholder="username" name="username">
+        <input class="w-input sign-in-input" id="password1" type="password" placeholder="password" name="password1">
+        
+        <label class="profile-picture-label" for="field">Pic of you:</label>
+        <div class="profile-registration-mask" style="display:none;"><img class="profile-registration-img" src="#" alt="" width="100%" height="100%" style="border-radius: 0px;"/></div>
+        <input class="add-profile-picture" id="picture" type="file" name="picture">
+        <div class="terms-agreement-notice">By pressing Join you are agreeing to our Terms of Service and Privacy Policy.</div>
+        <input class="w-button sign-in-button" type="submit" value="Join">
+        <input type="hidden" name="next" value="{{ next }}">
+      </form>
+    </div>
+</div>
+	<!-- <h4>Sign up</h4>
 	
 	<form id="user_form" method="post" action="{% url 'register' %}"
 		enctype="multipart/form-data">
@@ -23,7 +49,7 @@
     </div>
     <br>
     <div class="fieldWrapper">        
-        {{user_form.errors.values.1}}            
+        {{user_form.errors.values.1}}             
         <label>Password</label><br>                    
         {{ user_form.password1 }}
     </div>
@@ -37,7 +63,7 @@
 	
 		<input type="submit" name="submit" value="Sign up" />
 		<input type="hidden" name="next" value="{{ next }}">
-	</form>
+	</form> -->
 
 {% endblock %}
 

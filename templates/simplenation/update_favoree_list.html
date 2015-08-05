@@ -1,0 +1,38 @@
+
+{% load staticfiles %}
+
+	{% if favourites %}
+		      	<h6 class="small-list-heading">Favorites</h6>
+		      		{% for favorite in favourites %}
+				      	<div class="w-clearfix dialog-list-block">
+				      		<img class="dialog-list-image" src="{{ favorite.author.picture.url }}" width="40">
+				      		<a class="dialog-author-title" href="{% url 'profile' favorite.author.slug %}">{{ favorite.author }}</a>
+				        <div class="dialog-challenge-button" id="dialog-challenge-button-{{favorite.id}}" data-challengeeid = "{{favorite.id}}" data-termid="{{term.id}}"></div>
+		      			</div>
+		      		{% endfor %}
+		      	{% endif %}
+		      	{% if favourites_of_favourites %}
+		      	<h6 class="small-list-heading">People you may know</h6>
+		      		{% for favorite in favourites_of_favourites %}
+			      		<div class="w-clearfix dialog-list-block">
+			      			<img class="dialog-list-image" src="{{ favorite.author.picture.url }}" width="40">
+			      			<a class="dialog-author-title" href="{% url 'profile' favorite.author.slug %}">{{ favorite.author }}</a>
+
+			        		<div class="dialog-challenge-button" id="dialog-challenge-button-{{favorite.id}}" data-challengeeid = "{{favorite.id}}" data-termid="{{term.id}}"></div>
+			        		<div class="dialog-add-favorite" id="dialog-add-favorite-{{favorite.id}}" data-userid = "{{favorite.id}}" data-termid="{{term.id}}"></div>
+	      				</div>
+		      		{% endfor %}
+		      	{% endif %}
+		      	<h6 class="small-list-heading">Top contributors</h6>
+		      	{% if top_contributors %}
+		      		{% for contributor in top_contributors %}
+			      		<div class="w-clearfix dialog-list-block">
+			      			<img class="dialog-list-image" src="{{ contributor.picture.url }}" width="40">
+			      			<a class="dialog-author-title" href="{% url 'profile' contributor.slug %}">{{ contributor }}</a>
+
+			        		<div class="dialog-challenge-button" id="dialog-challenge-button-{{contributor.user.id}}" data-challengeeid = "{{contributor.user.id}}" data-termid="{{term.id}}"></div>
+			        		<div class="dialog-add-favorite" id="dialog-add-favorite-{{contributor.user.id}}" data-userid = "{{contributor.user.id}}" data-termid="{{term.id}}"></div>
+	      				</div>
+		      		{% endfor %}
+
+		      	{% endif %}

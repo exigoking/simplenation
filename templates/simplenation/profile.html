@@ -5,131 +5,66 @@
 {% block title %}{{ profile_name }}{% endblock %}
 
 {% block body_block %}
-	{% autoescape off %}
-	{% if user.is_authenticated %}
-		{% if user.username == profile_name %}
-		<h4>Your profile</h4>
-		<div class="profile-circular-mask"><img class="alignnone" src="{{ author.picture.url }}" alt="" width="58" height="58" style="border-radius: 50%;"/></div>
-		<p><a href="{% url 'edit_profile' author.slug %}">Edit your profile</a></p>
-		<p>Username: {{ profile_name }}</p>
-		<p>Bio: {{ profile_bio }} </p>
-		<p>Score: {{ author.score }}</p>
-		<p>Rank: {{ author.ranking }}</p>
-		<p>Favourites: </p>
-			{% if favorees %}
-				{% for favoree in favorees %}
-					<p>{{ favoree.username }}</p>
-				{% endfor %}
-			{% endif %}
-		<table style="text-align: left; width: 1001px; height: 52px; padding: 1px;" >
-			<tbody>
-				<tr>
-					<td style="vertical-align: top;">#<br>
-					</td>
-					<td style="vertical-align: top;">Term<br>
-					</td>
-					<td style="vertical-align: top;">Explanation<br>
-					</td>
-					<td style="vertical-align: top;">Time posted<br>
-					</td>
-					<td style="vertical-align: top;">Likes<br>
-					</td>
-				</tr>
-				{% if explanations %}
-					{% for explanation in explanations %}
-						{% if explanation %}
-				<tr>
-					<td style="vertical-align: center;"><br>
-					</td>
-					<td style="vertical-align: center;"><a href="{% url 'term' explanation.term.slug %}">{{ explanation.term.name }}</a><br>
-					</td>
-					<td style="vertical-align: center;">{{ explanation.body|truncatewords:3}}<br>
-					</td>
-					<td style="vertical-align: center;">{{ explanation.post_date}}<br>
-					</td>
-					<td style="vertical-align: center;"> {{ explanation.likes }}<br>
-					</td>
-						{%endif%}
-					{% endfor %}
-				</tr>
-				{%endif%}
-			</tbody>
-		</table>
+	{% if success %}
+	<div class="w-clearfix profile-header">
+    	<div class="profile-picture-block">
+    		<img class="profile-picture" src="{{ author.picture.url }}" width="170">
+    	</div>
+    	<div class="profile-info-block">
+      		<p class="profile-info-element">
+      			<a class="author-title profile-page" href="{% url 'profile' author.slug %}">{{ profile_name }}</a>
+      		</p>
+      		{% if user.username == profile_name %}
+      			<a class="edit-profile-trigger" href="{% url 'edit_profile' author.slug %}">Edit Your Profile</a>
+      			<a class="edit-profile-trigger logout" href="{% url 'signout' %}" style="margin-left:30px;">Sign Out</a>
+      		{% endif %}
+      		<p class="profile-info-element">Score: {{ author.score }}</p>
+      		<p class="profile-info-element">Rank: {{ author.ranking }}</p>
+      		<p class="profile-info-element about">Favorites: <button class="favorite-number" style="background-color:transparent;border:0px;">{{ favourites_count }}</button></p>
+      		
 
-			
-				
-					
-
-					 
-					
-				
-				
-
-		{% else %} <!-- IF the user is not profile owner -->
-		<h4>{{ profile_name }}</h4>
-
-		<div class="profile-circular-mask"><img class="alignnone" src="{{ author.picture.url }}" alt="" width="58" height="58" style="border-radius: 50%;"/></div>
-		<p>Username: {{ profile_name }}</p>
-		<span><p>Bio: </p></span><span>{{ profile_bio }}</span>
-		<p>Score: {{ author.score }}</p>
-		<p>Rank: {{ author.ranking }}</p>
-		<p>Favourites: </p>
-			{% if favorees %}
-				{% for favoree in favorees %}
-					<p>{{ favoree.username }}</p>
-				{% endfor %}
-			{% endif %}
-		<button id="favourite-{{ favourite.id }}" data-favoree-id="{{ author.user.id }}" class="favourites_class" type="submit" name="add_favourites">{{ favor_button_text }}</button>
-		
-		<table style="text-align: left; width: 1001px; height: 52px; padding: 1px;" >
-			<tbody>
-				<tr>
-					<td style="vertical-align: top;">#<br>
-					</td>
-					<td style="vertical-align: top;">Term<br>
-					</td>
-					<td style="vertical-align: top;">Explanation<br>
-					</td>
-					<td style="vertical-align: top;">Time posted<br>
-					</td>
-					<td style="vertical-align: top;">Likes<br>
-					</td>
-				</tr>
-				{% if explanations %}
-					{% for explanation in explanations %}
-						{% if explanation %}
-				<tr>
-					<td style="vertical-align: center;"><br>
-					</td>
-					<td style="vertical-align: center;"><a href="{% url 'term' explanation.term.slug %}">{{ explanation.term.name }}</a><br>
-					</td>
-					<td style="vertical-align: center;">{{ explanation.body|truncatewords:3}}<br>
-					</td>
-					<td style="vertical-align: center;">{{ explanation.post_date}}<br>
-					</td>
-					<td style="vertical-align: center;"> {{ explanation.likes }}<br>
-					</td>
-						{%endif%}
-					{% endfor %}
-				</tr>
-				{%endif%}
-			</tbody>
-		</table>
-			
-		
-		{% endif %}			
-	{% else %} <!-- IF the user is not registered -->
-		<h4>{{ profile_name }}</h4>
-
-		<div class="profile-circular-mask"><img class="alignnone" src="{{ author.picture.url }}" alt="" width="58" height="58" style="border-radius: 50%;"/></div>
-		<p>Username: {{ profile_name }}</p>
-		<span><p>Bio: </p></span><span>{{ profile_bio }}</span>
-		<p>Score: {{ author.score }}</p>
-		<p>Rank: {{ author.ranking }}</p>
-
-
+      		{% if user.is_authenticated %}
+      			{% if user.username != profile_name %}
+      				<button class="w-button favor-button {{ favorite_button_class }}" id="favourite-{{ favourite.id }}" data-favoree-id="{{ author.user.id }}">{{ favor_button_text }}</button>
+      			{% endif %}
+      		{% endif %}
+    	</div>
+  	</div>
+  	<div class="profile-table-block">
+  		{% if explanations %}
+  			<p style="font-size:16px; font-weight:bold;">Recent Contributions</p>
+  			{% for explanation in explanations %}
+    			<p class="profile-table-element"><a href="{% url 'term' explanation.term.slug %}"><span class="profile-term-span">{{ explanation.term.name }}</span>: <span class="profile-explanation-span">{{ explanation.body|slice:":50" }}...</span></a> <span style="float:right;"><span style="color:grey;">{{ explanation.last_posted }}</span>. Likes: {{ explanation.likes }} </p></span> 
+    		{% endfor %}
+    	{% endif %}
+  	</div>
+  	<div class = "favorites-list-dialog" style="display:none;">
+	  	<div class="favorite-dialog-block">
+		   		
+		    	{% if favourites %}
+		      	<h6 class="small-list-heading">Favorites</h6>
+		      		{% for favorite in favourites %}
+				      	<div class="w-clearfix dialog-list-block">
+				      		<img class="dialog-list-image" src="{{ favorite.author.picture.url }}" width="40">
+				      		<a class="dialog-author-title" href="{% url 'profile' favorite.author.slug %}">{{ favorite.author }}</a>
+		      			</div>
+		      		{% endfor %}
+		      	{% else %}
+            <div class="no-found-terms" style="margin-top:50px;" >
+              <img src="{% static "images/Empty-Set-Black@2x.png" %}" width="70px">
+               <div class="no-found-terms-text">No favorites</div>
+            </div>
+		      	
+    			{% endif %}
+	   	</div>
+	</div>
+	{% else %}
+	<div class="no-found-terms" style="margin-top:50px;">
+    	<img src="{% static "images/delete_user_picture.png" %}" width="100px">
+    	<div class="no-found-terms-text">User does not exist</div>
+    </div>
 	{% endif %}
-	{% endautoescape %}
+	
 {% endblock %}
 
 

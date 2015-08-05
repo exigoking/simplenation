@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from registration.forms import RegistrationForm
 from django.contrib.auth.forms import UserCreationForm
 
+
 class TermForm(forms.ModelForm):
 	name = forms.TextInput(attrs={'placeholder':'Enter the term...'})
 	views = forms.IntegerField(widget=forms.HiddenInput(), initial=0, required=False)
@@ -20,15 +21,21 @@ class DefinitionForm(forms.ModelForm):
 		fields = ('body',)
  
 
-class UserForm(UserCreationForm):
+class UserForm(forms.ModelForm):
+	
 	username = forms.CharField(
 		widget=forms.TextInput(attrs={'placeholder':'Enter username...'})
 		)
 	email = forms.EmailField(widget = forms.TextInput(attrs={'placeholder':'Enter email...'}))
-
+	password1 = forms.CharField(error_messages = {
+								'password_mismatch': ("Passwords don't match."),
+								'required':("Please enter password."),
+								},
+								widget=forms.PasswordInput(attrs={'placeholder':'New password...'}))
+	
 	class Meta:
 		model = User
-		fields = ('username', 'email', 'password1', 'password2')
+		fields = ('username', 'email', 'password1',)
 
 	def clean_email(self):
 	    email = self.cleaned_data["email"]
@@ -36,18 +43,26 @@ class UserForm(UserCreationForm):
 	        User._default_manager.get(email=email)
 	    except User.DoesNotExist:
 	        return email
-	    raise forms.ValidationError('duplicate email')
+	    raise forms.ValidationError('We have someone with this email already.')
+
+	def save(self, commit=True):
+		user = super(UserForm, self).save(commit=False)
+		user.set_password(self.cleaned_data["password1"])
+		if commit:
+		    user.save()
+		return user
+
 
 	
 class ProfileForm(forms.ModelForm):
-	bio = forms.CharField(required = False)
+	picture = forms.ImageField(required = False)
 	class Meta:
 		model = Author
-		fields = ('picture','bio')
+		fields = ('picture',)
 
 class NewProfileForm(RegistrationForm):
 	picture = forms.ImageField(label="Profile picture", required = False)
-	bio = forms.CharField(required = False)
+	
 	
 class PasswordResetRequestForm(forms.Form):
 	email_or_username = forms.CharField(max_length=254, widget = forms.TextInput(attrs={'placeholder':'Email or Username...'}))
@@ -55,6 +70,7 @@ class PasswordResetRequestForm(forms.Form):
 class SetPasswordForm(forms.Form):
 	error_messages = {
 		'password_mismatch': ("The two password fields didn't match."),
+		'required':("Please enter password."),
 	}
 	new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder':'New password...'}))
 	new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder':'Confirm password...'}))

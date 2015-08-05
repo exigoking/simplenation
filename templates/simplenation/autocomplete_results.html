@@ -1,7 +1,9 @@
-<div class="suggestions">
-          		{% if suggestions %}
-					{% for suggestion in suggestions %}
-					<p class="suggestion" id = "suggestion-{{suggestion.id}}"><a href="{% url 'term' suggestion.slug %}">{{ suggestion.name }}</a></p>
-					{% endfor %}
-				{% endif %}
-</div>
+				{% if suggestions %}
+        			<div class="suggestions-container">
+        				{% for suggestion in suggestions %}
+          					<div class="suggestion">
+          						<a href="{% url 'term' suggestion.slug %}" style="text-align:left; color:black" ><div class="suggestion-text" id = "suggestion-{{suggestion.id}}">{{ suggestion.name }}</div></a>
+         	 				</div>
+         	 			{% endfor %}
+         	 		</div>
+         	 	{% endif %}

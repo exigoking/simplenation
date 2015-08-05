@@ -24,6 +24,9 @@ class FavouriteManager(models.Manager):
     def is_favoree(self, user1, user2):
         return self.filter(Q(favoror=user1, favoree=user2)).count() > 0
 
+    def favoree_count(self, user):
+        return self.filter(Q(favoror=user)).count()
+
 
 
 class ChallengeManager(models.Manager):

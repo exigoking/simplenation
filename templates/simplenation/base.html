@@ -14,138 +14,161 @@
     	
  
 		<title>SimpleNation - {% block title %}Describe in your own words!{% endblock %}</title>
-		<!-- <link href="http://dev.djangobook.com/static/simplenation/simplenation.css" type="text/css" rel="stylesheet" />
-		<<link href="http://dev.djangobook.com/static/simplenation/index.css" type="text/css" rel="stylesheet" />
-		<link href="http://dev.djangobook.com/static/simplenation/standardize.css" type="text/css" rel="stylesheet" />
-		<link href="http://dev.djangobook.com/static/simplenation/index-grid.css" type="text/css" rel="stylesheet" />  -->
+		
 
       	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		<!--<script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script> -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-		<script src="{% static "js/simplenation-ajax.js" %}"></script>
-		<script src="{% static "js/autocomplete/src/jquery.autocomplete.js" %}"></script>
-		<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-      	<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+		<script src="{% static "js/simplenation-main.js" %}"></script>
+    <script src="{% static "js/simplenation-functions.js" %}"></script>
+    <script src="{% static "js/jquery.growl.js" %}"></script>
+		<script src="{% static "js/autocomplete/src/jquery.autocomplete.js" %}" type="text/javascript"></script>
+
+    <script src="{% static "gallery/js/Am2_SimpleSlider.js" %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static "gallery/css/SimpleSlider.css" %}">
+		<link rel="stylesheet" type="text/css" href="{% static "css/normalize.css" %}">
+  	<link rel="stylesheet" type="text/css" href="{% static "css/webflow.css" %}">
+  	<link rel="stylesheet" type="text/css" href="{% static "css/simplenation.webflow.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css/jquery.growl.css" %}">
+	  
+    <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 		
 
 		
-		
-		<script>
-		// tinymce.init({
-		// 	mode: 'textareas',
-		//     plugins: [
-		//         "visualblocks fullscreen",
-		//         "paste"
-		//     ],
-		//     width: 600,
-		    
-		//     toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent"
-		// });
-		</script>
-		 
 		
 		
 	</head>
 
-	<body class="body page-index clearfix">
-		
-      <div class="container">
-        <div id="navbar-universal" class="container container-1">
-        <div class="container container-2"></div>
-  		<div class="container container-3"></div>
-        <p class="text text-1"><a href="{% url 'index' %}">Simplenation</a></p>
-          <ul class="nav navbar-nav navbar-right">
-            <li class="hover">
-             <p class="navbar-link navbar-link-2"><a href="{% url 'index' %}">Home</a></p>
-            </li>
-            {% if user.is_authenticated %}
-            	{% if user.author %}
-            	<li>
-            	 <p class="navbar-link navbar-link-1"><a href="{% url 'profile' user.author.slug %}">Profile</a></p>
-           		</li>
-           		<li>
-            	 <p class="navbar-link navbar-link-1"><a href="{% url 'signout' %}">Sign out</a></p>
-           		</li>
-           		<li>
-            	 <div class="notification-block">
+	<body class="body" style="position:relative;">
 
-            	 	<p class="navbar-link navbar-link-1">
-
-            	 		<a class="notification-button" href="{% url 'recent_notifications' %}"> Notifications </a>
-            	 		<text class="notification-indicator"></text>
-            	 	</p>
-            	 	
-           		 		
-           		 </div>
-           		</li>
-           		{% endif %}
-            {% else %}
-            	<li>
-             	<p class="navbar-link navbar-link-1"><a href="{% url 'signin' %}?next={{ request.get_full_path|urlencode }}">Sign in</a></p>
-           		</li>
-            {% endif %}
-          </ul>
-          <form class="navbar-form navbar-left text-left" action="{% url 'search' %}" method="post" role="search" style=""> 
-
-            <div class="global-search">
-              {% csrf_token %}
-              <input class="global-search-input" name="search_item" placeholder="Search..." type="text" autocomplete="off">
-          	  <button type="submit" class="global-search-button">Submit</button> 
-          	</div>
-          </form>
-          	<div class="suggestions">
-          		{% if suggestions %}
-					{% for suggestion in suggestions %}
-					<p class="suggestion" id = "suggestion-{{suggestion.id}}"><a href="{% url 'term' suggestion.slug %}">{{ suggestion.name }}</a></p>
-					{% endfor %}
-				{% endif %}
-          	</div>
-          
+    
+    {% if user.is_authenticated %}
+      <div class="login-status-check" style="display:none;" data-signal="Y"></div>
+      {% if not user.author.active %}
+        <div style="width:100%;height:27px;"></div>
+        <div class="email-confirmation-bar">
+          <p class="email-confirmation-text">Confirmation link has been sent to your email. Please confirm your email address. <a href ='#' style="font-weight: bold; color:white;" class="send-email-confirmation">Send again.</a></p>
         </div>
+      {% endif %}
+    {% else %}
+      <div class="login-status-check" style="display:none;" data-signal="N"></div>
+    {% endif %}
+
+    <a class="static-src" href="{% static "" %}" style="display:none;"></a>
+
+	  <div class="w-nav navbar" data-collapse="medium" data-animation="default" data-duration="400" data-contain="1">
+    	<div class="w-container navbar-container">
+      		<div class="global-search">
+      			<form class="global-search-form" action="{% url 'search' %}" method="post" role="search" style="">
+      				{% csrf_token %}
+        			<input id="global-search-input-id" class="w-input global-search-input" name="search_item" placeholder="Search..." type="text" autocomplete="off">
+        			<button class="w-button global-search-button" type="submit" value="S">S</button>
+      			</form>
+        		
+        		<div class="suggestions">
+        			{% if suggestions %}
+        			<div class="suggestions-container">
+        				{% for suggestion in suggestions %}
+          					<div class="suggestion">
+            					<a href="{% url 'term' suggestion.slug %}" style="text-align:left; color:black" ><div class="suggestion-text" id = "suggestion-{{suggestion.id}}">{{ suggestion.name }}</div></a>
+         	 				</div>
+         	 			{% endfor %}
+         	 		</div>
+         	 		{% endif %}
+        		</div>
+      		</div>
+      		<div class="nav-menu">
+        		<a class="w-inline-block navbar-link explore pressed" href="{% url 'index' %}"></a>
+        		{% if user.is_authenticated %}
+        			{% if user.author %}
+        		<a class="w-inline-block navbar-link notification pressed" href="{% url 'recent_notifications' %}">
+          			<div class="notifications-indicator"></div>
+        		</a>
+        		<a class="w-inline-block navbar-profile-link" href="{% url 'profile' user.author.slug %}"><img class="navbar-profile-img" src="{{ user.author.picture.url }}" height="29">
+       			 </a>
+       			 	{% endif %}
+       			{% else %}
+       			<a class="w-inline-block navbar-sign-in" href="{% url 'signin' %}?next={{ request.get_full_path|urlencode }}">
+         		 	<div class="sign-in-text pressed">Sign in</div>
+        		</a>
+        		{% endif %}
+
+      		</div>
+    	</div>
+  	</div>
+	  {% if search_active %}			
+    <div class="container-tag-filtered-terms-index" style="margin-top: 50px;">
+      <div class="terms-filtered-container">
+      {% if search_results %}
+      <div class="term-sorting">
+        <text class="term-sorting-text">sort by <a id="term-sorting-button-exp" class="term-sorting-button">explanations</a> or <a id="term-sorting-button-view" class="term-sorting-button">views</a></text>
       </div>
+        {% for term in search_results %}
+          <div class="w-clearfix term-filtered">
+              <div class="term-label-and-tags">
+                <div class="term-name"><a class="term-list-link" href="{% url 'term' term.slug %}">{{ term.name }}</a></div>
+                {% if term.iterable_tags %}
+                <div class="term-tags">
+                  {% for tag in term.iterable_tags %}
+                    <a class="term-tag" href="{% url 'single_tag_view' tag.slug %}">{{ tag.name }}</a>
+                {% endfor %}
+                </div>
+                {% endif %}
+              </div>
+              <div class="w-clearfix term-stats">
+                {% if term.has_explanations %}
+                <a href="{% url 'term' term.slug %}"><div class="term-stats-element explanations">
+                    <div class="term-stats-number explanations">{{ term.number_of_explanations }}</div>
+                    <div class="term-stats-label explanations">Explanations</div>
+                </div></a>
+                {% else %}
+                <a href="{% url 'term' term.slug %}"><div class="term-stats-element no-explanations">
+                    <div class="term-stats-number explanations">{{ term.number_of_explanations }}</div>
+                    <div class="term-stats-label explanations">Explanations</div>
+                </div></a>
+                {% endif %}
+                <div class="term-stats-element">
+                    <div class="term-stats-number term-views">{{ term.views }}</div>
+                    <div>Views</div>
+                </div>
+              </div>
+          </div>
+        {% endfor %}
+      {% else %}
+      <div class="term-not-found">
+        <p class="term-not-found-text">We don't have <strong>'{{ search_item }}'</strong> yet. </p>
+        {% if user.is_authenticated %}
+          <div class="terms-agreement-notice">Please add it, let someone explain!</div>
+          <div class="add-term-block">
+            <form action="{% url 'add_term'%}" method="POST">
+              {% csrf_token %}
+              <input class="w-input add-term-input" type="text" name="name" value="{{ search_item }}">
+              <input class="w-button add-term-button" type="submit" name="add" value="Add new term" />
+            </form>
+          </div>
+        {% else %}
+          <div class="terms-agreement-notice">Please add it, let someone explain!</div>
+          <p class="post-not-registered-text" style="border: 0px; margin-top:10px;">To add a new term  <a class="log-in" href="{% url 'signin' %}?next={{ request.get_full_path|urlencode }}">Log in</a>  or  <a class="sign-up" href="{% url 'register' %}?next={{ request.get_full_path|urlencode }}">Sign up</a>. You will be redirected here afterwards ;)</p>
+        {% endif %}
+      </div> 
+      {% endif %}
+    </div>
+  </div>
+	{% else %}
+	  <div>
+		  {% block body_block %}{% endblock%}
+	  </div>
+  {% endif %}
+		<div class="bottom-bar">
+      <div class="site-related">
+        <a class="bottom-bar-link" href="#">About</a>
+        <a class="bottom-bar-link" href="#">Privacy</a>
+        <a class="bottom-bar-link" href="#">Terms of Service</a>
+        <a class="bottom-bar-link" href="#">Site Rules</a>
+        <a class="bottom-bar-link" href="#">FAQ</a>
+      </div>
+    </div>
 		
-	  {% if search_active %}
-	  <div class="search-results">
-				{% if search_results %}
-					{% for search_result in search_results %}
-    			
-    					<p class="search-result"><a href="{% url 'term' search_result.slug %}">{{ search_result.name }}</a></p>
-
-
-
-					{% endfor %}
-				{% else %}
-					<p><strong> I could not find "{{ search_item }}", so sorry. </strong></p>
-					{% if user.is_authenticated %}
-						<p> Please add this term </p>
-						<form action="{% url 'add_term'%}" method="POST">
-							{% csrf_token %}
-							<input type="text" name="name" value="{{ search_item }}">
-							<input type="submit" name="add" value="Add" />
-						</form>
-						
-					{% else %}
-						<p class="sign-in"><a href="{% url 'signin' %}?next={% url 'add_term' %}">Sign in</a> to add this term</p>
-					{% endif %}
-				{% endif %}
-	   </div>
-	   {% else %}
-	   <div>
-			{% block body_block %}{% endblock%}
-	   </div>
-	   {% endif %}
-		<!-- {% if user.is_authenticated %}
-		<a href="{% url 'signout' %}">Sign out</a><br />
-		<a href="{% url 'add_term' %}">Add term</a><br />
-			{% if user.author %}
-				<a href="{% url 'profile' user.author.slug %}">Profile</a><br />
-			{% endif %}
-		{% else %}
-		<a href="{% url 'register' %}">Sign up</a><br/>
-		<a href="{% url 'signin' %}">Sign in</a><br/>
-		<a href="{% url 'add_term' %}">Add new term</a><br/>
-		{% endif %} -->
-		</hr>
 
 	</body>
 </html>

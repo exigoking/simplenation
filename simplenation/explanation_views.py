@@ -35,9 +35,19 @@ def edit_exp(request):
 		explanation_id = request.POST.get('explanation_id', False)
 		
 		explanation = Definition.objects.get(id = explanation_id)
+		pictures = Picture.objects.filter(definition = explanation)
 		signal = request.POST['signal']
 
 		if signal == 'edit':
+
+			if pictures:
+				for picture in pictures:
+					if picture.to_delete:
+						picture.delete()
+
+					if picture.to_add:
+						picture.to_add=False
+						picture.save()
 
 			explanation.body = request.POST['body']
 			suspect_word_count = profanityFilter(explanation.body)
@@ -49,7 +59,9 @@ def edit_exp(request):
 			return HttpResponse(html)
 
 		elif signal == 'delete':
-			Picture.objects.filter(definition = explanation).delete()
+
+			if pictures:
+				pictures.delete()
 			explanation.delete()
 			return HttpResponse('Success-deleted')
 		else:
@@ -90,6 +102,7 @@ def add_like(request):
 			likes = explanation.likes
 			if request.user != explanation.author.user:
 				Notification(typeof = 'like_notification', sender = request.user, receiver = explanation.author.user, definition = explanation).save()
+	
 		else:
 			return HttpResponse("You have already liked this explanation.")
 	else:

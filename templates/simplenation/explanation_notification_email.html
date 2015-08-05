@@ -1,0 +1,16 @@
+{% load i18n %}{% autoescape off %} 
+
+{% blocktrans %}Hello there, {{ receiver }}!{% endblocktrans %} 
+
+{{ sender }} has explained {{ term }}.
+
+Check it out!
+{% block reset_link %} 
+{{ protocol }}://{{ domain }}{% url 'term' term.slug %} 
+{% endblock %} 
+
+{% trans "Thanks for using our site!" %} 
+
+{% blocktrans %}The {{ site_name }} team{% endblocktrans %} 
+
+{% endautoescape %}

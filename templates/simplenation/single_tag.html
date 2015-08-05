@@ -5,24 +5,55 @@
 {% block title %}Tagged Terms{% endblock %}i
 
 {% block body_block %}
-	<div class='tag-header-container'>
-	<p> {{ tag.name }}</p>
-	<p> Total number of tagged terms: {{ number_of_terms}} </p>
-		
-	</div>
+	<div class="tag-choose-container"><a class="term-tag" href="#">{{ tag.name }}</a>
+   		<p class="tagged-terms-stats">tagged terms: {{number_of_terms}} </p>
+  	</div>
 
-	<div class="container-tag-filtered-terms-index">
-	{% if terms_for_explainers %}
-		<ul>
-			{% for term in terms_for_explainers %}
-			<li><a href="{% url 'term' term.slug %}">{{ term.name }}</a></li>
-			{% endfor %}
-		</ul>
-	{% else %}
-		<strong> There are no terms here yet! </strong>
-	{% endif %}	
-	</div>
-
+  	<div class="container-tag-filtered-terms-index">
+  		<div class="term-sorting">
+  			<text class="term-sorting-text">sort by <a id="term-sorting-button-exp" class="term-sorting-button">explanations</a> or <a id="term-sorting-button-view" class="term-sorting-button">views</a></text>
+  		</div>
+  		<div class="terms-filtered-container">
+  		{% if terms_for_explainers %}
+  			{% for term in terms_for_explainers %}
+		    	<div class="w-clearfix term-filtered">
+		      		<div class="term-label-and-tags">
+		        		<div class="term-name"><a class="term-list-link" href="{% url 'term' term.slug %}">{{ term.name }}</a></div>
+		        		{% if term.iterable_tags %}
+		        		<div class="term-tags">
+		        			{% for tag in term.iterable_tags %}
+		        				<a class="term-tag" href="{% url 'single_tag_view' tag.slug %}">{{ tag.name }}</a>
+		     				{% endfor %}
+		        		</div>
+		        		{% endif %}
+		      		</div>
+		      		<div class="w-clearfix term-stats">
+		      			{% if term.has_explanations %}
+		       			<a href="{% url 'term' term.slug %}"><div class="term-stats-element explanations">
+		          			<div class="term-stats-number explanations">{{ term.number_of_explanations }}</div>
+		          			<div class="term-stats-label explanations">Explanations</div>
+		        		</div></a>
+		        		{% else %}
+		        		<a href="{% url 'term' term.slug %}"><div class="term-stats-element no-explanations">
+		          			<div class="term-stats-number explanations">{{ term.number_of_explanations }}</div>
+		          			<div class="term-stats-label explanations">Explanations</div>
+		        		</div></a>
+		        		{% endif %}
+		        		<div class="term-stats-element">
+		          			<div class="term-stats-number term-views">{{ term.views }}</div>
+		          			<div>Views</div>
+		        		</div>
+		      		</div>
+		    	</div>
+    		{% endfor %}
+    	{% else %}
+    		<div class="no-found-terms">
+    			<img src="{% static "images/Empty-Set-Black@2x.png" %}" width="100px">
+    			<div class="no-found-terms-text">No terms for this tag</div>
+    		</div>
+    	{% endif %}
+    	</div>
+    </div>
 
 
 {% endblock %}

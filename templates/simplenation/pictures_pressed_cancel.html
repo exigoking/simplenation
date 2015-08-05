@@ -1,0 +1,65 @@
+<!-- {% if pictures %}
+		{% for picture in pictures %}
+		
+			{% if picture.definition == explanation  %}
+				{% if not picture.to_delete %}
+				<img src="{{ picture.image_thumbnail.url }}" width="100" height="100"/>
+					{% if user.username == explanation.author.user.username %}
+						<button id="remove-picture-{{picture.id}}" data-pictureid="{{picture.id}}" class="remove-picture" data-expid="{{explanation.id}}">X</button>
+					{% endif %}
+				{% endif %}
+			{% endif %}
+		
+		{% endfor %}
+	{% endif %}
+
+	{% if user.username == explanation.author.user.username %}
+		<div id="picture-edit-{{explanation.id}}" class="picture-edit-block" style="display:none">
+				<form class="picture-add-form" id="picture-form-{{explanation.id}}" action="{% url 'add_picture' explanation.id %}" method="POST" enctype="multipart/form-data" >
+					{% csrf_token %}
+					<input class="picture-add" type="file" name="pictures" id = "picture-of-{{explanation.id}}" data-expid="{{explanation.id}}">
+					<button id = "add-picture-{{explanation.id}}" class="add-picture" style="display:none;">Upload</button>
+
+				</form>
+
+		</div>
+	{% endif %} -->
+
+	{% load staticfiles %}
+	{% if pictures %}
+		{% for picture in pictures %}
+			{% if picture.definition == explanation  %}
+				{% if not picture.to_delete %}
+    			<div class="picture-container" id="picture-container-{{picture.id}}" data-pictureid="{{picture.id}}" data-expid='{{ explanation.id }}'>
+		    				<img class="picture-thumbnail" id="picture-thumbnail-{{picture.id}}" data-pictureid="{{picture.id}}" data-expid='{{ explanation.id }}' src="{{ picture.image_thumbnail.url }}" alt="img{{picture.id}}">
+		    				{% if user.username == explanation.author.user.username %}
+		    					<button class="remove-picture" id="remove-picture-{{picture.id}}" data-pictureid="{{picture.id}}" data-expid="{{explanation.id}}" style="display:none; border: 0px;">x</button>
+		    				{% endif %}
+		    			</div>
+    			{% endif %}
+			{% endif %}
+		{% endfor %}
+		<ul class="gallery-images" id="gallery-{{explanation.id}}" style="display:none;">
+			{% for picture in pictures %}
+				{% if picture.definition == explanation  %}
+					{% if not picture.to_delete %}
+					<li class="gallery-element-{{explanation.id}}" id="gallery-element-{{picture.id}}">
+						<img class="gallery-image" id="gallery-image-{{picture.id}}" src="{{picture.image.url}}" alt="img{{picture.id}}">
+						<div data-desc="{{ explanation.body }}"></div>
+					</li>
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+		</ul>
+    {% endif %}
+    {% if user.username == explanation.author.user.username %}
+    	<div class="add-picture" id = "add-picture-of-{{explanation.id}}" data-expid="{{explanation.id}}" style="display:none">
+			<img class="add-picture-placeholder" src="{% static "images/add-photo@2x.png" %}">
+		</div>
+		<div id="picture-edit-{{explanation.id}}" class="picture-edit-block" style="display:none">
+			<form class="picture-add-form" id="picture-form-{{explanation.id}}" action="{% url 'add_picture' explanation.id %}" method="POST" enctype="multipart/form-data" >
+			{% csrf_token %}
+			<input class="picture-add" type="file" name="pictures" id = "picture-of-{{explanation.id}}" data-expid="{{explanation.id}}" style="display:none;">
+			</form>
+		</div>
+    {% endif %}

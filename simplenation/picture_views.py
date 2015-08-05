@@ -27,7 +27,7 @@ def add_picture(request, explanation_id):
 		definition = Definition.objects.get(id = explanation_id)
 		for picture in pictures:
 			if picture:
-				Picture(definition = definition, image = picture, image_thumbnail = picture, term=definition.term).save()
+				Picture(definition = definition, image = picture, image_thumbnail = picture, term=definition.term, to_add = True).save()
 
 		updated_pictures = Picture.objects.filter(definition = definition)
 		if updated_pictures:
@@ -63,7 +63,8 @@ def remove_picture(request):
 
 		if picture:
 			definition = picture.definition
-			picture.delete()
+			picture.to_delete = True
+			picture.save()
 			pictures = Picture.objects.filter(definition = definition)
 			if pictures:
 				context_dict['pictures'] = pictures
@@ -72,10 +73,42 @@ def remove_picture(request):
 			context_dict['explanation'] = definition
 			
 		else:
-			return HttpResponse("Already removed from favourites.")
+			return HttpResponse("Already removed from pictures.")
 
 	else:
 	    return HttpResponse("Invalid Form.")
 
 	html = render_to_string('simplenation/pictures.html', context_dict)
+	return HttpResponse(html)
+
+
+@login_required
+def cancel_edition(request):
+	params=json.loads(request.body)
+
+	explanation_id = params['explanation_id']
+	context_dict = {}
+
+	context_dict['user'] = request.user
+
+
+	if request.method == "POST":
+		definition = Definition.objects.get(id = explanation_id)
+		pictures = Picture.objects.filter(definition = definition)
+		if pictures:
+			for picture in pictures:
+				if picture.to_delete:
+					picture.to_delete = False
+					picture.save()
+				if picture.to_add:
+					picture.delete()
+
+		pictures = Picture.objects.filter(definition = definition)
+		context_dict['pictures'] = pictures
+		context_dict['explanation'] = definition
+
+	else:
+	    return HttpResponse("Invalid Form.")
+
+	html = render_to_string('simplenation/pictures_pressed_cancel.html', context_dict)
 	return HttpResponse(html)

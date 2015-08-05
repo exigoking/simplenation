@@ -1,0 +1,16 @@
+{% load i18n %}{% autoescape off %} 
+
+{% blocktrans %}Hey there, {{ receiver_username }}!{% endblocktrans %} 
+
+Thanks for signing up and welcome!
+
+Go to link below to confirm your email address:
+{% block reset_link %} 
+{{ protocol }}://{{ domain }}{% url 'email_confirmation' account_deletion_key %} 
+{% endblock %} 
+If for some reason the link did not work, you can always get in touch with us at {{ site_email }}
+{% trans "Have a nice day!" %} 
+
+{% blocktrans %}The {{ site_name }} team {% endblocktrans %} 
+
+{% endautoescape %}

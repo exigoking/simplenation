@@ -4,6 +4,7 @@ from django.template.defaultfilters import slugify
 from datetime import datetime
 from simplenation.addons import last_posted_date
 from taggit.managers import TaggableManager
+from taggit.models import Tag
 from registration.signals import user_registered
 from django.db.models import Count
 from simplenation.managers import FavouriteManager, ChallengeManager, NotificationManager, LikeManager
@@ -11,6 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from djangobook import settings
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
+from django.contrib.auth.decorators import login_required
 
 
 class Author(models.Model):
@@ -19,12 +21,13 @@ class Author(models.Model):
     """
 	user = models.OneToOneField(User)
 	bio = models.CharField(max_length=1024)
-	picture = models.ImageField(upload_to='profile_images', default = 'profile_images/default_profile_picture.png')
+	picture = ProcessedImageField(upload_to='profile_images', default = 'profile_images/default_profile_picture.png', processors=[ResizeToFill(400, 400)], format='JPEG', options={'quality': 100})
 	slug = models.SlugField(unique=True)
 	account_deletion_key = models.CharField(max_length = 64, blank = True)
 	score = models.DecimalField(default=0.00, max_digits=5, decimal_places=2)
 	rank = models.IntegerField(default=9999999)
 	num_of_likes = models.IntegerField(default=0)
+	active = models.BooleanField(default=False)
 
 	def save(self, *args, **kwargs):
 		self.slug = slugify(self.user.username)
@@ -34,8 +37,21 @@ class Author(models.Model):
 		aggregate = Author.objects.filter(score__gt=self.score).aggregate(ranking=Count('score'))
 		return aggregate['ranking'] + 1
 
+	def has_favorites(self):
+		if self.user.favorees.count() > 0:
+			return True
+		else: 
+			return False
+	def favorite_list(self):
+		return self.user.favorees.all()
+
+	def favorite_count(self):
+		return self.user.favorees.count()
+
 	def __unicode__(self):
 		return self.user.username
+
+
 
 class Term(models.Model):
 	"""
@@ -46,12 +62,34 @@ class Term(models.Model):
 	views = models.IntegerField(default=0)
 	slug = models.SlugField(unique=True)
 	author = models.ForeignKey(Author, null=True)
+	created_at = models.DateTimeField(auto_now_add=True)
 	tags = TaggableManager()
 	
 	def save(self, *args, **kwargs):
 		self.slug = slugify(self.name)
 		self.name = self.name.title()
 		super(Term, self).save(*args, **kwargs)
+
+	def iterable_tags(self):
+		return self.tags.all()
+	def has_explanations(self):
+		if self.definition_set.count() > 0:
+			return True
+		else:
+			return False
+	def number_of_explanations(self):
+		return self.definition_set.count()
+	def sorted_by_number_of_views_descending(self):
+		return self.order_by('-views') 
+
+	def sorted_by_number_of_views(self):
+		return self.order_by('views')
+
+	def sorted_by_number_of_explanations(self):
+		return self.annotate(exp_count=Count('definition')).order_by('exp_count')
+
+	def sorted_by_number_of_explanations_descending(self):
+		return self.annotate(exp_count=Count('definition')).order_by('-exp_count')
 	
 	def __unicode__(self):
 		return self.name
@@ -62,8 +100,8 @@ class Definition(models.Model):
     A definition can be created by any registerd user @simplenation.
     A term can have multiple definitions.
     """
-	author = models.ForeignKey(Author)
-	term = models.ForeignKey(Term)
+	author = models.ForeignKey(Author, null=True)
+	term = models.ForeignKey(Term, null=True)
 	body = models.TextField(max_length=512)
 	likes = models.IntegerField(default=0)
 	post_date = models.DateTimeField(auto_now_add=True)	
@@ -86,6 +124,8 @@ class Picture(models.Model):
 	deleted=models.BooleanField(default=False)
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
+	to_delete = models.BooleanField(default=False)
+	to_add = models.BooleanField(default=False)
 
 	def __unicode__(self):
 		return 'Picture with id {0}'.format(self.id)
@@ -103,6 +143,7 @@ class Like(models.Model):
 
 	def __unicode__(self):
 		return self.user.username
+
 
 class Report(models.Model):
 	"""
@@ -168,6 +209,23 @@ class Notification(models.Model):
 		return self.typeof
 
 
+class Session(models.Model):
+	created_at = models.DateTimeField(auto_now_add=True)
+	tags = TaggableManager()
+
+
+class PressedTag(models.Model):
+    name = models.CharField(max_length=200)
+    session = models.ForeignKey(Session, related_name='pressed_tags')
+
+    def __unicode__(self):
+		return self.id
+
+    def setname(self, x):
+        self.name = x
+
+    def getname(self, x):
+        return self.name
 
 
 

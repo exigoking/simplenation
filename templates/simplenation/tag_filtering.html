@@ -1,11 +1,42 @@
 <!DOCTYPE html>
-
-
+{% load staticfiles %}
 		{% if terms_tag_filtered %}
-			<ul>
-				{% for term in terms_tag_filtered %}
-				<li><a href="{% url 'term' term.slug %}">{{ term.name }}</a></li>
-				{% endfor %}
-			</ul>
-		{% endif %}
+  			{% for term in terms_tag_filtered %}
+		    	<div class="w-clearfix term-filtered">
+		      		<div class="term-label-and-tags">
+		        		<div class="term-name"><a class="term-list-link" href="{% url 'term' term.slug %}">{{ term.name }}</a></div>
+		        		{% if term.iterable_tags %}
+		        		<div class="term-tags">
+		        			{% for tag in term.iterable_tags %}
+		        				<a class="term-tag" href="{% url 'single_tag_view' tag.slug %}">{{ tag.name }}</a>
+		     				{% endfor %}
+		        		</div>
+		        		{% endif %}
+		      		</div>
+		      		<div class="w-clearfix term-stats">
+		      			{% if term.has_explanations %}
+		       			<a href="{% url 'term' term.slug %}"><div class="term-stats-element explanations">
+		          			<div class="term-stats-number explanations">{{ term.number_of_explanations }}</div>
+		          			<div class="term-stats-label explanations">Explanations</div>
+		        		</div></a>
+		        		{% else %}
+		        		<a href="{% url 'term' term.slug %}"><div class="term-stats-element no-explanations">
+		          			<div class="term-stats-number explanations">{{ term.number_of_explanations }}</div>
+		          			<div class="term-stats-label explanations">Explanations</div>
+		        		</div></a>
+		        		{% endif %}
+		        		<div class="term-stats-element">
+		          			<div class="term-stats-number term-views">{{ term.views }}</div>
+		          			<div>Views</div>
+		        		</div>
+		      		</div>
+		    	</div>
+    		{% endfor %}
+    	{% else %}
+    		<div class="no-found-terms">
+    			<img src="{% static "images/Empty-Set-Black@2x.png" %}" width="100px">
+    			<div class="no-found-terms-text">No terms for tag combination</div>
+
+    		</div>
+    	{% endif %}
 

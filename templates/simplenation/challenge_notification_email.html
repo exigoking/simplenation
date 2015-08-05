@@ -1,0 +1,15 @@
+{% load i18n %}{% autoescape off %} 
+
+{% blocktrans %}Hey, {{ receiver }}! You have been challenged @{{ site_name }}.{% endblocktrans %} 
+
+{{ sender }} has challenged you to explain {{ term }}.
+
+{% block reset_link %} 
+{{ protocol }}://{{ domain }}{% url 'term' term.slug %} 
+{% endblock %} 
+
+{% trans "Thanks for using our site!" %} 
+
+{% blocktrans %}The {{ site_name }} team{% endblocktrans %} 
+
+{% endautoescape %}

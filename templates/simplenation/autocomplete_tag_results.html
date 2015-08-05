@@ -1,6 +1,9 @@
 
 	{% if tag_suggestions %}
-		{% for tag_suggestion in tag_suggestions %}
-			<p class="tag-suggestion" id = "tag-suggestion-{{tag_suggestion.id}}" data-tagname="{{tag_suggestion.name}}">{{ tag_suggestion.name }}</p>
-		{% endfor %}
+  			<div class="tag-suggestions-border">
+				{% for tag_suggestion in tag_suggestions %}
+					<div class="tag-suggestion" id = "tag-suggestion-{{tag_suggestion.id}}" data-tagname="{{tag_suggestion.name}}">{{ tag_suggestion.name }}</div>
+				{% endfor %}
+				<p class="tag-suggestion-help-text">Press Enter to add</p>
+			</div>
 	{% endif %}

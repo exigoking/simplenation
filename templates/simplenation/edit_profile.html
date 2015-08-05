@@ -7,7 +7,29 @@
 {% block body_block %}
 
 		{% if user.username == author.user.username %}
-		<h4>Edit your profile</h4>
+		<div class="sign-in-block"> 
+    		<h3>Edit Profile</h3>
+    		<div class="w-form">
+     			<form class="w-clearfix sign-in-form registration-form" id="edit_profile" method="post" action="{% url 'edit_profile' author.slug %}" enctype="multipart/form-data">
+        		{% csrf_token %}
+        		{% if profile_edit_error_message %}
+            		<div class="form-error-msg">{{ profile_edit_error_message }}</div>
+        		{% endif %}
+	        		<input class="w-input sign-in-input" id="email" type="text" name="email" value="{{ profile_email }}">
+	        		<input class="w-input sign-in-input" id="username" type="text" name="username" value="{{ profile_name }}">
+	        
+	        		<label class="profile-picture-label" for="field">Pic of you:</label>
+	        		<div class="profile-registration-mask">
+	        			<img class="profile-registration-img edit-profile-img" src="{{ author.picture.url }}" alt="" width="100%" height="100%" style="border-radius: 0px;"/></div>
+	        		<input class="add-profile-picture" id="picture" type="file" name="picture" style="margin-top:8px;">
+	        		<a class="w-button sign-in-button cancel" href="{% url 'profile' author.slug %}" >Cancel</a>
+	        		<input class="w-button sign-in-button" type="submit" value="Save">
+	        		
+	        		<input type="hidden" name="next" value="{{ next }}">
+      			</form>
+    		</div>
+		</div>
+		<!-- <h4>Edit your profile</h4>
 		<form id="edit_profile" method="post" action="{% url 'edit_profile' author.slug %}" enctype="multipart/form-data">
 			{% csrf_token %}
 
@@ -21,8 +43,8 @@
 			<button type="submit">Save</button>
 			
 		</form>
-		
-		{% endif %}
+		 
+		{% endif %} -->
 
 	
 {% endblock %}

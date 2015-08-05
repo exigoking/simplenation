@@ -1,6 +1,15 @@
 from datetime import datetime, tzinfo
 from django.utils.timezone import utc
-
+from django.core.validators import validate_email
+from django.core.mail import send_mail
+from django.core.exceptions import ValidationError
+import re
+from simplenation.models import *
+from django.contrib.auth.models import User
+from django.template.loader import render_to_string, get_template
+from django.template import loader
+from djangobook.settings import EMAIL_HOST_USER
+from django.shortcuts import render
 
 def last_posted_date(post_date):
    now = datetime.utcnow()
@@ -18,33 +27,33 @@ def last_posted_date(post_date):
       if diff.days > 1000 or diff.days < 0:
          return post_date.strftime('%d %b %y')
       elif years == 1:
-         return '1 year ago'
+         return '1y ago'
       elif years > 1:
-         return '{} years ago'.format(years)
+         return '{}y ago'.format(years)
       elif months == 1:
-         return '1 month ago'
+         return '1m ago'
       elif months > 1:
-         return '{} months ago'.format(months)
+         return '{}m ago'.format(months)
       elif weeks == 1:
-         return '1 week ago'
+         return '1w ago'
       elif weeks > 1:
-         return '{} weeks ago'.format(weeks)
+         return '{}w ago'.format(weeks)
       elif diff.days == 1:
-         return '1 day ago'
+         return '1d ago'
       elif diff.days > 1:
-         return '{} days ago'.format(diff.days)
+         return '{}d ago'.format(diff.days)
       elif s <= 1:
          return 'just now'
       elif s < 60:
-         return '{} seconds ago'.format(s)
+         return '{}s ago'.format(s)
       elif s < 120:
-         return '1 minute ago'
+         return '1min ago'
       elif s < 3600:
-         return '{} minutes ago'.format(s/60)
+         return '{}min ago'.format(s/60)
       elif s < 7200:
-         return '1 hour ago'
+         return '1h ago'
       else:
-         return '{} hours ago'.format(s/3600)
+         return '{}h ago'.format(s/3600)
 
    # If happening time is in the FUTURE
    else:
@@ -444,3 +453,77 @@ def profanityFilter(text):
         count = count + 1
 
    return count
+
+def simplenation_email_validation(email):
+   try:
+      validate_email(email)
+      return True
+   except ValidationError:
+      return False
+
+def simplenation_username_validation(username):
+   if re.match("^[a-zA-Z0-9_.-]+$", username):
+      return True
+   else:
+      return False
+
+
+
+awesomeUsernames=[
+'fidelity',
+'raspberryHunter',
+'hipsroma',
+'spiritualFlex',
+'witboing',
+'campuslute',
+'nerdom',
+'awesomeTech',
+'kaztur',
+'knowthings',
+'newgenny',
+'valmentor',
+'supercool',
+'everythingcando',
+'foreversmart',
+'truthSeeker',
+'starmart',
+'highgoal',
+]
+
+GhostProfile = {
+   'username':'Ghost',
+   'email':'ghost@simplenation.co',
+   'password':'SimpleNationGhost',
+
+}
+
+def deleted_user_profile():
+   username = GhostProfile['username']
+   email = GhostProfile['email']
+   password = GhostProfile['password']
+
+   user = User.objects.get(username = username)
+   if not user:
+      user = User(username = username, email = email, password = password)
+      user.save()
+      author = Author(picture = 'profile_images/delete_user_picture.png')
+      author.user = user
+      author.save()
+      user.save()
+
+   return user.author 
+
+
+def send_email(email_data, subject_template_name, email_template_name):
+   user_email = email_data['email']
+   subject = loader.render_to_string(subject_template_name, email_data)
+   subject = ''.join(subject.splitlines())
+   email = get_template(email_template_name).render(email_data)
+   try:
+      send_mail(subject, email, EMAIL_HOST_USER , [user_email])
+      return True
+   except:
+      return False
+
+
+

@@ -5,14 +5,15 @@
 {% block title %}Delete account{% endblock %}i
 
 {% block body_block %}
-
-	<h4>Dear {{ username }}, are you sure, you want to leave us?</h4>
-	<form action="{% url 'account_deletion' account_deletion_key %}" method="POST">
+	<div class="delete-account-block">
+	<p class="delete-account-message">Dear {{ username }}, are you sure to DELETE your account?</p>
+	<p class="delete-account-help-message">Caution: your ranking, score and any other profile data will not be retrievable.</p>
+	<form action="{% url 'account_deletion' account_deletion_key %}" method="POST" style="display:inline-block; margin-top:15px;">
 		{% csrf_token %}
-		<input type="submit" name="yes" value="Yes" />
-		<input type="submit" name="no" value="No" />
+		<input class="w-button delete-account-yes yes" type="submit" name="yes" value="Yes" />
+		<input class="w-button delete-account-yes" type="submit" name="no" value="No" />
 	</form>
-
+	</div>
 	
 
-{% endblock %}
+{% endblock %} 

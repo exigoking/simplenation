@@ -5,64 +5,91 @@
 {% block title %}Main{% endblock %}
 
 {% block body_block %}
+	<div class="tag-choose-container">
+		{% if tags %}
+			{% for tag in tags %}
+				{% if tag.name in pressed_tag_names %}
 
-	<h4>Learn</h4>
-	<div class='not-found'><p></p></div>
-	<div class="container-terms-for-learners">
-	{% if terms_for_learners %}
-		<ul>
-			{% for term in terms_for_learners %}
-			<li><a href="{% url 'term' term.slug %}">{{ term.name }}</a></li>
-			{% endfor %}
-		</ul>
-	{% else %}
-		<strong> There are no explanations here yet! </strong>
-	{% endif %}
-	</div>
-	<br />
-	<br />
-
-	<h4>Explain</h4>
-	<div class='tag-choose-container'>
-	{% if tags %}
-		{% for tag in tags %}
-		<div id="tag-filter-{{ tag.id }}" class="tag-filtering" style="display:inline">
-		<button type='submit' id='tag-choose-{{ tag.id }}' class='tag-choose' data-tagid='{{tag.id}}' data-tagname='{{tag.name}}'> {{tag.name}} </button><button id="tag-unchoose-{{tag.id}}" data-tagname="{{tag.name}}" data-tagid="{{tag.id}}" type="submit" class="tag-unchoose">x</button>
-		</div>
-		{% endfor %}
-	{% else %}
-		<p>{{ no_tags_message }}</p>
-	{% endif %}
-		
-	</div>
-	<div id='no-tags-message'><p></p></div>
-
-	<div class='search-tags'>
-		<input type='text' name='search_tag_item' placeholder='Find tags you want...' class='search-tag-input' id='search-tag-input-id'>
-		<button type="submit" class="search-tag-button" > + </button> 
-	</div>
-	<div class="tag-suggestions">
-          		{% if tag_suggestions %}
-					{% for tag_suggestion in tag_suggestions %}
-					<p class="tag-suggestion" id = "tag-suggestion-{{tag_suggestion.id}}" data-tagname="{{tag_suggestion.name}}">{{ tag_suggestion.name }}</p>
-					{% endfor %}
+				<div id="tag-filter-{{ tag.id }}" class="tag-filtering">
+				    		<a id='tag-choose-{{ tag.id }}' class="tag-choose" data-tagid='{{tag.id}}' data-tagname='{{tag.name}}' href="#" style="background-color: rgb(0, 145, 194);">{{tag.name}}</a>
+				    		<a class="tag-unchoose" id="tag-unchoose-{{tag.id}}" data-tagname="{{tag.name}}" data-tagid="{{tag.id}}" href="#" style="background-color: rgb(0, 145, 194);">x</a>
+				    	</div>
+				    {% else %}
+				    <div id="tag-filter-{{ tag.id }}" class="tag-filtering">
+				    		<a id='tag-choose-{{ tag.id }}' class="tag-choose" data-tagid='{{tag.id}}' data-tagname='{{tag.name}}' href="#">{{tag.name}}</a>
+				    		<a class="tag-unchoose" id="tag-unchoose-{{tag.id}}" data-tagname="{{tag.name}}" data-tagid="{{tag.id}}" href="#">x</a>
+				    	</div>
 				{% endif %}
+    		{% endfor %}
+    	{% endif %}
+
+  	</div>
+	<div class="search-tags">
+    	<div class="no-tags-message">No tags you are looking for :(</div>
+    	<div class="w-form">
+      		<div class="search-tags-form" name="tags">
+      			<div class="search-tags-wrapper" style="display:inline-block; position:relative;">
+       				<input id="search-tag-input-id" class="w-input search-tag-input" type="text" placeholder="Find tags you want" name='search_tag_item' id='search-tag-input-id' autocomplete="off">
+       			</div>
+       			<div class="tag-suggestions">
+          		{% if tag_suggestions %}
+          			<div class="tag-suggestions-border">
+					{% for tag_suggestion in tag_suggestions %}
+					<div class="tag-suggestion" id = "tag-suggestion-{{tag_suggestion.id}}" data-tagname="{{tag_suggestion.name}}">{{ tag_suggestion.name }}</div>
+					{% endfor %}
+					<p class="tag-suggestion-help-text">Press Enter to add</p>
+					</div>
+				{% endif %}
+    			</div>
+     	 	</div>
+    	</div>
+  	</div>
+
+  	<div class="container-tag-filtered-terms-index">
+  		<div class="term-sorting">
+  			<text class="term-sorting-text">sort by <a id="term-sorting-button-exp" class="term-sorting-button">explanations</a> or <a id="term-sorting-button-view" class="term-sorting-button">views</a></text>
+  		</div>
+  		<div class="terms-filtered-container">
+  		{% if terms_for_explainers %}
+  			{% for term in terms_for_explainers %}
+		    	<div class="w-clearfix term-filtered">
+		      		<div class="term-label-and-tags">
+		        		<div class="term-name"><a class="term-list-link" href="{% url 'term' term.slug %}">{{ term.name }}</a></div>
+		        		{% if term.iterable_tags %}
+		        		<div class="term-tags">
+		        			{% for tag in term.iterable_tags %}
+		        				<a class="term-tag" href="{% url 'single_tag_view' tag.slug %}">{{ tag.name }}</a>
+		     				{% endfor %}
+		        		</div>
+		        		{% endif %}
+		      		</div>
+		      		<div class="w-clearfix term-stats">
+		      			{% if term.has_explanations %}
+		       			<a href="{% url 'term' term.slug %}"><div class="term-stats-element explanations">
+		          			<div class="term-stats-number explanations">{{ term.number_of_explanations }}</div>
+		          			<div class="term-stats-label explanations">Explanations</div>
+		        		</div></a>
+		        		{% else %}
+		        		<a href="{% url 'term' term.slug %}"><div class="term-stats-element no-explanations">
+		          			<div class="term-stats-number explanations">{{ term.number_of_explanations }}</div>
+		          			<div class="term-stats-label explanations">Explanations</div>
+		        		</div></a>
+		        		{% endif %}
+		        		<div class="term-stats-element">
+		          			<div class="term-stats-number term-views">{{ term.views }}</div>
+		          			<div>Views</div>
+		        		</div>
+		      		</div>
+		    	</div>
+    		{% endfor %}
+    	{% else %}
+    		<div class="no-found-terms">
+    			<img src="{% static "images/Empty-Set-Black@2x.png" %}" width="100px">
+    			<div class="no-found-terms-text">No terms for tag combination</div>
+    		</div>
+    	{% endif %}
+    	</div>
     </div>
-
-	<div class="container-tag-filtered-terms-index">
-	{% if terms_for_explainers %}
-		<ul>
-			{% for term in terms_for_explainers %}
-			<li><a href="{% url 'term' term.slug %}">{{ term.name }}</a></li>
-			{% endfor %}
-		</ul>
-	{% else %}
-		<strong> There are no terms here yet! </strong>
-	{% endif %}	
-	</div>
-
-
-
 
 {% endblock %}
 
