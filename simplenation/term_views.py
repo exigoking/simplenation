@@ -160,7 +160,7 @@ def term(request, term_name_slug):
 					if request.user != definition.term.author.user:
 						Notification(typeof = 'explanation_notification', sender = request.user, receiver = definition.term.author.user, term = term).save()
 
-				return HttpResponseRedirect('/simplenation/term/'+ term_name_slug)
+				return HttpResponseRedirect('/term/'+ term_name_slug)
 			else:
 				print form.errors	
 
@@ -436,7 +436,7 @@ def add_term(request):
 			term.save()
 			Notification(typeof = 'term_creation', sender = request.user, receiver = request.user, term = term).save()
 			
-			return HttpResponseRedirect('/simplenation/term/'+term.slug)
+			return HttpResponseRedirect('/term/'+term.slug)
 		else:
 			print term_form.errors
 	else:	

@@ -67,7 +67,7 @@ def edit_exp(request):
 		else:
 			pass
 
-		return HttpResponseRedirect('Neither edited or deleted')	
+		return HttpResponse('Neither edited or deleted')	
 	else:
 		pass
 

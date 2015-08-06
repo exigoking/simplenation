@@ -128,7 +128,7 @@ def search(request):
 				if is_single_object>1:
 					context_dict['search_results'] = terms
 				else:
-					return HttpResponseRedirect('/simplenation/term/'+terms[0].slug)
+					return HttpResponseRedirect('/term/'+terms[0].slug)
 			else:
 				context_dict['not_found'] = "Not found"
 

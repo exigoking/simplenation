@@ -12,7 +12,6 @@ from django.template.loader import render_to_string
 from django.http import HttpResponse, HttpResponseRedirect
 from djangobook.settings import SITE_NAME
 from simplenation.addons import send_email
-from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.contrib.auth import get_user_model
 
 @login_required
