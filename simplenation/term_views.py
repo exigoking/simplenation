@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from simplenation.models import Term, Author, Definition, Like, Report, Favourite, Notification, Picture, Session, PressedTag
-from simplenation.forms import UserForm, ProfileForm, DefinitionForm, TermForm, PasswordResetRequestForm, SetPasswordForm
+from simplenation.forms import UserForm, ProfileForm, DefinitionForm, TermForm, PasswordResetRequestForm, SetPasswordForm, PictureForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -139,10 +139,11 @@ def term(request, term_name_slug):
 		if request.method == 'POST' and 'add' in request.POST:
 		
 			form = DefinitionForm(request.POST or None)
-			pictures = request.FILES.getlist('pictures')
-			if form.is_valid():
+			pictures_form = PictureForm(request.POST, request.FILES)
+			#pictures = request.FILES.getlist('pictures')
+			if form.is_valid() and pictures_form.is_valid():
 				definition = form.save(commit=False)
-
+				pictures = request.FILES.getlist('pictures')
 				suspect_word_count = profanityFilter(definition.body)
 
 				if suspect_word_count > 0:
@@ -151,9 +152,9 @@ def term(request, term_name_slug):
 				definition.term = term
 				definition.author = request.user.author
 				definition.save()
-
 				
 				for picture in pictures:
+					picture_form = PictureForm(request.POST, request.FILES)
 					Picture(definition = definition, image = picture, image_thumbnail = picture, term=term).save()
 
 				if definition.term.author:
@@ -161,8 +162,10 @@ def term(request, term_name_slug):
 						Notification(typeof = 'explanation_notification', sender = request.user, receiver = definition.term.author.user, term = term).save()
 
 				return HttpResponseRedirect('/term/'+ term_name_slug)
+			elif not pictures_form.is_valid:
+				context_dict['post_error_message'] = 'Files must be pictures, e.g. jpeg, png'	
 			else:
-				context_dict['post_error_message'] = 'Invalid Form.'	
+				context_dict['post_error_message'] = 'Are you sending a blank explanation? If not, please try again.'
 
 		else:
 			form = DefinitionForm()

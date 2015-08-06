@@ -554,7 +554,14 @@ $(document).ready(function(){
 			var explanation_id = $(this).attr('data-expid');
 			$('#pictures-container-'+explanation_id).on('change', '#picture-of-'+explanation_id,  function(){
 					
-					add_picture(explanation_id);
+					var ext = $(this).val().split('.').pop().toLowerCase();
+					if($.inArray(ext, ['png','jpg','jpeg']) == -1) {
+						$.growl.warning({title:"Not a picture", message: "Please upload pictures with extensions jpg, jpeg or png."});
+					}
+					else{
+						add_picture(explanation_id);
+					}
+					
 					
 			});
 	});
@@ -578,12 +585,20 @@ $(document).ready(function(){
 	$('.explanation-post-form').on( 'change', '.add-post-picture-input', function(){
 			var preview_count = parseInt($(this).attr('data-count'), 10);
 			var static_src = $('.static-src').attr("href");
-			readURL(this, preview_count);
-			$('#preview-picture-'+preview_count).show();
-			$('#add-post-picture-wrapper-'+preview_count).hide();
-			preview_count = preview_count + 1;
-			$('.add-post-pictures').append('<div class="add-post-picture preview" id="preview-picture-'+preview_count+'" style="display:none; overflow:hidden;"><img class="add-post-picture-placeholder preview" id="add-post-picture-preview-'+ preview_count +'" data-count="'+ preview_count +'" src="#"><button class="remove-post-picture" id="remove-post-picture-'+ preview_count +'" data-count="'+ preview_count +'" type="button" style="border: 0px;">x</button></div>');
-			$('.add-post-pictures').append('<div class="add-post-picture" id="add-post-picture-wrapper-'+ preview_count +'"><input class="add-post-picture-input" id="add-post-picture-'+ preview_count +'" data-count="'+preview_count+'" type="file" name="pictures" style="display:none;"><img class="add-post-picture-placeholder" id="add-post-picture-placeholder-'+ preview_count +'" data-count="'+ preview_count +'" src="'+ static_src+'images/add-photo@2x.png"></div>');
+			var ext = $(this).val().split('.').pop().toLowerCase();
+			if($.inArray(ext, ['png','jpg','jpeg']) == -1) {
+			    $.growl.warning({title:"Not a picture", message: "Please upload pictures with extensions jpg, jpeg or png."});
+			}
+			else{
+				readURL(this, preview_count);
+				$('#preview-picture-'+preview_count).show();
+				$('#add-post-picture-wrapper-'+preview_count).hide();
+				preview_count = preview_count + 1;
+				$('.add-post-pictures').append('<div class="add-post-picture preview" id="preview-picture-'+preview_count+'" style="display:none; overflow:hidden;"><img class="add-post-picture-placeholder preview" id="add-post-picture-preview-'+ preview_count +'" data-count="'+ preview_count +'" src="#"><button class="remove-post-picture" id="remove-post-picture-'+ preview_count +'" data-count="'+ preview_count +'" type="button" style="border: 0px;">x</button></div>');
+				$('.add-post-pictures').append('<div class="add-post-picture" id="add-post-picture-wrapper-'+ preview_count +'"><input class="add-post-picture-input" id="add-post-picture-'+ preview_count +'" data-count="'+preview_count+'" type="file" name="pictures" style="display:none;"><img class="add-post-picture-placeholder" id="add-post-picture-placeholder-'+ preview_count +'" data-count="'+ preview_count +'" src="'+ static_src+'images/add-photo@2x.png"></div>');
+			}
+
+
 	});
 
 	$('.explanation-post-form').on('click', '.add-post-picture-placeholder', function(){
@@ -688,8 +703,15 @@ $(document).ready(function(){
 
 	$('.registration-form').on('change','.add-profile-picture', function(){
 
-		$('.profile-registration-mask').show();
-		preview_profile_picture(this);
+		var ext = $(this).val().split('.').pop().toLowerCase();
+		if($.inArray(ext, ['png','jpg','jpeg']) == -1) {
+			$.growl.warning({title:"Not a picture", message: "Please upload pictures with extensions jpg, jpeg or png."});
+		}
+		else{
+			$('.profile-registration-mask').show();
+			preview_profile_picture(this);
+		}
+		
 
 	});
 

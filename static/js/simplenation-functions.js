@@ -585,10 +585,10 @@ function cancel_edition(explanation_id){
 // Add a picture: Preloads an image to the server. Modifies DOM upon response.
 function add_picture(explanation_id){
 	var data = new FormData($('#picture-form-'+explanation_id).get(0));
+	var static_src = $('.static-src').attr("href");
 
 	$('#add-picture-of-'+ explanation_id).empty();
 	$('#add-picture-of-'+ explanation_id).addClass("loader");
-
 
 	$.ajax({
 		url: $('#picture-form-'+explanation_id).attr('action'),
@@ -598,9 +598,16 @@ function add_picture(explanation_id){
 		processData: false,
 		contentType: false,
 		success: function(data) {
-			$('#add-picture-of-'+explanation_id).remove();
-			$('#picture-edit-'+ explanation_id).remove();
-    		$('#pictures-container-'+explanation_id).append(data);
+			if(data['no_success_message']){
+       		   	$.growl.warning({title:"Not a picture", message: "Please upload pictures, e.g. jpeg, png etc."});
+       		   	$('#add-picture-of-'+ explanation_id).removeClass("loader");
+       		   	$('#add-picture-of-'+ explanation_id).append('<img class="add-picture-placeholder" src="'+ static_src +'images/add-photo@2x.png">');
+       		}
+       		else {
+				$('#add-picture-of-'+explanation_id).remove();
+				$('#picture-edit-'+ explanation_id).remove();
+    			$('#pictures-container-'+explanation_id).append(data);
+    		}
 		},
 		error: function(rs, e) {
 		    alert(rs.responseText);
@@ -620,8 +627,11 @@ function remove_picture(explanation_id, picture_id){
        contentType: 'application/json; charset=utf-8',
        data: JSON.stringify(obj),
        success: function(data) {
-       		   $('#picture-container-'+picture_id).remove();
-       		   $('#gallery-element-'+picture_id).remove();
+       		   
+		   		$('#picture-container-'+picture_id).remove();
+		  		$('#gallery-element-'+picture_id).remove();
+       		   
+       		   
        },
        error: function(rs, e) {
                alert(rs.responseText);

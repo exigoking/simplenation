@@ -1,5 +1,5 @@
 from django import forms
-from simplenation.models import Term, Author, Definition
+from simplenation.models import Term, Author, Definition, Picture
 from django.contrib.auth.models import User
 from registration.forms import RegistrationForm
 from django.contrib.auth.forms import UserCreationForm
@@ -86,4 +86,8 @@ class SetPasswordForm(forms.Form):
 					)
 		return password2
 
-
+class PictureForm(forms.ModelForm):
+	pictures = forms.ImageField()
+	class Meta:
+		model = Picture
+		fields = ('pictures',)

@@ -195,6 +195,7 @@
   	{% else %}
   	<div class="explanation-post-form">
   		<h1 class="post-form-heading">Your Explanation</h1>
+      <div class="form-error-msg">{{ post_error_message }}</div>
   		<textarea class="w-input post-input" id="exp_input" name="body" placeholder="Explain using as FEW words and/or pictures as POSSIBLE" cols="92" rows="7" maxlength="2048"></textarea>
   		<div class="add-post-pictures">
     		<div class="add-post-picture preview" id="preview-picture-0" style="display:none; overflow:hidden;">
@@ -202,7 +203,7 @@
     			<button class="remove-post-picture" id="remove-post-picture-0" data-count="0" style="border: 0px;" type="button">x</button>
     		</div>
    			 <div class="add-post-picture" id="add-post-picture-wrapper-0">
-   			 	<input class="add-post-picture-input" id="add-post-picture-0" data-count="0" type="file" name="pictures" style="display:none;">
+   			 	<input class="add-post-picture-input" id="add-post-picture-0" data-count="0" type="file" name="pictures" style="display:none;" >
    			 	<img class="add-post-picture-placeholder" id="add-post-picture-placeholder-0" data-count="0" src="{% static "images/add-photo@2x.png" %}">
     		</div>
   		</div>

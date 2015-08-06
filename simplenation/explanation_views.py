@@ -44,8 +44,7 @@ def edit_exp(request):
 				for picture in pictures:
 					if picture.to_delete:
 						picture.delete()
-
-					if picture.to_add:
+					elif picture.to_add:
 						picture.to_add=False
 						picture.save()
 

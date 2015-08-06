@@ -5,9 +5,10 @@ from django.utils.translation import ugettext as _
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.contrib.auth import get_user_model
 from simplenation.models import Picture, Definition
+from simplenation.forms import PictureForm
 import json
 from django.template.loader import render_to_string
 from django.http import HttpResponse, HttpResponseRedirect
@@ -19,29 +20,35 @@ def add_picture(request, explanation_id):
 	Add picture to definition. 
 	"""
 	context_dict = {}
-	context_dict['user'] = request.user
+	
 	if request.method == "POST":
 
-		picture = request.FILES['pictures']
-
+		picture_form = PictureForm(request.POST, request.FILES)
 		definition = Definition.objects.get(id = explanation_id)
-		
-		added_picture = Picture(definition = definition, image = picture, image_thumbnail = picture, term=definition.term, to_add = True)
-		added_picture.save()
 
-		if added_picture:
-			context_dict['picture'] = added_picture
+		if picture_form.is_valid():
+			picture = picture_form.cleaned_data['pictures']
+			added_picture = Picture(definition = definition, image = picture, image_thumbnail = picture, term=definition.term, to_add = True)
+			added_picture.save()
+			context_dict['success'] = True
+			context_dict['user'] = request.user
+
+			if added_picture:
+				context_dict['picture'] = added_picture
+			else:
+				context_dict['picture'] = None
+
+			context_dict['explanation'] = definition
 		else:
-			context_dict['picture'] = None
-
-		context_dict['explanation'] = definition
-		context_dict['success'] = True
-		
+			context_dict['success'] = False
+			context_dict['no_success_message'] = "Wrong file type."
+			return HttpResponse(json.dumps(context_dict), content_type = 'application/json')
 				
 
 	else:
 		context_dict['success'] = False
 		context_dict['no_success_message'] = "Invalid form."
+		return HttpResponse(json.dumps(context_dict), content_type = 'application/json')
 
 	html = render_to_string('simplenation/add_picture.html', context_dict)
 	return HttpResponse(html)
@@ -77,7 +84,7 @@ def remove_picture(request):
 			return HttpResponse("Already removed from pictures.")
 
 	else:
-	    context_dict['success'] = False
+		context_dict['success'] = False
 		context_dict['no_success_message'] = "Invalid form."
 
 	html = render_to_string('simplenation/pictures.html', context_dict)
