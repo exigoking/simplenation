@@ -2,4 +2,4 @@ simplenation/migrations
 snippets
 djangobook/settings.py
 *.pyc
-
+media
