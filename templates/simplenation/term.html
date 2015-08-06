@@ -20,7 +20,7 @@
 		      			<a id="tag-name-{{tag.name}}" class="term-tag" href="{% url 'single_tag_view' tag.slug %}">{{ tag.name }}</a>
 		      			{% if user.is_authenticated %}
 		      				{% if user.username == term.author.user.username %}
-		      					<a id="tags-remove-{{tag.id}}" class="term-tag delete" data-tagname="{{tag.name}}" data-tagid="{{tag.id}}" data-signal="remove" data-termid="{{term.id}}" href="#">x</a>
+		      					<button id="tags-remove-{{tag.id}}" class="term-tag delete" data-tagname="{{tag.name}}" data-tagid="{{tag.id}}" data-signal="remove" data-termid="{{term.id}}" style="border:0px;">x</button>
 		      				{% endif %}
 		      			{% endif %}
 		      		{% endfor %}
@@ -100,11 +100,11 @@
         		</div>
       		</div>
       		{% endautoescape %}
-      		<div class="pictures-container" id="pictures-container-{{explanation.id}}" >
+      		<div class="pictures-container" id="pictures-container-{{explanation.id}}">
       		{% if pictures %}
-				{% for picture in pictures %}
-					{% if picture.definition == explanation  %}
-						{% if not picture.to_delete %}
+				  {% for picture in pictures %}
+					  {% if picture.definition == explanation  %}
+						  {% if not picture.to_delete %}
 		    			<div class="picture-container" id="picture-container-{{picture.id}}" data-pictureid="{{picture.id}}" data-expid='{{ explanation.id }}'>
 		    				<img class="picture-thumbnail" id="picture-thumbnail-{{picture.id}}" data-pictureid="{{picture.id}}" data-expid='{{ explanation.id }}' src="{{ picture.image_thumbnail.url }}" alt="img{{picture.id}}">
 		    				{% if user.username == explanation.author.user.username %}
@@ -112,8 +112,8 @@
 		    				{% endif %}
 		    			</div>
 		    			{% endif %}
-					{% endif %}
-				{% endfor %}
+					  {% endif %}
+				  {% endfor %}
 				<ul class="gallery-images" id="gallery-{{explanation.id}}" style="display:none;">
 					{% for picture in pictures %}
 						{% if picture.definition == explanation  %}
@@ -127,16 +127,17 @@
 					{% endfor %}
 				</ul>
 		    {% endif %}
+       
 	        {% if user.username == explanation.author.user.username %}
-	        <div class="add-picture" id = "add-picture-of-{{explanation.id}}" data-expid="{{explanation.id}}" style="display:none">
-					   <img class="add-picture-placeholder" src="{% static "images/add-photo@2x.png" %}">
-				  </div>
-    			<div id="picture-edit-{{explanation.id}}" class="picture-edit-block" style="display:none">
-					<form class="picture-add-form" id="picture-form-{{explanation.id}}" action="{% url 'add_picture' explanation.id %}" method="POST" enctype="multipart/form-data" >
-					{% csrf_token %}
-					<input class="picture-add" type="file" name="pictures" id = "picture-of-{{explanation.id}}" data-expid="{{explanation.id}}" style="display:none;">
-					</form>
-				</div>
+            <div class="add-picture" id = "add-picture-of-{{explanation.id}}" data-expid="{{explanation.id}}" style="display:none">
+              <img class="add-picture-placeholder" src="{% static "images/add-photo@2x.png" %}">
+            </div>
+            <div id="picture-edit-{{explanation.id}}" class="picture-edit-block" style="display:none">
+              <form class="picture-add-form" id="picture-form-{{explanation.id}}" action="{% url 'add_picture' explanation.id %}" method="POST" enctype="multipart/form-data" >
+              {% csrf_token %}
+                <input class="picture-add" type="file" name="pictures" id = "picture-of-{{explanation.id}}" data-expid="{{explanation.id}}" style="display:none;">
+              </form>
+            </div>
 	        {% endif %}
 	        
       		</div>

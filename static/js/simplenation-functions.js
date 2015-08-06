@@ -598,7 +598,9 @@ function add_picture(explanation_id){
 		processData: false,
 		contentType: false,
 		success: function(data) {
-    		$('#pictures-container-'+explanation_id).html(data);
+			$('#add-picture-of-'+explanation_id).remove();
+			$('#picture-edit-'+ explanation_id).remove();
+    		$('#pictures-container-'+explanation_id).append(data);
 		},
 		error: function(rs, e) {
 		    alert(rs.responseText);
@@ -618,7 +620,8 @@ function remove_picture(explanation_id, picture_id){
        contentType: 'application/json; charset=utf-8',
        data: JSON.stringify(obj),
        success: function(data) {
-			   $('#pictures-container-'+explanation_id).html(data);
+       		   $('#picture-container-'+picture_id).remove();
+       		   $('#gallery-element-'+picture_id).remove();
        },
        error: function(rs, e) {
                alert(rs.responseText);

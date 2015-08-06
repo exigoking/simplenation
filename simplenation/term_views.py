@@ -40,7 +40,7 @@ def term(request, term_name_slug):
 		term = Term.objects.get(slug=term_name_slug)
 		explanations = Definition.objects.filter(term = term)
 		pictures = Picture.objects.filter(term = term)
-		top_contributors = Author.objects.order_by('-score')[:50]
+		top_contributors = list(Author.objects.order_by('-score')[:50])
 		views = request.session.get('views_'+term.name)
 
 		if not views:
