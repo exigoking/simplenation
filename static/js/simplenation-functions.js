@@ -585,7 +585,10 @@ function cancel_edition(explanation_id){
 // Add a picture: Preloads an image to the server. Modifies DOM upon response.
 function add_picture(explanation_id){
 	var data = new FormData($('#picture-form-'+explanation_id).get(0));
-	$('.add-picture-placeholder').addClass("button-bg-loader");
+
+	$('#add-picture-of-'+ explanation_id).empty();
+	$('#add-picture-of-'+ explanation_id).addClass("loader");
+
 
 	$.ajax({
 		url: $('#picture-form-'+explanation_id).attr('action'),

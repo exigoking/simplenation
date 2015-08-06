@@ -40,7 +40,7 @@ def term(request, term_name_slug):
 		term = Term.objects.get(slug=term_name_slug)
 		explanations = Definition.objects.filter(term = term)
 		pictures = Picture.objects.filter(term = term)
-		top_contributors = list(Author.objects.order_by('-score')[:50])
+		top_contributors = Author.objects.order_by('-score')[:50]
 		views = request.session.get('views_'+term.name)
 
 		if not views:
@@ -122,7 +122,7 @@ def term(request, term_name_slug):
 					picture.save()
 				if picture.to_add:
 					picture.delete()
-
+			pictures = Picture.objects.filter(term = term)
 			context_dict['pictures'] = pictures
 
 		if request.user.id:
@@ -162,18 +162,18 @@ def term(request, term_name_slug):
 
 				return HttpResponseRedirect('/term/'+ term_name_slug)
 			else:
-				print form.errors	
+				context_dict['post_error_message'] = 'Invalid Form.'	
 
 		else:
 			form = DefinitionForm()
 
 		context_dict['success'] = True
+		context_dict['form'] = form
 
 	except Term.DoesNotExist:
 		context_dict['success'] = False
-		context_dict['no_success_message'] = False
+		context_dict['no_success_message'] = "Term does not exist"
 	
-	context_dict['form'] = form
 	return render(request, 'simplenation/term.html', context_dict)
 
 

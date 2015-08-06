@@ -1,6 +1,6 @@
 
 $(document).ready(function(){
-	
+
 	var domain = "http://" + document.location.host;
 
 	$('html').bind('click', function(event) {
@@ -164,7 +164,7 @@ $(document).ready(function(){
 		}
 			
 
-	}, 50000);
+	}, 100000);
 
 
 

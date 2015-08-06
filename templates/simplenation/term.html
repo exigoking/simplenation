@@ -128,9 +128,9 @@
 				</ul>
 		    {% endif %}
 	        {% if user.username == explanation.author.user.username %}
-	        	<div class="add-picture" id = "add-picture-of-{{explanation.id}}" data-expid="{{explanation.id}}" style="display:none">
-					<img class="add-picture-placeholder" src="{% static "images/add-photo@2x.png" %}">
-				</div>
+	        <div class="add-picture" id = "add-picture-of-{{explanation.id}}" data-expid="{{explanation.id}}" style="display:none">
+					   <img class="add-picture-placeholder" src="{% static "images/add-photo@2x.png" %}">
+				  </div>
     			<div id="picture-edit-{{explanation.id}}" class="picture-edit-block" style="display:none">
 					<form class="picture-add-form" id="picture-form-{{explanation.id}}" action="{% url 'add_picture' explanation.id %}" method="POST" enctype="multipart/form-data" >
 					{% csrf_token %}
