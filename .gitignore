@@ -3,3 +3,5 @@ snippets
 djangobook/settings.py
 *.pyc
 media
+fabfile.py
+fab_hosts

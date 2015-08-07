@@ -10,3 +10,5 @@ mysql-python
 django-registration
 django-storages 
 boto
+config
+fabric

@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 class TermForm(forms.ModelForm):
-	name = forms.TextInput(attrs={'placeholder':'Enter the term...'})
+	name = forms.TextInput(attrs={'placeholder':'Article name...'})
 	views = forms.IntegerField(widget=forms.HiddenInput(), initial=0, required=False)
 	slug = forms.CharField(widget=forms.HiddenInput(), required=False)
 	

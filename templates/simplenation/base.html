@@ -62,8 +62,8 @@
       		<div class="global-search">
       			<form class="global-search-form" action="{% url 'search' %}" method="post" role="search" style="">
       				{% csrf_token %}
-        			<input id="global-search-input-id" class="w-input global-search-input" name="search_item" placeholder="Search..." type="text" autocomplete="off">
-        			<button class="w-button global-search-button" type="submit" value="S">S</button>
+        			<input id="global-search-input-id" class="w-input global-search-input" name="search_item" placeholder="Search or Add articles" type="text" autocomplete="off">
+        			<button class="w-button global-search-button" type="submit">S</button>
       			</form>
         		
         		<div class="suggestions">
@@ -144,12 +144,12 @@
             <form action="{% url 'add_term'%}" method="POST">
               {% csrf_token %}
               <input class="w-input add-term-input" type="text" name="name" value="{{ search_item }}">
-              <input class="w-button add-term-button" type="submit" name="add" value="Add new term" />
+              <input class="w-button add-term-button" type="submit" name="add" value="Add new article" />
             </form>
           </div>
         {% else %}
           <div class="terms-agreement-notice">Please add it, let someone explain!</div>
-          <p class="post-not-registered-text" style="border: 0px; margin-top:10px;">To add a new term  <a class="log-in" href="{% url 'signin' %}?next={{ request.get_full_path|urlencode }}">Log in</a>  or  <a class="sign-up" href="{% url 'register' %}?next={{ request.get_full_path|urlencode }}">Sign up</a>. You will be redirected here afterwards ;)</p>
+          <p class="post-not-registered-text" style="border: 0px; margin-top:10px;">To add a new article  <a class="log-in" href="{% url 'signin' %}?next={{ request.get_full_path|urlencode }}">Log in</a>  or  <a class="sign-up" href="{% url 'register' %}?next={{ request.get_full_path|urlencode }}">Sign up</a>. You will be redirected here afterwards ;)</p>
         {% endif %}
       </div> 
       {% endif %}
