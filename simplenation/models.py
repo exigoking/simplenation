@@ -67,7 +67,19 @@ class Term(models.Model):
 	
 	def save(self, *args, **kwargs):
 		self.slug = slugify(self.name)
-		self.name = self.name.title()
+		name_elements = self.name.split()
+		cleaned_name_elements = []
+		if name_elements:
+			for element in name_elements:
+				if not element.isupper():
+					element.title()
+				cleaned_name_elements.append(element)
+			cleaned_name = " ".join(cleaned_name_elements)
+		else:
+			if self.name.isupper():
+				cleaned_name = self.name
+
+		self.name = cleaned_name
 		super(Term, self).save(*args, **kwargs)
 
 	def iterable_tags(self):
