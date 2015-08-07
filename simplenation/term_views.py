@@ -194,8 +194,8 @@ def add_tags_to_term(request):
 		
 
 		if signal == 'add':
-
-			term.tags.add(tag_name)
+			
+			term.tags.add(tag_name.lower())
 			term.save()
 
 		elif signal == 'remove':
