@@ -701,6 +701,25 @@ function send_email_confirmation(){
       });
 
 }
+// Returns text statistics for the specified editor by id
+function getStats(id) {
+    var body = tinymce.get(id).getBody(), text = tinymce.trim(body.innerText || body.textContent);
+
+    return {
+        chars: text.length,
+        words: text.split(/[\w\u2019\'-]+/).length
+    };
+}
+function ValidateCharacterLength() {
+    // Check if the user has entered less than 1000 characters
+    if (getStats('exp_input').chars > 4000) {
+        $.growl.warning({title:"Too big", message: "Your post is too big, try to make it more compact."});
+        return false;
+    }
+    return true;
+
+}
+
 
 // The following code handles csrf token retrieval
 // This function gets cookie with a given name

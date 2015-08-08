@@ -19,12 +19,14 @@
       	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		<!--<script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script> -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
 		<script src="{% static "js/simplenation-main.js" %}"></script>
     <script src="{% static "js/simplenation-functions.js" %}"></script>
     <script src="{% static "js/jquery.growl.js" %}"></script>
 		<script src="{% static "js/autocomplete/src/jquery.autocomplete.js" %}" type="text/javascript"></script>
 
     <script src="{% static "gallery/js/Am2_SimpleSlider.js" %}"></script>
+    <script src="{% static "js/readmore.js" %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static "gallery/css/SimpleSlider.css" %}">
 		<link rel="stylesheet" type="text/css" href="{% static "css/normalize.css" %}">
   	<link rel="stylesheet" type="text/css" href="{% static "css/webflow.css" %}">
@@ -32,6 +34,15 @@
     <link rel="stylesheet" type="text/css" href="{% static "css/jquery.growl.css" %}">
 	  
     <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script src="//tinymce.cachefly.net/4.2/tinymce.min.js"></script>
+    <script>tinymce.init({
+                          selector:'textarea',
+                          menubar: false,
+                          toolbar: false,
+                          fontsize_formats: "10pt 12pt 14pt 18pt 24pt",
+                          content_css: "{% static "css/normalize.css" %}, {% static "css/webflow.css" %}, {% static "css/simplenation.webflow.css" %}",
+                          statusbar: false,
+                        });</script>
 		
 
 		
@@ -102,7 +113,7 @@
       <div class="terms-filtered-container">
       {% if search_results %}
       <div class="term-sorting">
-        <text class="term-sorting-text">sort by <a id="term-sorting-button-exp" class="term-sorting-button">explanations</a> or <a id="term-sorting-button-view" class="term-sorting-button">views</a></text>
+        <text class="term-sorting-text">sort by <a id="term-sorting-button-exp" class="term-sorting-button">posts</a> or <a id="term-sorting-button-view" class="term-sorting-button">views</a></text>
       </div>
         {% for term in search_results %}
           <div class="w-clearfix term-filtered">
@@ -120,12 +131,12 @@
                 {% if term.has_explanations %}
                 <a href="{% url 'term' term.slug %}"><div class="term-stats-element explanations">
                     <div class="term-stats-number explanations">{{ term.number_of_explanations }}</div>
-                    <div class="term-stats-label explanations">Explanations</div>
+                    <div class="term-stats-label explanations">Posts</div>
                 </div></a>
                 {% else %}
                 <a href="{% url 'term' term.slug %}"><div class="term-stats-element no-explanations">
                     <div class="term-stats-number explanations">{{ term.number_of_explanations }}</div>
-                    <div class="term-stats-label explanations">Explanations</div>
+                    <div class="term-stats-label explanations">Posts</div>
                 </div></a>
                 {% endif %}
                 <div class="term-stats-element">

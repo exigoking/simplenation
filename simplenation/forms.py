@@ -15,7 +15,7 @@ class TermForm(forms.ModelForm):
 		fields = ('name',)
 
 class DefinitionForm(forms.ModelForm):
-	body = forms.CharField(max_length = 512, widget=forms.Textarea(attrs={'placeholder':'Explain in your own words...'}))
+	body = forms.CharField(max_length = 4096, widget=forms.Textarea(attrs={'placeholder':'Explain in your own words...'}))
 	class Meta:
 		model = Definition
 		fields = ('body',)

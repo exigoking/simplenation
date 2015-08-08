@@ -114,7 +114,7 @@ class Definition(models.Model):
     """
 	author = models.ForeignKey(Author, null=True)
 	term = models.ForeignKey(Term, null=True)
-	body = models.TextField(max_length=512)
+	body = models.TextField(max_length=4096)
 	likes = models.IntegerField(default=0)
 	post_date = models.DateTimeField(auto_now_add=True)	
 	last_posted = models.CharField(max_length=128, blank=True)

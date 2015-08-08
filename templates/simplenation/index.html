@@ -47,7 +47,7 @@
 
   	<div class="container-tag-filtered-terms-index">
   		<div class="term-sorting">
-  			<text class="term-sorting-text">sort by <a id="term-sorting-button-exp" class="term-sorting-button">explanations</a> or <a id="term-sorting-button-view" class="term-sorting-button">views</a></text>
+  			<text class="term-sorting-text">sort by <a id="term-sorting-button-exp" class="term-sorting-button">posts</a> or <a id="term-sorting-button-view" class="term-sorting-button">views</a></text>
   		</div>
   		<div class="terms-filtered-container">
   		{% if terms_for_explainers %}
@@ -67,12 +67,12 @@
 		      			{% if term.has_explanations %}
 		       			<a href="{% url 'term' term.slug %}"><div class="term-stats-element explanations">
 		          			<div class="term-stats-number explanations">{{ term.number_of_explanations }}</div>
-		          			<div class="term-stats-label explanations">Explanations</div>
+		          			<div class="term-stats-label explanations">Posts</div>
 		        		</div></a>
 		        		{% else %}
 		        		<a href="{% url 'term' term.slug %}"><div class="term-stats-element no-explanations">
 		          			<div class="term-stats-number explanations">{{ term.number_of_explanations }}</div>
-		          			<div class="term-stats-label explanations">Explanations</div>
+		          			<div class="term-stats-label explanations">Posts</div>
 		        		</div></a>
 		        		{% endif %}
 		        		<div class="term-stats-element">

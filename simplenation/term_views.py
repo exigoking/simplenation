@@ -139,13 +139,12 @@ def term(request, term_name_slug):
 		if request.method == 'POST' and 'add' in request.POST:
 		
 			form = DefinitionForm(request.POST or None)
-			pictures_form = PictureForm(request.POST, request.FILES)
-			#pictures = request.FILES.getlist('pictures')
-			if form.is_valid() and pictures_form.is_valid():
+			pictures = request.FILES.getlist('pictures')
+			
+			if form.is_valid():
 				definition = form.save(commit=False)
-				pictures = request.FILES.getlist('pictures')
+				
 				suspect_word_count = profanityFilter(definition.body)
-
 				if suspect_word_count > 0:
 					definition.times_reported = suspect_word_count
 
@@ -154,7 +153,6 @@ def term(request, term_name_slug):
 				definition.save()
 				
 				for picture in pictures:
-					picture_form = PictureForm(request.POST, request.FILES)
 					Picture(definition = definition, image = picture, image_thumbnail = picture, term=term).save()
 
 				if definition.term.author:
@@ -162,10 +160,8 @@ def term(request, term_name_slug):
 						Notification(typeof = 'explanation_notification', sender = request.user, receiver = definition.term.author.user, term = term).save()
 
 				return HttpResponseRedirect('/term/'+ term_name_slug)
-			elif not pictures_form.is_valid:
-				context_dict['post_error_message'] = 'Files must be pictures, e.g. jpeg, png'	
 			else:
-				context_dict['post_error_message'] = 'Are you sending a blank explanation? If not, please try again.'
+				context_dict['post_error_message'] = 'Are you sending a blank post? If not, please try again.'
 
 		else:
 			form = DefinitionForm()
@@ -194,7 +190,7 @@ def add_tags_to_term(request):
 		
 
 		if signal == 'add':
-			
+
 			term.tags.add(tag_name.lower())
 			term.save()
 

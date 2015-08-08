@@ -88,14 +88,24 @@
 	<div class="explanations-container-parent">
 		{% for explanation in explanations %}
     	<div class="w-clearfix exp-container-parent" id='exp-container-{{explanation.id}}' data-expid='{{ explanation.id }}'>
-      		<div class="exp-body" id="exp-body-{{explanation.id}}">
-        		<p>{{ explanation.body }}</p>
+      		<div class="exp-body" id="exp-body-{{explanation.id}}" data-expid="{{explanation.id}}">
+            {% autoescape off %}
+        		{{ explanation.body|truncatewords:"75" }}
+            {% endautoescape %}
+            
       		</div>
+          <div class="exp-body" id="exp-full-body-{{explanation.id}}" style="display:none;" data-expid="{{explanation.id}}">
+            {% autoescape off %}
+            {{ explanation.body }}
+            {% endautoescape %}
+          </div>
+          <button id="see-more-{{explanation.id}}" class="see-more" style="display:none;border:0px;background-color:transparent;padding:0;color:lightgrey;" data-expid="{{explanation.id}}">Show more</button>
+          
       		{% autoescape off %}
       		<div class="edit_form" id="edit-text-{{ explanation.id }}" style="display:none">
         		<div class="w-form all-form-wrappers">
           			<form id="email-form-3" name="email-form-3" data-name="Email Form 3">
-            			<textarea class="w-input edit-input" id="edit-input-{{ explanation.id }}" name="body" cols="92" rows="5" maxlength="2048" data-signal="edit">{{ explanation.body }}</textarea>
+            			<textarea class="w-input edit-input" id="edit-input-{{ explanation.id }}" name="body" cols="92" rows="7" data-signal="edit">{{ explanation.body }}</textarea>
           			</form>
         		</div>
       		</div>
@@ -176,9 +186,9 @@
   	{% if user.is_authenticated %}
   	<div class="w-form">
     	<form class="explanation-post-form" action="{% url 'term' term.slug %}" method="POST" enctype="multipart/form-data">
-      		<h1 class="post-form-heading">Your Explanation</h1>
+      		<h1 class="post-form-heading">Your Thoughts</h1>
       		{% csrf_token %}
-      		<textarea class="w-input post-input" id="exp_input" name="body" placeholder="Explain using as FEW words and/or pictures as POSSIBLE" cols="92" rows="7" maxlength="2048"></textarea>
+      		<textarea class="w-input post-input" id="exp_input" name="body" placeholder="Explain using as FEW words and/or pictures as POSSIBLE" cols="92" rows="7"></textarea>
      		<div class="add-post-pictures">
         		<div class="add-post-picture preview" id="preview-picture-0" style="display:none; overflow:hidden;">
         			<img class="add-post-picture-placeholder preview" id="add-post-picture-preview-0" data-count="0" src="#">
@@ -189,14 +199,15 @@
        			 	<img class="add-post-picture-placeholder" id="add-post-picture-placeholder-0" data-count="0" src="{% static "images/add-photo@2x.png" %}">
         		</div>
       		</div>
-      		<input class="w-button post-button" name="add" type="submit" value="POST EXPLANATION">
+        
+      		<input class="w-button post-button" name="add" type="submit" value="POST EXPLANATION" onclick="return ValidateCharacterLength();">
     	</form>
   	</div>
   	{% else %}
   	<div class="explanation-post-form">
-  		<h1 class="post-form-heading">Your Explanation</h1>
+  		<h1 class="post-form-heading">Your Thoughts</h1>
       <div class="form-error-msg">{{ post_error_message }}</div>
-  		<textarea class="w-input post-input" id="exp_input" name="body" placeholder="Explain using as FEW words and/or pictures as POSSIBLE" cols="92" rows="7" maxlength="2048"></textarea>
+  		<textarea class="w-input post-input" id="exp_input" name="body" placeholder="Explain using as FEW words and/or pictures as POSSIBLE" cols="92" rows="7"></textarea>
   		<div class="add-post-pictures">
     		<div class="add-post-picture preview" id="preview-picture-0" style="display:none; overflow:hidden;">
     			<img class="add-post-picture-placeholder preview" id="add-post-picture-preview-0" data-count="0" src="#">
@@ -207,7 +218,8 @@
    			 	<img class="add-post-picture-placeholder" id="add-post-picture-placeholder-0" data-count="0" src="{% static "images/add-photo@2x.png" %}">
     		</div>
   		</div>
-  		<input class="w-button post-button not-registered" name="add" type="submit" value="POST EXPLANATION">
+
+  		<input class="w-button post-button not-registered" name="add" type="submit" value="POST EXPLANATION" onclick="return ValidateCharacterLength();">
 
   	</div>
   	{% endif %}

@@ -186,7 +186,7 @@ $(document).ready(function(){
 			sortUsingNestedTextDescending($('.terms-filtered-container'), ".term-filtered", "div.term-stats-number.term-views");
 		}
 		else {
-			if(currentElement.text() == "explanations"){
+			if(currentElement.text() == "posts"){
 				currentElement.addClass("top");
 				sortUsingNestedTextDescending($('.terms-filtered-container'), ".term-filtered", "div.term-stats-number.explanations");
 			}
@@ -621,7 +621,7 @@ $(document).ready(function(){
 
 	$('.edit-option-buttons').on('click', '.edit-button', function(){
 
-
+		tinyMCE.triggerSave();
 		var explanation_id = $(this).attr('data-expid');
 		var body = $('#edit-input-'+ explanation_id).val();
 		var signal = $(this).attr('data-signal');
@@ -657,6 +657,7 @@ $(document).ready(function(){
 		
 		$('#edit-'+explanation_id).show();
 		$('#exp-body-'+ explanation_id).show();
+		$('#see-more-'+ explanation_id).show();
 
 	});
 
@@ -687,6 +688,7 @@ $(document).ready(function(){
 		var explanation_id = $(this).attr('data-editid');
 
 		$('#exp-body-'+ explanation_id).hide();
+		$('#see-more-'+ explanation_id).hide();
 		$('#edit-'+explanation_id).hide();
 		$('#edit-text-'+explanation_id).show();
 		$('#edit-option-'+explanation_id).show();

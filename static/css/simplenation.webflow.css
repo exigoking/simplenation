@@ -53,7 +53,18 @@ a {
   text-align: center;
   text-decoration: none;
 }
-.email-confirmation-bar{
+.mce-content-body  {
+  text-align: left;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  
+}
+.mce-edit-area.mce-container.mce-panel.mce-stack-layout-item.mce-first.mce-last {
+  border-top: 0px;
+}
+.email-confirmation-bar {
   background-color: #00a8e0;
   width: 100%;
   text-align: center;
@@ -62,7 +73,7 @@ a {
   top: 0;
   z-index: 1002;
 }
-.email-confirmation-text{
+.email-confirmation-text {
   color: white;
   font-size: 12px;
   line-height: 27px;
@@ -400,6 +411,9 @@ a {
   width: 500px;
   text-align: left;
   word-wrap:break-word;
+}
+.exp-body.full {
+  display: none;
 }
 .exp-author {
   position: absolute;
@@ -1112,6 +1126,12 @@ a {
 .favor-button.is-favorite {
   background-color: #0091c2;
   color: white;
+}
+.morecontent span {
+    display: none;
+}
+.morelink {
+    display: block;
 }
 @media (max-width: 991px) {
   .navbar {
