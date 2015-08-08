@@ -34,7 +34,7 @@
   		{% if explanations %}
   			<p style="font-size:16px; font-weight:bold;">Recent Contributions</p>
   			{% for explanation in explanations %}
-    			<p class="profile-table-element"><a href="{% url 'term' explanation.term.slug %}"><span class="profile-term-span">{{ explanation.term.name }}</span>: <span class="profile-explanation-span">{{ explanation.body|slice:":50" }}...</span></a> <span style="float:right;"><span style="color:grey;">{{ explanation.last_posted }}</span>. Likes: {{ explanation.likes }} </p></span> 
+    			<p class="profile-table-element"><a href="{% url 'term' explanation.term.slug %}"><span class="profile-term-span">{{ explanation.term.name }}</span>: <span class="profile-explanation-span" id="profile-explanation-span-{{explanation.id}}" data-expid="{{explanation.id}}">{{ explanation.body|truncatewords:"5" }}</span></a> <span style="float:right;"><span style="color:grey;">{{ explanation.last_posted }}</span>. Likes: {{ explanation.likes }} </p></span> 
     		{% endfor %}
     	{% endif %}
   	</div>
