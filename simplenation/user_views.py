@@ -243,12 +243,14 @@ def register(request):
 	return render(request, 'simplenation/registration_form.html', context_dict)
 
 
-@login_required
 def email_confirmation(request, account_deletion_key):
     author = get_object_or_404(Author, account_deletion_key=account_deletion_key)
     author.active = True
     author.save()
-    return HttpResponseRedirect('/simplenation/')
+    if request.user.is_authenticated():
+    	return HttpResponseRedirect('/')
+    else:
+    	return HttpResponseRedirect('/signin/')
 
 
 
