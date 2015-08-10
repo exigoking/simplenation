@@ -5,265 +5,269 @@
 {% block title %}{{ term_name }}{% endblock %}
 
 {% block body_block %}
-	<div class="term-header-container">
-    	<div class="w-clearfix term-title-and-stats">
-    		<a class="term-title" href="{% url 'term' term.slug %}">{{ term.name }}</a>
-    		{% if user.is_authenticated %}
-      			<a class="w-inline-block challenge-dialog-opener" href="#" data-termid="{{term.id}}"></a>
-      		{% endif %}
-    	</div>
-    	<div class="tags-container-parent">
-      		<div class="tags-container">
-      			{% if tags %}
-      			<div id="tag-set-{{ term.name }}">
-      				{% for tag in tags %}
-		      			<a id="tag-name-{{tag.name}}" class="term-tag" href="{% url 'single_tag_view' tag.slug %}">{{ tag.name }}</a>
-		      			{% if user.is_authenticated %}
-		      				{% if user.username == term.author.user.username %}
-		      					<button id="tags-remove-{{tag.id}}" class="term-tag delete" data-tagname="{{tag.name}}" data-tagid="{{tag.id}}" data-signal="remove" data-termid="{{term.id}}" style="border:0px;">x</button>
-		      				{% endif %}
-		      			{% endif %}
-		      		{% endfor %}
-		      	</div>
-		      	{% else %}
-		      		{% if user.is_authenticated %}
-						<p> Tag this Term so people can find it! </p>
-					{% endif %}
-				{% endif %}
-        		<div class="w-form add-tags-form-wrapper">
-        			{% if user.is_authenticated %}
-          			
-            			<input class="w-input tags-input" id="tags-input-new" type="text" name="tag_name" placeholder="Add a tag...">
-            			<button class="w-button tags-add" id="tags-add-new" type="submit" data-signal="add" data-termid="{{term.id}}"></button>
-          			
-          			{% endif %}
-        		</div>
-      		</div>
-    	</div>
- 	</div>
- 	{% if user.is_authenticated %}
-  	<div class = "challenge-dialog" style="display:none;">
-	  	<div class="favorite-dialog-block">
-		   		
-		    	{% if favourites %}
-		      	<h6 class="small-list-heading">Favorites</h6>
-		      		{% for favorite in favourites %}
-				      	<div class="w-clearfix dialog-list-block">
-				      		<img class="dialog-list-image" src="{{ favorite.author.picture.url }}" width="40">
-				      		<a class="dialog-author-title" href="{% url 'profile' favorite.author.slug %}">{{ favorite.author }}</a>
-				        <div class="dialog-challenge-button" id="dialog-challenge-button-{{favorite.id}}" data-challengeeid = "{{favorite.id}}" data-termid="{{term.id}}"></div>
-		      			</div>
-		      		{% endfor %}
-		      	{% endif %}
-		      	{% if favourites_of_favourites %}
-		      	<h6 class="small-list-heading">Suggested contributors</h6>
-		      		{% for favorite in favourites_of_favourites %}
-			      		<div class="w-clearfix dialog-list-block">
-			      			<img class="dialog-list-image" src="{{ favorite.author.picture.url }}" width="40">
-			      			<a class="dialog-author-title" href="{% url 'profile' favorite.author.slug %}">{{ favorite.author }}</a>
-
-			        		<div class="dialog-challenge-button" id="dialog-challenge-button-{{favorite.id}}" data-challengeeid = "{{favorite.id}}" data-termid="{{term.id}}"></div>
-			        		<div class="dialog-add-favorite" id="dialog-add-favorite-{{favorite.id}}" data-userid = "{{favorite.id}}" data-termid="{{term.id}}"></div>
-	      				</div>
-		      		{% endfor %}
-		      	{% endif %}
-		      	{% if top_contributors %}
-		      	<h6 class="small-list-heading">Other contributors</h6>
-		      		{% for contributor in top_contributors %}
-			      		<div class="w-clearfix dialog-list-block">
-			      			<img class="dialog-list-image" src="{{ contributor.picture.url }}" width="40">
-			      			<a class="dialog-author-title" href="{% url 'profile' contributor.slug %}">{{ contributor }}</a>
-
-			        		<div class="dialog-challenge-button" id="dialog-challenge-button-{{contributor.user.id}}" data-challengeeid = "{{contributor.user.id}}" data-termid="{{term.id}}"></div>
-			        		<div class="dialog-add-favorite" id="dialog-add-favorite-{{contributor.user.id}}" data-userid = "{{contributor.user.id}}" data-termid="{{term.id}}"></div>
-	      				</div>
-		      		{% endfor %}
-
-		      	{% endif %}
-		    
-	   	</div>
-	</div>
-	{% endif %}
-	{% if explanations %}
-	<div class="explanations-container-parent">
-		{% for explanation in explanations %}
-    	<div class="w-clearfix exp-container-parent" id='exp-container-{{explanation.id}}' data-expid='{{ explanation.id }}'>
-      		<div class="exp-body" id="exp-body-{{explanation.id}}" data-expid="{{explanation.id}}">
-            {% autoescape off %}
-        		{{ explanation.body|truncatewords:"75" }}
-            {% endautoescape %}
-            
-      		</div>
-          <div class="exp-body" id="exp-full-body-{{explanation.id}}" style="display:none;" data-expid="{{explanation.id}}">
-            {% autoescape off %}
-            {{ explanation.body }}
-            {% endautoescape %}
-          </div>
-          <button id="see-more-{{explanation.id}}" class="see-more" style="display:none;border:0px;background-color:transparent;padding:0;color:lightgrey;" data-expid="{{explanation.id}}">Show more</button>
-          
-      		{% autoescape off %}
-      		<div class="edit_form" id="edit-text-{{ explanation.id }}" style="display:none">
-        		<div class="w-form all-form-wrappers">
-          			<form id="email-form-3" name="email-form-3" data-name="Email Form 3">
-            			<textarea class="w-input edit-input" id="edit-input-{{ explanation.id }}" name="body" cols="92" rows="7" data-signal="edit">{{ explanation.body }}</textarea>
-          			</form>
-        		</div>
-      		</div>
-      		{% endautoescape %}
-      		<div class="pictures-container" id="pictures-container-{{explanation.id}}">
-      		{% if pictures %}
-				  {% for picture in pictures %}
-					  {% if picture.definition == explanation  %}
-						  {% if not picture.to_delete %}
-		    			<div class="picture-container" id="picture-container-{{picture.id}}" data-pictureid="{{picture.id}}" data-expid='{{ explanation.id }}'>
-		    				<img class="picture-thumbnail" id="picture-thumbnail-{{picture.id}}" data-pictureid="{{picture.id}}" data-expid='{{ explanation.id }}' src="{{ picture.image_thumbnail.url }}" alt="img{{picture.id}}">
-		    				{% if user.username == explanation.author.user.username %}
-		    					<button class="remove-picture" id="remove-picture-{{picture.id}}" data-pictureid="{{picture.id}}" data-expid="{{explanation.id}}" style="display:none; border: 0px;">x</button>
-		    				{% endif %}
-		    			</div>
-		    			{% endif %}
-					  {% endif %}
-				  {% endfor %}
-				<ul class="gallery-images" id="gallery-{{explanation.id}}" style="display:none;">
-					{% for picture in pictures %}
-						{% if picture.definition == explanation  %}
-							{% if not picture.to_delete %}
-							<li class="gallery-element-{{explanation.id}}" id="gallery-element-{{picture.id}}">
-								<img class="gallery-image" id="gallery-image-{{picture.id}}" src="{{picture.image.url}}" alt="img{{picture.id}}">
-								<div data-desc="{{ explanation.body }}"></div>
-							</li>
-							{% endif %}
-						{% endif %}
-					{% endfor %}
-				</ul>
-		    {% endif %}
-       
-	        {% if user.username == explanation.author.user.username %}
-            <div class="add-picture" id = "add-picture-of-{{explanation.id}}" data-expid="{{explanation.id}}" style="display:none">
-              <img class="add-picture-placeholder" src="{% static "images/add-photo@2x.png" %}">
-            </div>
-            <div id="picture-edit-{{explanation.id}}" class="picture-edit-block" style="display:none">
-              <form class="picture-add-form" id="picture-form-{{explanation.id}}" action="{% url 'add_picture' explanation.id %}" method="POST" enctype="multipart/form-data" >
-              {% csrf_token %}
-                <input class="picture-add" type="file" name="pictures" id = "picture-of-{{explanation.id}}" data-expid="{{explanation.id}}" style="display:none;">
-              </form>
-            </div>
-	        {% endif %}
-	        
-      		</div>
-      		{% if user.username == explanation.author.user.username %}
-      			<button class="edit_class" id="edit-{{ explanation.id }}" data-editid="{{explanation.id}}" style="background-color: transparent;border: 0px;">Edit</button>
-      		{% endif %}
-      		<div class="like-container">
-      			{% if user.is_authenticated %}
-        			<button class="w-inline-block upvote {{ explanation.like_text }}" id="likes-upvote-{{ explanation.id }}" data-likeflag="liked" data-expid="{{ explanation.id }}" data-signal="up" style="background-color: transparent;border: 0px;"></button>
-        		{% else %}
-        			<button class="w-inline-block upvote not-registered" id="likes-upvote-{{ explanation.id }}" data-likeflag="liked" data-expid="{{ explanation.id }}" data-signal="up" style="background-color: transparent;border: 0px;"></button>
+  {% if term_exists %}
+  	<div class="term-header-container">
+      	<div class="w-clearfix term-title-and-stats">
+      		<a class="term-title" href="{% url 'term' term.slug %}">{{ term.name }}</a>
+      		{% if user.is_authenticated %}
+        			<a class="w-inline-block challenge-dialog-opener" href="#" data-termid="{{term.id}}"></a>
         		{% endif %}
-        		<div class="likes-count" id="likes-count-{{ explanation.id }}">{{ explanation.likes }}</div>
-            {% if user.is_authenticated %}
-              <button class="w-inline-block downvote {{ explanation.like_text }}" id="likes-downvote-{{ explanation.id }}" data-likeflag="liked" data-expid="{{ explanation.id }}" data-signal="down" style="background-color: transparent;border: 0px;"></button>
-            {% else %}
-              <button class="w-inline-block downvote not-registered" id="likes-downvote-{{ explanation.id }}" data-likeflag="liked" data-expid="{{ explanation.id }}" data-signal="down" style="background-color: transparent;border: 0px;"></button>
-            {% endif %}
-      		</div>
-      		<div id="edit-option-{{ explanation.id }}" class="edit-option-buttons" style="display:none">
-      			<button class="delete-post-button" id="delete-button-{{ explanation.id }}" data-signal="delete" data-expid='{{ explanation.id }}' style="background-color: transparent;border: 0px;">Remove Post</button>
-      			<button class="edit-button" data-expid='{{ explanation.id }}' data-signal='edit' style="background-color: transparent;border: 0px;">Save</button>
-      			<button class="cancel-edit-button" data-expid='{{ explanation.id }}' style="background-color: transparent;border: 0px;">Cancel</button>
-			</div>
-      		
-      		<a class="w-inline-block exp-author" href="{% url 'profile' explanation.author.slug %}">
-      			<img class="author-img" src="{{ explanation.author.picture.url }}" width="30">
-       		 	<div class="author-title">{{ explanation.author.user.username|slice:":13" }}</div>
-        		<div class="author-stats">{{ explanation.author.score }}</div>
-        		<div class="author-stats">#{{ explanation.author.ranking }}</div>
-        		<div class="author-stats" style="color:#b0b0b0; font-size:11px;">{{ explanation.last_posted }}</div>
-      		</a>
-    	</div>
-    	{% endfor%}
+      	</div>
+      	<div class="tags-container-parent">
+        		<div class="tags-container">
+        			{% if tags %}
+        			<div id="tag-set-{{ term.name }}">
+        				{% for tag in tags %}
+  		      			<a id="tag-name-{{tag.name}}" class="term-tag" href="{% url 'single_tag_view' tag.slug %}">{{ tag.name }}</a>
+  		      			{% if user.is_authenticated %}
+  		      				{% if user.username == term.author.user.username %}
+  		      					<button id="tags-remove-{{tag.id}}" class="term-tag delete" data-tagname="{{tag.name}}" data-tagid="{{tag.id}}" data-signal="remove" data-termid="{{term.id}}" style="border:0px;">x</button>
+  		      				{% endif %}
+  		      			{% endif %}
+  		      		{% endfor %}
+  		      	</div>
+  		      	{% else %}
+  		      		{% if user.is_authenticated %}
+  						<p> Tag this Term so people can find it! </p>
+  					{% endif %}
+  				{% endif %}
+          		<div class="w-form add-tags-form-wrapper">
+          			{% if user.is_authenticated %}
+            			
+              			<input class="w-input tags-input" id="tags-input-new" type="text" name="tag_name" placeholder="Add a tag...">
+              			<button class="w-button tags-add" id="tags-add-new" type="submit" data-signal="add" data-termid="{{term.id}}"></button>
+            			
+            			{% endif %}
+          		</div>
+        		</div>
+      	</div>
+   	</div>
+   	{% if user.is_authenticated %}
+    	<div class = "challenge-dialog" style="display:none;">
+  	  	<div class="favorite-dialog-block">
+  		   		
+  		    	{% if favourites %}
+  		      	<h6 class="small-list-heading">Favorites</h6>
+  		      		{% for favorite in favourites %}
+  				      	<div class="w-clearfix dialog-list-block">
+  				      		<img class="dialog-list-image" src="{{ favorite.author.picture.url }}" width="40">
+  				      		<a class="dialog-author-title" href="{% url 'profile' favorite.author.slug %}">{{ favorite.author }}</a>
+  				        <div class="dialog-challenge-button" id="dialog-challenge-button-{{favorite.id}}" data-challengeeid = "{{favorite.id}}" data-termid="{{term.id}}"></div>
+  		      			</div>
+  		      		{% endfor %}
+  		      	{% endif %}
+  		      	{% if favourites_of_favourites %}
+  		      	<h6 class="small-list-heading">Suggested contributors</h6>
+  		      		{% for favorite in favourites_of_favourites %}
+  			      		<div class="w-clearfix dialog-list-block">
+  			      			<img class="dialog-list-image" src="{{ favorite.author.picture.url }}" width="40">
+  			      			<a class="dialog-author-title" href="{% url 'profile' favorite.author.slug %}">{{ favorite.author }}</a>
+
+  			        		<div class="dialog-challenge-button" id="dialog-challenge-button-{{favorite.id}}" data-challengeeid = "{{favorite.id}}" data-termid="{{term.id}}"></div>
+  			        		<div class="dialog-add-favorite" id="dialog-add-favorite-{{favorite.id}}" data-userid = "{{favorite.id}}" data-termid="{{term.id}}"></div>
+  	      				</div>
+  		      		{% endfor %}
+  		      	{% endif %}
+  		      	{% if top_contributors %}
+  		      	<h6 class="small-list-heading">Other contributors</h6>
+  		      		{% for contributor in top_contributors %}
+  			      		<div class="w-clearfix dialog-list-block">
+  			      			<img class="dialog-list-image" src="{{ contributor.picture.url }}" width="40">
+  			      			<a class="dialog-author-title" href="{% url 'profile' contributor.slug %}">{{ contributor }}</a>
+
+  			        		<div class="dialog-challenge-button" id="dialog-challenge-button-{{contributor.user.id}}" data-challengeeid = "{{contributor.user.id}}" data-termid="{{term.id}}"></div>
+  			        		<div class="dialog-add-favorite" id="dialog-add-favorite-{{contributor.user.id}}" data-userid = "{{contributor.user.id}}" data-termid="{{term.id}}"></div>
+  	      				</div>
+  		      		{% endfor %}
+
+  		      	{% endif %}
+  		    
+  	   	</div>
   	</div>
-  	{% else %}
+  	{% endif %}
+  	{% if explanations %}
   	<div class="explanations-container-parent">
-  		<p style="text-align:left;">Be the first one to review.</p>
-  	</div>
-  	{% endif %}
-  	{% if user.is_authenticated %}
-  	<div class="w-form">
+  		{% for explanation in explanations %}
+      	<div class="w-clearfix exp-container-parent" id='exp-container-{{explanation.id}}' data-expid='{{ explanation.id }}'>
+        		<div class="exp-body" id="exp-body-{{explanation.id}}" data-expid="{{explanation.id}}">
+              {% autoescape off %}
+          		{{ explanation.body|truncatewords:"75" }}
+              {% endautoescape %}
+              
+        		</div>
+            <div class="exp-body" id="exp-full-body-{{explanation.id}}" style="display:none;" data-expid="{{explanation.id}}">
+              {% autoescape off %}
+              {{ explanation.body }}
+              {% endautoescape %}
+            </div>
+            <button id="see-more-{{explanation.id}}" class="see-more" style="display:none;border:0px;background-color:transparent;padding:0;color:lightgrey;" data-expid="{{explanation.id}}">Show more</button>
+            
+        		{% autoescape off %}
+        		<div class="edit_form" id="edit-text-{{ explanation.id }}" style="display:none">
+          		<div class="w-form all-form-wrappers">
+            			<form id="email-form-3" name="email-form-3" data-name="Email Form 3">
+              			<textarea class="w-input edit-input" id="edit-input-{{ explanation.id }}" name="body" cols="92" rows="7" data-signal="edit">{{ explanation.body }}</textarea>
+            			</form>
+          		</div>
+        		</div>
+        		{% endautoescape %}
+        		<div class="pictures-container" id="pictures-container-{{explanation.id}}">
+        		{% if pictures %}
+  				  {% for picture in pictures %}
+  					  {% if picture.definition == explanation  %}
+  						  {% if not picture.to_delete %}
+  		    			<div class="picture-container" id="picture-container-{{picture.id}}" data-pictureid="{{picture.id}}" data-expid='{{ explanation.id }}'>
+  		    				<img class="picture-thumbnail" id="picture-thumbnail-{{picture.id}}" data-pictureid="{{picture.id}}" data-expid='{{ explanation.id }}' src="{{ picture.image_thumbnail.url }}" alt="img{{picture.id}}">
+  		    				{% if user.username == explanation.author.user.username %}
+  		    					<button class="remove-picture" id="remove-picture-{{picture.id}}" data-pictureid="{{picture.id}}" data-expid="{{explanation.id}}" style="display:none; border: 0px;">x</button>
+  		    				{% endif %}
+  		    			</div>
+  		    			{% endif %}
+  					  {% endif %}
+  				  {% endfor %}
+  				<ul class="gallery-images" id="gallery-{{explanation.id}}" style="display:none;">
+  					{% for picture in pictures %}
+  						{% if picture.definition == explanation  %}
+  							{% if not picture.to_delete %}
+  							<li class="gallery-element-{{explanation.id}}" id="gallery-element-{{picture.id}}">
+  								<img class="gallery-image" id="gallery-image-{{picture.id}}" src="{{picture.image.url}}" alt="img{{picture.id}}">
+  								<div data-desc="{{ explanation.body }}"></div>
+  							</li>
+  							{% endif %}
+  						{% endif %}
+  					{% endfor %}
+  				</ul>
+  		    {% endif %}
+         
+  	        {% if user.username == explanation.author.user.username %}
+              <div class="add-picture" id = "add-picture-of-{{explanation.id}}" data-expid="{{explanation.id}}" style="display:none">
+                <img class="add-picture-placeholder" src="{% static "images/add-photo@2x.png" %}">
+              </div>
+              <div id="picture-edit-{{explanation.id}}" class="picture-edit-block" style="display:none">
+                <form class="picture-add-form" id="picture-form-{{explanation.id}}" action="{% url 'add_picture' explanation.id %}" method="POST" enctype="multipart/form-data" >
+                {% csrf_token %}
+                  <input class="picture-add" type="file" name="pictures" id = "picture-of-{{explanation.id}}" data-expid="{{explanation.id}}" style="display:none;">
+                </form>
+              </div>
+  	        {% endif %}
+  	        
+        		</div>
+        		{% if user.username == explanation.author.user.username %}
+        			<button class="edit_class" id="edit-{{ explanation.id }}" data-editid="{{explanation.id}}" style="background-color: transparent;border: 0px;">Edit</button>
+        		{% endif %}
+        		<div class="like-container">
+        			{% if user.is_authenticated %}
+          			<button class="w-inline-block upvote {{ explanation.like_text }}" id="likes-upvote-{{ explanation.id }}" data-likeflag="liked" data-expid="{{ explanation.id }}" data-signal="up" style="background-color: transparent;border: 0px;"></button>
+          		{% else %}
+          			<button class="w-inline-block upvote not-registered" id="likes-upvote-{{ explanation.id }}" data-likeflag="liked" data-expid="{{ explanation.id }}" data-signal="up" style="background-color: transparent;border: 0px;"></button>
+          		{% endif %}
+          		<div class="likes-count" id="likes-count-{{ explanation.id }}">{{ explanation.likes }}</div>
+              {% if user.is_authenticated %}
+                <button class="w-inline-block downvote {{ explanation.like_text }}" id="likes-downvote-{{ explanation.id }}" data-likeflag="liked" data-expid="{{ explanation.id }}" data-signal="down" style="background-color: transparent;border: 0px;"></button>
+              {% else %}
+                <button class="w-inline-block downvote not-registered" id="likes-downvote-{{ explanation.id }}" data-likeflag="liked" data-expid="{{ explanation.id }}" data-signal="down" style="background-color: transparent;border: 0px;"></button>
+              {% endif %}
+        		</div>
+        		<div id="edit-option-{{ explanation.id }}" class="edit-option-buttons" style="display:none">
+        			<button class="delete-post-button" id="delete-button-{{ explanation.id }}" data-signal="delete" data-expid='{{ explanation.id }}' style="background-color: transparent;border: 0px;">Remove Post</button>
+        			<button class="edit-button" data-expid='{{ explanation.id }}' data-signal='edit' style="background-color: transparent;border: 0px;">Save</button>
+        			<button class="cancel-edit-button" data-expid='{{ explanation.id }}' style="background-color: transparent;border: 0px;">Cancel</button>
+  			</div>
+        		
+        		<a class="w-inline-block exp-author" href="{% url 'profile' explanation.author.slug %}">
+        			<img class="author-img" src="{{ explanation.author.picture.url }}" width="30">
+         		 	<div class="author-title">{{ explanation.author.user.username|slice:":13" }}</div>
+          		<div class="author-stats">{{ explanation.author.score }}</div>
+          		<div class="author-stats">#{{ explanation.author.ranking }}</div>
+          		<div class="author-stats" style="color:#b0b0b0; font-size:11px;">{{ explanation.last_posted }}</div>
+        		</a>
+      	</div>
+      	{% endfor%}
+    	</div>
+    	{% else %}
+    	<div class="explanations-container-parent">
+    		<p style="text-align:left;">Be the first one to review.</p>
+    	</div>
+    	{% endif %}
+    	{% if user.is_authenticated %}
+    	<div class="w-form">
+      	<form class="explanation-post-form" action="{% url 'term' term.slug %}" method="POST" enctype="multipart/form-data">
+        		<h1 class="post-form-heading">Your Review</h1>
+        		{% csrf_token %}
+            {{ form.body }}
+       		<div class="add-post-pictures">
+          		<div class="add-post-picture preview" id="preview-picture-0" style="display:none; overflow:hidden;">
+          			<img class="add-post-picture-placeholder preview" id="add-post-picture-preview-0" data-count="0" src="#">
+          			<button class="remove-post-picture" id="remove-post-picture-0" data-count="0" style="border: 0px;" type="button">x</button>
+          		</div>
+         			 <div class="add-post-picture" id="add-post-picture-wrapper-0">
+         			 	<input class="add-post-picture-input" id="add-post-picture-0" data-count="0" type="file" name="pictures" style="display:none;">
+         			 	<img class="add-post-picture-placeholder" id="add-post-picture-placeholder-0" data-count="0" src="{% static "images/add-photo@2x.png" %}">
+          		</div>
+        		</div>
+          
+        		<input class="w-button post-button" type="submit" value="POST REVIEW" onclick="return ValidateCharacterLength();">
+      	</form>
+    	</div>
+    	{% else %}
     	<form class="explanation-post-form" action="{% url 'term' term.slug %}" method="POST" enctype="multipart/form-data">
-      		<h1 class="post-form-heading">Your Review</h1>
-      		{% csrf_token %}
-          {{ form.body }}
-     		<div class="add-post-pictures">
-        		<div class="add-post-picture preview" id="preview-picture-0" style="display:none; overflow:hidden;">
-        			<img class="add-post-picture-placeholder preview" id="add-post-picture-preview-0" data-count="0" src="#">
-        			<button class="remove-post-picture" id="remove-post-picture-0" data-count="0" style="border: 0px;" type="button">x</button>
-        		</div>
-       			 <div class="add-post-picture" id="add-post-picture-wrapper-0">
-       			 	<input class="add-post-picture-input" id="add-post-picture-0" data-count="0" type="file" name="pictures" style="display:none;">
-       			 	<img class="add-post-picture-placeholder" id="add-post-picture-placeholder-0" data-count="0" src="{% static "images/add-photo@2x.png" %}">
-        		</div>
+    		<h1 class="post-form-heading">Your Review</h1>
+        <div class="form-error-msg">{{ post_error_message }}</div>
+        {% csrf_token %}
+    		{{ form.body }}
+    		<div class="add-post-pictures">
+      		<div class="add-post-picture preview" id="preview-picture-0" style="display:none; overflow:hidden;">
+      			<img class="add-post-picture-placeholder preview" id="add-post-picture-preview-0" data-count="0" src="#">
+      			<button class="remove-post-picture" id="remove-post-picture-0" data-count="0" style="border: 0px;" type="button">x</button>
       		</div>
+     			 <div class="add-post-picture" id="add-post-picture-wrapper-0">
+     			 	<input class="add-post-picture-input" id="add-post-picture-0" data-count="0" type="file" name="pictures" style="display:none;" >
+     			 	<img class="add-post-picture-placeholder" id="add-post-picture-placeholder-0" data-count="0" src="{% static "images/add-photo@2x.png" %}">
+      		</div>
+    		</div>
+
+        <div class="sign-in-block sign-post">
+          <button class="side-sign-option up pressed" type="button">sign up</button> 
+          <button class="side-sign-option in" type="button">log in</button> 
+          <div class="w-form" id="post-and-sign-up-form">
+            <div class="w-clearfix sign-in-form registration-form" id="user_form" style="padding-bottom:0px;margin-bottom:0px;">
+             
+              {% if user_error_message %}
+              <div class="form-error-msg">{{ user_error_message }}</div>
+              {% elif user_form.email.errors %}
+              <div class="form-error-msg">{{ user_form.email.errors.as_text }}</div>
+              {% elif user_form.errors.values.0 %}
+              <div class="form-error-msg">{{ user_form.errors.values.0.as_text }}</div>
+              {% endif %}
+              <input class="w-input sign-in-input" id="email" type="text" placeholder="email" name="email">
+              <input class="w-input sign-in-input" id="username" type="text" placeholder="username" name="username">
+              <input class="w-input sign-in-input" id="password1" type="password" placeholder="password" name="password1">
+              <div class="terms-agreement-notice" style="margin-bottom:0px;">By pressing SIGN UP AND POST you are agreeing to our Terms of Service and Privacy Policy.</div>
+            </div>
+          <input class="w-button post-button not-registered" name="signup" type="submit" value="SIGN UP AND POST" onclick="return ValidateCharacterLength();">
+          </div>
+
+          <div class="w-form" style="display:none;" id="post-and-log-in-form">
+            <div class="w-clearfix sign-in-form registration-form" id="user_form" style="padding-bottom:0px;margin-bottom:0px;">
+              
+              <div class="form-error-msg">{{ user_error_message }}</div>
+              
+              <input class="w-input sign-in-input" type="text" placeholder="email or username" name="email_or_username">
+              <input class="w-input sign-in-input" type="password" placeholder="password" name="password">
+            </div>
+          <input class="w-button post-button not-registered" name="login" type="submit" value="LOGIN AND POST" onclick="return ValidateCharacterLength();">
+          </div>
         
-      		<input class="w-button post-button" type="submit" value="POST REVIEW" onclick="return ValidateCharacterLength();">
-    	</form>
-  	</div>
-  	{% else %}
-  	<form class="explanation-post-form" action="{% url 'term' term.slug %}" method="POST" enctype="multipart/form-data">
-  		<h1 class="post-form-heading">Your Review</h1>
-      <div class="form-error-msg">{{ post_error_message }}</div>
-      {% csrf_token %}
-  		{{ form.body }}
-  		<div class="add-post-pictures">
-    		<div class="add-post-picture preview" id="preview-picture-0" style="display:none; overflow:hidden;">
-    			<img class="add-post-picture-placeholder preview" id="add-post-picture-preview-0" data-count="0" src="#">
-    			<button class="remove-post-picture" id="remove-post-picture-0" data-count="0" style="border: 0px;" type="button">x</button>
-    		</div>
-   			 <div class="add-post-picture" id="add-post-picture-wrapper-0">
-   			 	<input class="add-post-picture-input" id="add-post-picture-0" data-count="0" type="file" name="pictures" style="display:none;" >
-   			 	<img class="add-post-picture-placeholder" id="add-post-picture-placeholder-0" data-count="0" src="{% static "images/add-photo@2x.png" %}">
-    		</div>
-  		</div>
-
-      <div class="sign-in-block sign-post">
-        <button class="side-sign-option up pressed" type="button">sign up</button> 
-        <button class="side-sign-option in" type="button">log in</button> 
-        <div class="w-form" id="post-and-sign-up-form">
-          <div class="w-clearfix sign-in-form registration-form" id="user_form" style="padding-bottom:0px;margin-bottom:0px;">
-           
-            {% if user_error_message %}
-            <div class="form-error-msg">{{ user_error_message }}</div>
-            {% elif user_form.email.errors %}
-            <div class="form-error-msg">{{ user_form.email.errors.as_text }}</div>
-            {% elif user_form.errors.values.0 %}
-            <div class="form-error-msg">{{ user_form.errors.values.0.as_text }}</div>
-            {% endif %}
-            <input class="w-input sign-in-input" id="email" type="text" placeholder="email" name="email">
-            <input class="w-input sign-in-input" id="username" type="text" placeholder="username" name="username">
-            <input class="w-input sign-in-input" id="password1" type="password" placeholder="password" name="password1">
-            <div class="terms-agreement-notice" style="margin-bottom:0px;">By pressing SIGN UP AND POST you are agreeing to our Terms of Service and Privacy Policy.</div>
-          </div>
-        <input class="w-button post-button not-registered" name="signup" type="submit" value="SIGN UP AND POST" onclick="return ValidateCharacterLength();">
         </div>
+      </form>
+    	{% endif %}
+  {% else %}
+    <div class="no-found-terms" style="margin-top:50px;">
+        <img src="{% static "images/no-article.png" %}" width="100px">
+        <div class="no-found-terms-text">Article does not exist.</div>
+    </div>
+  {% endif %}
 
-        <div class="w-form" style="display:none;" id="post-and-log-in-form">
-          <div class="w-clearfix sign-in-form registration-form" id="user_form" style="padding-bottom:0px;margin-bottom:0px;">
-            
-            <div class="form-error-msg">{{ user_error_message }}</div>
-            
-            <input class="w-input sign-in-input" type="text" placeholder="email or username" name="email_or_username">
-            <input class="w-input sign-in-input" type="password" placeholder="password" name="password">
-          </div>
-        <input class="w-button post-button not-registered" name="login" type="submit" value="LOGIN AND POST" onclick="return ValidateCharacterLength();">
-        </div>
-      
-      </div>
-    </form>
-
-  		
-
-  	</div>
-  	{% endif %}
 {% endblock %}
 
 

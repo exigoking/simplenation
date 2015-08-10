@@ -35,7 +35,7 @@ def term(request, term_name_slug):
 	reported = False
 	report_by_explanation_id = {}
 	pictures = []
-
+	context_dict['term_exists'] = True
 	
 	try:
 		term = Term.objects.get(slug=term_name_slug)
@@ -210,6 +210,7 @@ def term(request, term_name_slug):
 
 	except Term.DoesNotExist:
 		context_dict['success'] = False
+		context_dict['term_exists'] = False
 		context_dict['no_success_message'] = "Term does not exist"
 	
 	return render(request, 'simplenation/term.html', context_dict)
