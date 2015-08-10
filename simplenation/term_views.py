@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from simplenation.addons import last_posted_date, profanityFilter, deleted_user_profile
+from simplenation.user_views import log_user_while_post, register_user_while_post
 from taggit.models import Tag, TaggedItem
 from django.db.models import Count
 import json
@@ -38,7 +39,7 @@ def term(request, term_name_slug):
 	
 	try:
 		term = Term.objects.get(slug=term_name_slug)
-		explanations = Definition.objects.filter(term = term)
+		explanations = Definition.objects.filter(term = term).order_by('-likes')
 		pictures = Picture.objects.filter(term = term)
 		top_contributors = list(Author.objects.order_by('-score')[:50])
 		views = request.session.get('views_'+term.name)
@@ -93,9 +94,13 @@ def term(request, term_name_slug):
 				explanation.author = deleted_user_profile()
 			
 			if request.user.id:
-				like = Like.objects.filter(user=request.user, definition=explanation)
-				if like:
-					explanation.like_text = 'liked'
+				if Like.objects.has_liked(request.user, explanation):
+					like = Like.objects.get(user=request.user, definition=explanation)
+					if like.upvote:
+						explanation.like_text = 'upvoted'
+					elif like.downvote:
+						explanation.like_text = 'downvoted'
+					
 				else:
 					explanation.like_text = None
 
@@ -136,25 +141,58 @@ def term(request, term_name_slug):
 				context_dict['top_contributors'] = top_contributors
 
 
-		if request.method == 'POST' and 'add' in request.POST:
+		# Posting on term page
+		# Is user submitting a new post?
+		if request.method == 'POST':
 		
 			form = DefinitionForm(request.POST or None)
 			pictures = request.FILES.getlist('pictures')
 			
+			# Did user submit a valid post or is he sending blanks?
 			if form.is_valid():
+
 				definition = form.save(commit=False)
 				
+				# How many times did the user swear? Report to admins if he did
 				suspect_word_count = profanityFilter(definition.body)
 				if suspect_word_count > 0:
 					definition.times_reported = suspect_word_count
 
 				definition.term = term
-				definition.author = request.user.author
+				# Is user logged in?
+				if not request.user.is_authenticated():
+					# Is it login_form or registration_form?
+					if 'login' in request.POST:
+						response = log_user_while_post(request)
+					else:
+						response = register_user_while_post(request)
+					
+					# Was the registraion or authentication successful?
+					if response['success']:
+						user = response['user']
+					else:
+						# Seems the are some errors with registration or authentication
+						if 'error_message' in response:
+							context_dict['user_error_message'] = response['error_message']
+						if 'user_form' in response:
+							context_dict['user_form'] = response['user_form']
+						context_dict['form'] = form
+						context_dict['success'] = False
+						return render(request, 'simplenation/term.html', context_dict)
+
+				# Is it newly registered/logged or old one?
+				if not user:
+					definition.author = request.user.author
+				else:
+					definition.author = user.author
+
 				definition.save()
 				
+				# Should we add pictures to the post if there are any?
 				for picture in pictures:
 					Picture(definition = definition, image = picture, image_thumbnail = picture, term=term).save()
 
+				# Why not notify an article author that someone has expressed his thoughts about it?
 				if definition.term.author:
 					if request.user != definition.term.author.user:
 						Notification(typeof = 'explanation_notification', sender = request.user, receiver = definition.term.author.user, term = term).save()
@@ -168,6 +206,7 @@ def term(request, term_name_slug):
 
 		context_dict['success'] = True
 		context_dict['form'] = form
+
 
 	except Term.DoesNotExist:
 		context_dict['success'] = False

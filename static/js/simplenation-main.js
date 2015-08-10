@@ -164,7 +164,7 @@ $(document).ready(function(){
 		}
 			
 
-	}, 100000);
+	}, 150000);
 
 
 
@@ -495,20 +495,49 @@ $(document).ready(function(){
 
 
 	
-	$('.like-container').on('click', '.like_class', function(){
+	$('.like-container').on('click', '.upvote', function(){
 
 		var explanation_id = $(this).attr('data-expid');
-		  if($(this).hasClass("liked")) {
+		var signal = $(this).attr('data-signal');
+		
+		  if($(this).hasClass("upvoted")) {
 		  	
-			$('#likes-'+explanation_id).removeClass('liked');
-			remove_like(explanation_id);
+			$('#likes-upvote-'+explanation_id).removeClass('upvoted');
+			remove_like(explanation_id, signal);
 		  } else if ($(this).hasClass("not-registered")){
-		  	$.growl.warning({ title: "Please Log In", message: "You need to sign in to like." });
+		  	$.growl.warning({ title: "Please Log In", message: "You need to sign in to vote." });
 
 		  } else {
 		  	
-			$('#likes-'+explanation_id).addClass('liked');
-			add_like(explanation_id);
+			$('#likes-upvote-'+explanation_id).addClass('upvoted');
+			$('#likes-downvote-'+explanation_id).removeClass('downvoted');
+			add_like(explanation_id, signal);
+		  }
+
+	});
+
+	$('.like-container').on('click', '.downvote', function(){
+
+		var explanation_id = $(this).attr('data-expid');
+		var signal = $(this).attr('data-signal');
+		var likes_count = parseInt($('#likes-count-'+explanation_id).text(), 10);
+		  if($(this).hasClass("downvoted")) {
+		  	
+			$('#likes-downvote-'+explanation_id).removeClass('downvoted');
+			remove_like(explanation_id, signal);
+		  } else if ($(this).hasClass("not-registered")){
+		  	$.growl.warning({ title: "Please Log In", message: "You need to sign in to vote." });
+
+		  } else {
+		  	
+			if (likes_count > 0){
+				$('#likes-downvote-'+explanation_id).addClass('downvoted');
+				$('#likes-upvote-'+explanation_id).removeClass('upvoted');
+				add_like(explanation_id, signal);
+			}
+			else{
+				$.growl.warning({message:'Vote count is already 0.'});
+			}
 		  }
 
 	});
@@ -715,6 +744,24 @@ $(document).ready(function(){
 		}
 		
 
+	});
+
+	$('.sign-post').on('click','.side-sign-option', function(){
+		if (!$(this).hasClass("pressed")){
+			if($(this).text() == 'sign up'){
+				$('.in').removeClass("pressed");
+				$('.up').addClass("pressed");
+				$('#post-and-log-in-form').hide();
+				$('#post-and-sign-up-form').show();
+			}
+			else{
+				$('.up').removeClass("pressed");
+				$('.in').addClass("pressed");
+				$('#post-and-sign-up-form').hide();
+				$('#post-and-log-in-form').show();
+			}
+		}
+		
 	});
 
 

@@ -11,7 +11,7 @@ class FavouriteManager(models.Manager):
                 favorees.append(favourite.favoree)
 
         return favorees
-
+ 
 
     def remove(self, user1, user2):
         favourites = self.filter(favoror=user1, favoree=user2)
@@ -110,6 +110,18 @@ class LikeManager(models.Manager):
 
     def has_liked(self, user, definition):
         return self.filter(Q(user=user, definition=definition)).count() > 0
+
+    def is_upvote(self, user, definition):
+        like = self.filter(Q(user=user, definition=definition))
+        if like:
+            return like.upvote
+        return False
+
+    def is_downvote(self, user, definition):
+        like = self.filter(Q(user=user, definition=definition))
+        if like:
+            return like.downvote
+        return False
 
 
         

@@ -1127,11 +1127,58 @@ a {
   background-color: #0091c2;
   color: white;
 }
-.morecontent span {
-    display: none;
+
+.upvote {
+  width: 75px;
+  height: 35px;
+  background-image: url('../images/caret-up-unpressed@2x.png');
+  background-position: 50% 50%;
+  background-size: 35px;
+  background-repeat: no-repeat;
 }
-.morelink {
-    display: block;
+.upvote.upvoted {
+  background-image: url('../images/caret-up-pressed@2x.png');
+}
+.downvote {
+  width: 75px;
+  height: 35px;
+  background-image: url('../images/caret-down-unpressed@2x.png');
+  background-position: 50% 50%;
+  background-size: 36px;
+  background-repeat: no-repeat;
+}
+.downvote.downvoted {
+  background-image: url('../images/caret-down-pressed@2x.png');
+}
+.sign-in-block.sign-post {
+  position: relative;
+  width: 264px;
+  margin-top: 0px;
+  padding-top: 25px;
+  padding-right: 0px;
+  padding-left: 0px;
+}
+.side-sign-option {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  color: #d1d1d1;
+  font-weight: 700;
+  border: 0px;
+  background-color: transparent;
+}
+.side-sign-option.bottom {
+  top: 97px;
+  right: -64px;
+}
+.side-sign-option.up {
+  right: 54px;
+}
+.side-sign-option.up.pressed {
+  color: #0091c2;
+}
+.side-sign-option.pressed {
+  color: #0091c2;
 }
 @media (max-width: 991px) {
   .navbar {
@@ -1336,6 +1383,16 @@ a {
   }
   .add-picture {
     width: 47.5%;
+  }
+  .upvote {
+    width: 30px;
+    height: 25px;
+    background-size: 25px;
+  }
+  .downvote {
+    width: 30px;
+    height: 25px;
+    background-size: 25px;
   }
 }
 @media (max-width: 479px) {

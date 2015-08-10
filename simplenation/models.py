@@ -132,7 +132,7 @@ class Picture(models.Model):
 	definition=models.ForeignKey(Definition,related_name='pictures_for_explanation')
 	term=models.ForeignKey(Term,related_name='pictures_for_term', null=True)
 	image=models.ImageField(upload_to="pictures/")
-	image_thumbnail = ProcessedImageField(upload_to="thumbnail_pictures/",processors=[ResizeToFill(100, 100)],format='JPEG',options={'quality': 100})
+	image_thumbnail = ProcessedImageField(upload_to="thumbnail_pictures/",processors=[ResizeToFill(300, 300)],format='JPEG',options={'quality': 100})
 	deleted=models.BooleanField(default=False)
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
@@ -150,6 +150,8 @@ class Like(models.Model):
 	user = models.ForeignKey(User)
 	definition = models.ForeignKey(Definition)
 	liked = models.BooleanField(default=False)
+	upvote = models.BooleanField(default=False)
+	downvote = models.BooleanField(default=False)
 
 	objects = LikeManager()
 

@@ -521,10 +521,10 @@ function remove_favourites(favoree_id)
 
 	
 // Add like: Sends a request to add new like to an explanation
-function add_like(explanation_id)
+function add_like(explanation_id, signal)
 {
 
-	var obj={'explanation_id':explanation_id}
+	var obj={'explanation_id':explanation_id, 'signal':signal}
 
 	jQuery.ajax({
 		           type: "POST",
@@ -543,9 +543,9 @@ function add_like(explanation_id)
 
 
 // Remove like: Sends a request to remove like from an explanation
-function remove_like(explanation_id)
+function remove_like(explanation_id, signal)
 {
-	var obj = {'explanation_id':explanation_id }
+	var obj = {'explanation_id':explanation_id, 'signal':signal }
 
 	jQuery.ajax({
 		           type: "POST",

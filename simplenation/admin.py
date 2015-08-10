@@ -1,5 +1,5 @@
 from django.contrib import admin
-from simplenation.models import Term, Definition, Author, Picture, Notification, Favourite, Like, Report, Challenge, Session
+from simplenation.models import Term, Definition, Author, Picture, Notification, Favourite, Like, Report, Challenge, Session, Like
 
 
 class TermAdmin(admin.ModelAdmin):
@@ -26,6 +26,9 @@ class ChallengeAdmin(admin.ModelAdmin):
 class SessionAdmin(admin.ModelAdmin):
 	list_display = ('id', 'created_at')
 
+class LikeAdmin(admin.ModelAdmin):
+	list_display = ('user', 'definition', 'upvote', 'downvote')
+
 admin.site.register(Term, TermAdmin)
 admin.site.register(Definition, DefinitionAdmin)
 admin.site.register(Author, AuthorAdmin)
@@ -34,3 +37,4 @@ admin.site.register(Notification, NotificationAdmin)
 admin.site.register(Favourite, FavouriteAdmin)
 admin.site.register(Challenge, ChallengeAdmin)
 admin.site.register(Session, SessionAdmin)
+admin.site.register(Like, LikeAdmin)

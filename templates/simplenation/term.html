@@ -56,7 +56,7 @@
 		      		{% endfor %}
 		      	{% endif %}
 		      	{% if favourites_of_favourites %}
-		      	<h6 class="small-list-heading">People you may know</h6>
+		      	<h6 class="small-list-heading">Suggested contributors</h6>
 		      		{% for favorite in favourites_of_favourites %}
 			      		<div class="w-clearfix dialog-list-block">
 			      			<img class="dialog-list-image" src="{{ favorite.author.picture.url }}" width="40">
@@ -68,7 +68,7 @@
 		      		{% endfor %}
 		      	{% endif %}
 		      	{% if top_contributors %}
-		      	<h6 class="small-list-heading">Top contributors</h6>
+		      	<h6 class="small-list-heading">Other contributors</h6>
 		      		{% for contributor in top_contributors %}
 			      		<div class="w-clearfix dialog-list-block">
 			      			<img class="dialog-list-image" src="{{ contributor.picture.url }}" width="40">
@@ -156,11 +156,16 @@
       		{% endif %}
       		<div class="like-container">
       			{% if user.is_authenticated %}
-        			<button class="w-inline-block like_class {{ explanation.like_text }}" id="likes-{{ explanation.id }}" data-likeflag="liked" data-expid="{{ explanation.id }}" style="background-color: transparent;border: 0px;"></button>
+        			<button class="w-inline-block upvote {{ explanation.like_text }}" id="likes-upvote-{{ explanation.id }}" data-likeflag="liked" data-expid="{{ explanation.id }}" data-signal="up" style="background-color: transparent;border: 0px;"></button>
         		{% else %}
-        			<button class="w-inline-block like_class not-registered" id="likes-{{ explanation.id }}" data-likeflag="liked" data-expid="{{ explanation.id }}" style="background-color: transparent;border: 0px;"></button>
+        			<button class="w-inline-block upvote not-registered" id="likes-upvote-{{ explanation.id }}" data-likeflag="liked" data-expid="{{ explanation.id }}" data-signal="up" style="background-color: transparent;border: 0px;"></button>
         		{% endif %}
         		<div class="likes-count" id="likes-count-{{ explanation.id }}">{{ explanation.likes }}</div>
+            {% if user.is_authenticated %}
+              <button class="w-inline-block downvote {{ explanation.like_text }}" id="likes-downvote-{{ explanation.id }}" data-likeflag="liked" data-expid="{{ explanation.id }}" data-signal="down" style="background-color: transparent;border: 0px;"></button>
+            {% else %}
+              <button class="w-inline-block downvote not-registered" id="likes-downvote-{{ explanation.id }}" data-likeflag="liked" data-expid="{{ explanation.id }}" data-signal="down" style="background-color: transparent;border: 0px;"></button>
+            {% endif %}
       		</div>
       		<div id="edit-option-{{ explanation.id }}" class="edit-option-buttons" style="display:none">
       			<button class="delete-post-button" id="delete-button-{{ explanation.id }}" data-signal="delete" data-expid='{{ explanation.id }}' style="background-color: transparent;border: 0px;">Remove Post</button>
@@ -180,15 +185,15 @@
   	</div>
   	{% else %}
   	<div class="explanations-container-parent">
-  		<p style="text-align:left;">Be the first one to explain. Help people understand things faster.</p>
+  		<p style="text-align:left;">Be the first one to review.</p>
   	</div>
   	{% endif %}
   	{% if user.is_authenticated %}
   	<div class="w-form">
     	<form class="explanation-post-form" action="{% url 'term' term.slug %}" method="POST" enctype="multipart/form-data">
-      		<h1 class="post-form-heading">Your Thoughts</h1>
+      		<h1 class="post-form-heading">Your Review</h1>
       		{% csrf_token %}
-      		<textarea class="w-input post-input" id="exp_input" name="body" placeholder="Explain using as FEW words and/or pictures as POSSIBLE" cols="92" rows="7"></textarea>
+          {{ form.body }}
      		<div class="add-post-pictures">
         		<div class="add-post-picture preview" id="preview-picture-0" style="display:none; overflow:hidden;">
         			<img class="add-post-picture-placeholder preview" id="add-post-picture-preview-0" data-count="0" src="#">
@@ -200,14 +205,15 @@
         		</div>
       		</div>
         
-      		<input class="w-button post-button" name="add" type="submit" value="POST EXPLANATION" onclick="return ValidateCharacterLength();">
+      		<input class="w-button post-button" type="submit" value="POST REVIEW" onclick="return ValidateCharacterLength();">
     	</form>
   	</div>
   	{% else %}
-  	<div class="explanation-post-form">
-  		<h1 class="post-form-heading">Your Thoughts</h1>
+  	<form class="explanation-post-form" action="{% url 'term' term.slug %}" method="POST" enctype="multipart/form-data">
+  		<h1 class="post-form-heading">Your Review</h1>
       <div class="form-error-msg">{{ post_error_message }}</div>
-  		<textarea class="w-input post-input" id="exp_input" name="body" placeholder="Explain using as FEW words and/or pictures as POSSIBLE" cols="92" rows="7"></textarea>
+      {% csrf_token %}
+  		{{ form.body }}
   		<div class="add-post-pictures">
     		<div class="add-post-picture preview" id="preview-picture-0" style="display:none; overflow:hidden;">
     			<img class="add-post-picture-placeholder preview" id="add-post-picture-preview-0" data-count="0" src="#">
@@ -219,7 +225,42 @@
     		</div>
   		</div>
 
-  		<input class="w-button post-button not-registered" name="add" type="submit" value="POST EXPLANATION" onclick="return ValidateCharacterLength();">
+      <div class="sign-in-block sign-post">
+        <button class="side-sign-option up pressed" type="button">sign up</button> 
+        <button class="side-sign-option in" type="button">log in</button> 
+        <div class="w-form" id="post-and-sign-up-form">
+          <div class="w-clearfix sign-in-form registration-form" id="user_form" style="padding-bottom:0px;margin-bottom:0px;">
+           
+            {% if user_error_message %}
+            <div class="form-error-msg">{{ user_error_message }}</div>
+            {% elif user_form.email.errors %}
+            <div class="form-error-msg">{{ user_form.email.errors.as_text }}</div>
+            {% elif user_form.errors.values.0 %}
+            <div class="form-error-msg">{{ user_form.errors.values.0.as_text }}</div>
+            {% endif %}
+            <input class="w-input sign-in-input" id="email" type="text" placeholder="email" name="email">
+            <input class="w-input sign-in-input" id="username" type="text" placeholder="username" name="username">
+            <input class="w-input sign-in-input" id="password1" type="password" placeholder="password" name="password1">
+            <div class="terms-agreement-notice" style="margin-bottom:0px;">By pressing SIGN UP AND POST you are agreeing to our Terms of Service and Privacy Policy.</div>
+          </div>
+        <input class="w-button post-button not-registered" name="signup" type="submit" value="SIGN UP AND POST" onclick="return ValidateCharacterLength();">
+        </div>
+
+        <div class="w-form" style="display:none;" id="post-and-log-in-form">
+          <div class="w-clearfix sign-in-form registration-form" id="user_form" style="padding-bottom:0px;margin-bottom:0px;">
+            
+            <div class="form-error-msg">{{ user_error_message }}</div>
+            
+            <input class="w-input sign-in-input" type="text" placeholder="email or username" name="email_or_username">
+            <input class="w-input sign-in-input" type="password" placeholder="password" name="password">
+          </div>
+        <input class="w-button post-button not-registered" name="login" type="submit" value="LOGIN AND POST" onclick="return ValidateCharacterLength();">
+        </div>
+      
+      </div>
+    </form>
+
+  		
 
   	</div>
   	{% endif %}

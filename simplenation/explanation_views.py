@@ -82,6 +82,7 @@ def add_like(request):
 	if request.method == 'POST':
 		params=json.loads(request.body)
 		explanation_id = params['explanation_id']
+		signal = params['signal']
 
 
 	if explanation_id:
@@ -92,18 +93,59 @@ def add_like(request):
 			like = Like()
 			like.user = request.user
 			like.definition = explanation
+
+			if signal == 'up':
+				like.upvote = True
+				like.downvote = False
+				explanation.likes = explanation.likes + 1
+				explanation.author.score = explanation.author.score + Decimal('0.03')
+				explanation.author.num_of_likes = explanation.author.num_of_likes + 1
+			elif signal == 'down':
+				like.downvote = True
+				like.upvote = False
+				explanation.likes = explanation.likes - 1
+				if explanation.likes < 0:
+					explanation.likes = 0
+				explanation.author.score = explanation.author.score - Decimal('0.03')
+				if explanation.author.score < 0:
+					explanation.author.score = 0
+				explanation.author.num_of_likes = explanation.author.num_of_likes - 1
+
 			like.save()
-			explanation.likes = explanation.likes + 1
 			explanation.save()
-			explanation.author.score = explanation.author.score + Decimal('0.03')
-			explanation.author.num_of_likes = explanation.author.num_of_likes + 1
 			explanation.author.save()
 			likes = explanation.likes
-			if request.user != explanation.author.user:
-				Notification(typeof = 'like_notification', sender = request.user, receiver = explanation.author.user, definition = explanation).save()
-	
+ 	
 		else:
-			return HttpResponse("You have already liked this explanation.")
+			like = Like.objects.get(user = request.user, definition=explanation)
+			if like.upvote:
+				if signal == 'down':
+					like.downvote = True
+					like.upvote = False
+					explanation.likes = explanation.likes - 2
+					if explanation.likes < 0:
+						explanation.likes = 0
+					explanation.author.score = explanation.author.score - Decimal('0.06')
+					if explanation.author.score < 0:
+						explanation.author.score = 0
+					explanation.author.num_of_likes = explanation.author.num_of_likes - 2
+
+			elif like.downvote:
+				if signal == 'up':
+					like.upvote = True
+					like.downvote = False
+					if explanation.likes == 0:
+						explanation.likes = explanation.likes + 1
+					else:
+						explanation.likes = explanation.likes + 2
+					explanation.author.score = explanation.author.score + Decimal('0.06')
+					explanation.author.num_of_likes = explanation.author.num_of_likes + 2
+
+			like.save()
+			explanation.save()
+			explanation.author.save()
+			likes = explanation.likes
+			
 	else:
 		return HttpResponse("Invalid form.")
 
@@ -118,18 +160,33 @@ def remove_like(request):
 	if request.method == 'POST':
 		params=json.loads(request.body)
 		explanation_id = params['explanation_id']
+		signal = params['signal']
 
 	if explanation_id:
 		explanation = Definition.objects.get(id = explanation_id)
 		like = Like.objects.get(user = request.user, definition = explanation)
 		if like:
 			like.delete()
-			explanation.likes = explanation.likes - 1
+			if signal == "up":
+				explanation.likes = explanation.likes - 1
+				if explanation.likes < 0:
+					explanation.likes = 0
+				explanation.author.score = explanation.author.score - Decimal('0.03')
+				explanation.author.num_of_likes = explanation.author.num_of_likes - 1
+				if explanation.author.score < 0:
+					explanation.author.score = 0
+			elif signal == "down":
+				if explanation.likes == 0:
+					explanation.likes = 0
+				else:
+					explanation.likes = explanation.likes + 1
+				explanation.author.score = explanation.author.score + Decimal('0.03')
+				explanation.author.num_of_likes = explanation.author.num_of_likes + 1
+				
 			explanation.save()
-			explanation.author.score = explanation.author.score - Decimal('0.03')
-			explanation.author.num_of_likes = explanation.author.num_of_likes - 1
 			explanation.author.save()
 			likes = explanation.likes
+
 		else:
 			return HttpResponse("Already removed like.")
 
@@ -139,60 +196,7 @@ def remove_like(request):
 	return HttpResponse(likes)
 
 
-@login_required
-def like_explanation(request):
 
-	explanation_id = None
-
-	if request.method == 'POST':
-		params=json.loads(request.body)
-    	explanation_id = params['explanation_id']
-		
-	
-	likes = 0
-	if explanation_id:
-		explanation = Definition.objects.get(id = explanation_id)
-		author = explanation.author
-
-
-
-		likes = Like.objects.filter(definition = explanation)
-		if likes:
-			for like in likes:
-					if like.user.username == request.user.username:
-						like.delete()
-						explanation.likes = explanation.likes - 1
-						explanation.save()
-						author.score = author.score - Decimal('0.03')
-						author.num_of_likes = author.num_of_likes - 1
-						author.save()
-						
-						
-					else:
-						like.user = request.user
-						explanation.likes = explanation.likes + 1
-						like.save()
-						explanation.save()
-						author.score = author.score + Decimal('0.03')
-						author.num_of_likes = author.num_of_likes + 1
-						author.save()
-						
-		else:
-			like = Like()
-			like.user = request.user
-			like.definition = explanation
-			like.save()
-			explanation.likes = explanation.likes + 1
-			explanation.save()
-			author.score = author.score + Decimal('0.03')
-			author.num_of_likes = author.num_of_likes + 1
-			author.save()
-
-		likes = explanation.likes
-	else:
-		pass
-
-	return HttpResponse(likes)
 
 @login_required
 def report_explanation(request):

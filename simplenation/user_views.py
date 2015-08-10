@@ -464,3 +464,147 @@ class PasswordResetConfirmView(FormView):
 			return self.form_invalid(form)
 
 
+def log_user_while_post(request):
+	response = {}
+
+	if request.method == 'POST':
+		
+		if not 'email_or_username' in request.POST:
+			response['success'] = False
+			response['error_message'] = 'Please enter username or email.'
+			return response
+		if not 'password' in request.POST:
+			response['success'] = False
+			response['error_message'] = 'Please enter your password.'
+			return response
+
+		email_or_username = request.POST['email_or_username']
+		password = request.POST['password']
+
+		if simplenation_email_validation(email_or_username):
+			email = request.POST['email_or_username']
+			user_by_email = User.objects.get(email=email)
+			username = user_by_email.username
+			user = authenticate(username=username, password=password)
+		elif simplenation_username_validation(email_or_username):
+			username = request.POST['email_or_username']
+			user = authenticate(username=username, password=password)
+		else:
+			response['error_message'] = 'Invalid username/email or password.'
+			response['success'] = False
+			return response
+
+		if user:
+			if user.is_active:
+				login(request,user)
+				response['success'] = True
+				response['user'] = user
+
+			else:
+				response['success'] = False
+				response['error_message'] = 'Your account has been disabled.'
+				
+		else:
+			response['success'] = False
+			response['error_message'] = 'Invalid username or password.'
+
+	return response
+
+def register_user_while_post(request):
+	response = {}
+	response['success'] = False
+	
+	if request.method == 'POST':
+		user_form = UserForm(data=request.POST)
+		profile_form = ProfileForm(data=request.POST)
+
+		if not 'username' in request.POST:
+			response['error_message'] = "Please enter username."
+			response['user_form'] = user_form
+			response['profile_form'] = profile_form
+			return response
+
+		if not 'email' in request.POST:
+			response['error_message'] = "Please enter email."
+			response['user_form'] = user_form
+			response['profile_form'] = profile_form
+			return response
+
+		if not 'password1' in request.POST:
+			response['error_message'] = "Please enter password."
+			response['user_form'] = user_form
+			response['profile_form'] = profile_form
+			return response
+
+		email_for_validation = request.POST['email']
+		if not simplenation_email_validation(email_for_validation):
+			response['error_message'] = "Please enter correct email."
+			response['user_form'] = user_form
+			response['profile_form'] = profile_form
+			return response
+
+		username_for_validation = request.POST['username']
+		if not simplenation_username_validation(username_for_validation):
+			response['error_message'] = "Username is a bit invalid, try something awesome like "+"'"+random.choice(awesomeUsernames)+"'"
+			response['user_form'] = user_form
+			response['profile_form'] = profile_form
+			return response
+
+		if user_form.is_valid() and profile_form.is_valid():
+			user = user_form.save()
+
+			username = user_form.cleaned_data['username']
+			email = user_form.cleaned_data['email']
+
+
+			salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
+			account_deletion_key = hashlib.sha1(salt+email).hexdigest()   
+			
+			user.save()
+
+			profile = profile_form.save(commit=False)
+			profile.user = user
+			profile.account_deletion_key = account_deletion_key
+
+			if 'picture' in request.FILES:
+				profile.picture = request.FILES['picture']
+
+			profile.save()
+			
+
+			email_data = {
+				'email': email,
+				'domain': request.META['HTTP_HOST'],
+				'site_name': SITE_NAME,
+				'account_deletion_key': account_deletion_key,
+				'receiver_username': username,
+				'site_email': EMAIL_HOST_USER,
+				'protocol': 'http',
+			}
+			subject_template_name='simplenation/registration_notification_subject.txt'
+			email_template_name='simplenation/registration_notification_email.html'
+			
+			if not send_email(email_data, subject_template_name, email_template_name):
+				response['error_message'] = "Couldn't send confirmation email."
+				response['user_form'] = user_form
+				response['profile_form'] = profile_form
+				return response
+
+			new_user = authenticate(username = request.POST['username'], password = request.POST['password1'])
+			login(request, new_user)
+			response['success'] = True
+			response['user'] = new_user
+			
+		else:
+			response['error_message'] = None
+
+	else:
+		user_form = UserForm()
+		profile_form = ProfileForm()
+
+	response['user_form'] = user_form
+	response['profile_form'] = profile_form
+
+	return response
+
+

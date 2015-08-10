@@ -946,7 +946,11 @@ a {
     .product-gallery-popup .product-popup-content {
         width: 500px;
         height: 295px;
+        display:none;
     } 
+    .popup-overlay{
+        display: none;
+    }
 }
 
 @media (max-width: 479px) {
@@ -954,6 +958,7 @@ a {
     .product-gallery-popup .product-popup-content {
         width: 400px;
         height: 237px;
+        display:none;
     } 
     .product-information {
         display: none;
