@@ -7,7 +7,7 @@
 	<head>
 		<meta charset="utf-8">
     	
-   	 	
+   	 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     	<meta name="description" content="">
     	<meta name="author" content="">
     	
@@ -174,11 +174,10 @@
   {% endif %}
 		<div class="bottom-bar">
       <div class="site-related">
-        <a class="bottom-bar-link" href="#">About</a>
-        <a class="bottom-bar-link" href="#">Privacy</a>
-        <a class="bottom-bar-link" href="#">Terms of Service</a>
-        <a class="bottom-bar-link" href="#">Site Rules</a>
-        <a class="bottom-bar-link" href="#">FAQ</a>
+        <a class="bottom-bar-link" href="{% url 'about' %}">About</a>
+        <a class="bottom-bar-link" href="{% url 'privacy' %}">Privacy</a>
+        <a class="bottom-bar-link" href="{% url 'terms' %}">Terms of Service</a>
+        <a class="bottom-bar-link" href="{% url 'rules' %}">Site Rules</a>
       </div>
     </div>
 		

@@ -10,6 +10,11 @@ urlpatterns = patterns('',
 	url(r'^search/', general_views.search, name = 'search'),
 	url(r'^autocomplete_search/$', general_views.autocomplete_search, name = 'autocomplete_search'),
 	url(r'^autocomplete_tag_search/$', general_views.autocomplete_tag_search, name = 'autocomplete_tag_search'),
+	url(r'^about/$', general_views.about, name = 'about'),
+	url(r'^terms/$', general_views.terms, name = 'terms'),
+	url(r'^privacy/$', general_views.privacy, name = 'privacy'),
+	url(r'^rules/$', general_views.rules, name = 'rules'),
+
 
 	# Calls to User Controller
 	url(r'^registration_form/$', user_views.register, name='register'),

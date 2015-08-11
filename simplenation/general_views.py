@@ -142,3 +142,19 @@ def search(request):
 
 	return render(request, 'simplenation/index.html', context_dict)
 
+def about(request):
+	context_dict ={}
+	return render(request, 'simplenation/about.html', context_dict)
+
+def terms(request):
+	context_dict ={}
+	return render(request, 'simplenation/terms.html', context_dict)
+
+def rules(request):
+	context_dict ={}
+	return render(request, 'simplenation/rules.html', context_dict)
+
+def privacy(request):
+	context_dict ={}
+	return render(request, 'simplenation/privacy.html', context_dict)
+
