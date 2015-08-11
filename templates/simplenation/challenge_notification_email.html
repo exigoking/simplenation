@@ -2,14 +2,12 @@
 
 {% blocktrans %}Hey, {{ receiver }}! You have been challenged @{{ site_name }}.{% endblocktrans %} 
 
-{{ sender }} has challenged you to explain {{ term }}.
+{{ sender }} has challenged you to write a post about {{ term }}.
 
 {% block reset_link %} 
 {{ protocol }}://{{ domain }}{% url 'term' term.slug %} 
 {% endblock %} 
 
-{% trans "Thanks for using our site!" %} 
-
-{% blocktrans %}The {{ site_name }} team{% endblocktrans %} 
+{% blocktrans %}{{ site_name }} team{% endblocktrans %} 
 
 {% endautoescape %}

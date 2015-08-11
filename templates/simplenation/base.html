@@ -74,7 +74,7 @@
       		<div class="global-search">
       			<form class="global-search-form" action="{% url 'search' %}" method="post" role="search" style="">
       				{% csrf_token %}
-        			<input id="global-search-input-id" class="w-input global-search-input" name="search_item" placeholder="Search or Add articles" type="text" autocomplete="off">
+        			<input id="global-search-input-id" class="w-input global-search-input" name="search_item" placeholder="Search..." type="text" autocomplete="off">
         			<button class="w-button global-search-button" type="submit">S</button>
       			</form>
         		

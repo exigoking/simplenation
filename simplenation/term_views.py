@@ -477,7 +477,15 @@ def add_term(request):
 			
 			return HttpResponseRedirect('/term/'+term.slug)
 		else:
-			print term_form.errors
+			str1 = 'exists'
+			str2 = term_form.errors.as_text()
+			str2 = " ".join(str2.split())
+			if 'exists' in str2:
+				context_dict['errors'] = 'topic already exists.'
+			elif 'required' in str2:
+				context_dict['errors'] = 'it was a blank'
+			else:
+				context_dict['errors'] = term_form.errors
 	else:	
 		term_form = TermForm()
 	

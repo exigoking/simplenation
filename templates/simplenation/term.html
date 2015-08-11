@@ -186,13 +186,13 @@
     	</div>
     	{% else %}
     	<div class="explanations-container-parent">
-    		<p style="text-align:left;">Be the first one to review.</p>
+    		<p style="text-align:left;">Be the first one to post.</p>
     	</div>
     	{% endif %}
     	{% if user.is_authenticated %}
     	<div class="w-form">
       	<form class="explanation-post-form" action="{% url 'term' term.slug %}" method="POST" enctype="multipart/form-data">
-        		<h1 class="post-form-heading">Your Review</h1>
+        		<h1 class="post-form-heading">Your Post</h1>
         		{% csrf_token %}
             {{ form.body }}
        		<div class="add-post-pictures">
@@ -206,12 +206,12 @@
           		</div>
         		</div>
           
-        		<input class="w-button post-button" type="submit" value="POST REVIEW" onclick="return ValidateCharacterLength();">
+        		<input class="w-button post-button" type="submit" value="PUBLISH" onclick="return ValidateCharacterLength();">
       	</form>
     	</div>
     	{% else %}
     	<form class="explanation-post-form" action="{% url 'term' term.slug %}" method="POST" enctype="multipart/form-data">
-    		<h1 class="post-form-heading">Your Review</h1>
+    		<h1 class="post-form-heading">Your Post</h1>
         <div class="form-error-msg">{{ post_error_message }}</div>
         {% csrf_token %}
     		{{ form.body }}
@@ -242,9 +242,9 @@
               <input class="w-input sign-in-input" id="email" type="text" placeholder="email" name="email">
               <input class="w-input sign-in-input" id="username" type="text" placeholder="username" name="username">
               <input class="w-input sign-in-input" id="password1" type="password" placeholder="password" name="password1">
-              <div class="terms-agreement-notice" style="margin-bottom:0px;">By pressing SIGN UP AND POST you are agreeing to our Terms of Service and Privacy Policy.</div>
+              <div class="terms-agreement-notice" style="margin-bottom:0px;">By pressing SIGN UP AND PUBLISH you are agreeing to our Terms of Service and Privacy Policy.</div>
             </div>
-          <input class="w-button post-button not-registered" name="signup" type="submit" value="SIGN UP AND POST" onclick="return ValidateCharacterLength();">
+          <input class="w-button post-button not-registered" name="signup" type="submit" value="SIGN UP AND PUBLISH" onclick="return ValidateCharacterLength();">
           </div>
 
           <div class="w-form" style="display:none;" id="post-and-log-in-form">
@@ -255,7 +255,7 @@
               <input class="w-input sign-in-input" type="text" placeholder="email or username" name="email_or_username">
               <input class="w-input sign-in-input" type="password" placeholder="password" name="password">
             </div>
-          <input class="w-button post-button not-registered" name="login" type="submit" value="LOGIN AND POST" onclick="return ValidateCharacterLength();">
+          <input class="w-button post-button not-registered" name="login" type="submit" value="LOGIN AND PUBLISH" onclick="return ValidateCharacterLength();">
           </div>
         
         </div>
@@ -264,7 +264,7 @@
   {% else %}
     <div class="no-found-terms" style="margin-top:50px;">
         <img src="{% static "images/no-article.png" %}" width="100px">
-        <div class="no-found-terms-text">Article does not exist.</div>
+        <div class="no-found-terms-text">Topic does not exist.</div>
     </div>
   {% endif %}
 

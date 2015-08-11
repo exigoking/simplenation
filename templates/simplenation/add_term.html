@@ -5,16 +5,31 @@
 {% block title %}Add new term{% endblock %}i
 
 {% block body_block %}
-
-	<h4>Add new article</h4>
-	<form action="{% url 'add_term'%}" method="POST">
-		{% csrf_token %}
-		<table>
-			{{ term_form.as_table }}	
-		</table>
-		<input type="submit" name="add" value="Add" />
-	</form>
-
+	<div class="term-not-found">
+        
+        {% if user.is_authenticated %}
+        <div class="term-guidelines">
+        	<h5>Your Topic</h5>
+        	<p class="guidelines-list-head">Please add something that:</p>
+        	<ul class="guidelines-list">
+        		<li>people can review, explain or blog about (e.g. <em>Dota 2</em>)</li>
+        		<li>does NOT contain a question, call for action or too obvious stuff (e.g. <em>house</em>)</li>
+        	</ul>
+        </div>
+          <div class="add-term-block" style="margin-top:0px;">
+            <form action="{% url 'add_term'%}" method="POST" >
+              {% csrf_token %}
+              
+              <div class="form-error-msg">{{ errors }}</div>
+              
+              <input class="w-input add-term-input" type="text" name="name" placeholder="topic" >
+              <input class="w-button add-term-button" type="submit" name="add" value="Add new topic" style="float:left;">
+            </form>
+          </div>
+        {% else %}
+          <p class="post-not-registered-text" style="border: 0px; margin-top:10px;">To add a new article  <a class="log-in" href="{% url 'signin' %}?next={{ request.get_full_path|urlencode }}">Log in</a>  or  <a class="sign-up" href="{% url 'register' %}?next={{ request.get_full_path|urlencode }}">Sign up</a>.</p>
+        {% endif %}
+      </div>
 {% endblock %}
 
 
