@@ -481,7 +481,7 @@ def add_term(request):
 			str2 = term_form.errors.as_text()
 			str2 = " ".join(str2.split())
 			if 'exists' in str2:
-				context_dict['errors'] = 'topic already exists.'
+				context_dict['errors'] = 'topic already exists'
 			elif 'required' in str2:
 				context_dict['errors'] = 'it was a blank'
 			else:

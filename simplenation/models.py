@@ -63,7 +63,7 @@ class Term(models.Model):
 	slug = models.SlugField(unique=True)
 	author = models.ForeignKey(Author, null=True)
 	created_at = models.DateTimeField(auto_now_add=True)
-	tags = TaggableManager()
+	tags = TaggableManager(blank=True)
 	
 	def save(self, *args, **kwargs):
 		self.slug = slugify(self.name)
@@ -72,12 +72,14 @@ class Term(models.Model):
 		if name_elements:
 			for element in name_elements:
 				if not element.isupper():
-					element.title()
+					element = element.title()
 				cleaned_name_elements.append(element)
 			cleaned_name = " ".join(cleaned_name_elements)
 		else:
 			if self.name.isupper():
 				cleaned_name = self.name
+			else:
+				cleaned_name = self.name.title()
 
 		self.name = cleaned_name
 		super(Term, self).save(*args, **kwargs)
