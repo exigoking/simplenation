@@ -160,6 +160,7 @@ def term(request, term_name_slug):
 
 				definition.term = term
 				# Is user logged in?
+				user = None
 				if not request.user.is_authenticated():
 					# Is it login_form or registration_form?
 					if 'login' in request.POST:

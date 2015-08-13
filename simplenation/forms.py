@@ -3,10 +3,11 @@ from simplenation.models import Term, Author, Definition, Picture
 from django.contrib.auth.models import User
 from registration.forms import RegistrationForm
 from django.contrib.auth.forms import UserCreationForm
+from tinymce.widgets import TinyMCE
 
 
 class TermForm(forms.ModelForm):
-	name = forms.TextInput(attrs={'placeholder':'Article name...'})
+	name = forms.TextInput(attrs={'placeholder':'topic'})
 	views = forms.IntegerField(widget=forms.HiddenInput(), initial=0, required=False)
 	slug = forms.CharField(widget=forms.HiddenInput(), required=False)
 	
@@ -17,7 +18,7 @@ class TermForm(forms.ModelForm):
 class DefinitionForm(forms.ModelForm):
 	body = forms.CharField(error_messages = {
 								'required': (""),
-								}, max_length = 4096,label = '', widget=forms.Textarea(attrs={'placeholder':'Explain in your own words...', 'id':'exp_input', 'cols':'92', 'rows':'7','class':'w-input post-input'}))
+								}, max_length = 4096,label = '', widget=forms.Textarea(attrs={'id':'exp_input', 'rows':'5','class':'w-input post-input'}))
 	class Meta:
 		model = Definition
 		fields = ('body',)

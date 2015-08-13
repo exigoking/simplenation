@@ -2,6 +2,7 @@
 
 {% load staticfiles %}
 
+
 {% block title %}{{ term_name }}{% endblock %}
 
 {% block body_block %}
@@ -91,13 +92,13 @@
       	<div class="w-clearfix exp-container-parent" id='exp-container-{{explanation.id}}' data-expid='{{ explanation.id }}'>
         		<div class="exp-body" id="exp-body-{{explanation.id}}" data-expid="{{explanation.id}}">
               {% autoescape off %}
-          		{{ explanation.body|truncatewords:"75" }}
+          		{{ explanation.body|linebreaks| truncatewords:"75" }}
               {% endautoescape %}
               
         		</div>
             <div class="exp-body" id="exp-full-body-{{explanation.id}}" style="display:none;" data-expid="{{explanation.id}}">
               {% autoescape off %}
-              {{ explanation.body }}
+              {{ explanation.body|linebreaks}}
               {% endautoescape %}
             </div>
             <button id="see-more-{{explanation.id}}" class="see-more" style="display:none;border:0px;background-color:transparent;padding:0;color:lightgrey;" data-expid="{{explanation.id}}">Show more</button>
@@ -106,7 +107,7 @@
         		<div class="edit_form" id="edit-text-{{ explanation.id }}" style="display:none">
           		<div class="w-form all-form-wrappers">
             			<form id="email-form-3" name="email-form-3" data-name="Email Form 3">
-              			<textarea class="w-input edit-input" id="edit-input-{{ explanation.id }}" name="body" cols="92" rows="7" data-signal="edit">{{ explanation.body }}</textarea>
+              			<textarea class="w-input edit-input" id="edit-input-{{ explanation.id }}" name="body" cols="92" rows="5" data-signal="edit">{{ explanation.body }}</textarea>
             			</form>
           		</div>
         		</div>

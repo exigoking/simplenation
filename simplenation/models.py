@@ -63,6 +63,8 @@ class Term(models.Model):
 	slug = models.SlugField(unique=True)
 	author = models.ForeignKey(Author, null=True)
 	created_at = models.DateTimeField(auto_now_add=True)
+	upvotes = models.IntegerField(default=0)
+	downvotes = models.IntegerField(default=0)
 	tags = TaggableManager(blank=True)
 	
 	def save(self, *args, **kwargs):
@@ -107,6 +109,20 @@ class Term(models.Model):
 	
 	def __unicode__(self):
 		return self.name
+
+class TermVote(models.Model):
+	"""
+    A vote is to rank a term.
+    """
+	user = models.ForeignKey(User)
+	term = models.ForeignKey(Term)
+	upvote = models.BooleanField(default=False)
+	downvote = models.BooleanField(default=False)
+
+	def __unicode__(self):
+		return self.user.username
+
+
 
 class Definition(models.Model):
 	"""
