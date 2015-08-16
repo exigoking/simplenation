@@ -123,6 +123,26 @@ class LikeManager(models.Manager):
             return like.downvote
         return False
 
+class TermVoteManager(models.Manager):
+
+    def voters_for_definition(self, term):
+        return self.filter(term=term)
+
+    def has_voted(self, user, term):
+        return self.filter(Q(user=user, term=term)).count() > 0
+
+    def is_upvote(self, user, term):
+        like = self.filter(Q(user=user, term=term))
+        if like:
+            return like.upvote
+        return False
+
+    def is_downvote(self, user, term):
+        like = self.filter(Q(user=user, term=term))
+        if like:
+            return like.term
+        return False
+
 
         
 

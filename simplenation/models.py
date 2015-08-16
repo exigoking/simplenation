@@ -7,7 +7,7 @@ from taggit.managers import TaggableManager
 from taggit.models import Tag
 from registration.signals import user_registered
 from django.db.models import Count
-from simplenation.managers import FavouriteManager, ChallengeManager, NotificationManager, LikeManager
+from simplenation.managers import FavouriteManager, ChallengeManager, NotificationManager, LikeManager, TermVoteManager
 from django.utils.translation import ugettext_lazy as _
 from djangobook import settings
 from imagekit.models import ProcessedImageField
@@ -106,6 +106,32 @@ class Term(models.Model):
 
 	def sorted_by_number_of_explanations_descending(self):
 		return self.annotate(exp_count=Count('definition')).order_by('-exp_count')
+
+	def upvoted(self, user):
+		voters = []
+		for vote in self.votes.all():
+			if vote.upvote:
+				voters.append(vote.user)
+		if user in voters:
+			return True
+		else:
+			return False
+
+	def downvoted(self, user):
+		voters = []
+		for vote in self.votes.all():
+			if vote.downvote:
+				voters.append(vote.user)
+		if user in voters:
+			return True
+		else:
+			return False
+
+	def upvote_count(self):
+		return self.upvotes
+
+	def downvote_count(self):
+		return self.downvotes
 	
 	def __unicode__(self):
 		return self.name
@@ -115,9 +141,11 @@ class TermVote(models.Model):
     A vote is to rank a term.
     """
 	user = models.ForeignKey(User)
-	term = models.ForeignKey(Term)
+	term = models.ForeignKey(Term, related_name='votes')
 	upvote = models.BooleanField(default=False)
 	downvote = models.BooleanField(default=False)
+
+	objects = TermVoteManager()
 
 	def __unicode__(self):
 		return self.user.username

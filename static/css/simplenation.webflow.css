@@ -220,6 +220,12 @@ a {
   top: 12px;
   right: 10px;
 }
+.tag-add-loader {
+  position: absolute;
+  top: 10px;
+  right: 32px;
+  background-color: rgba(232, 232, 232, 0.36);
+}
 .no-tags-message {
   display: none;
   padding-top: 4px;
@@ -244,7 +250,7 @@ a {
   display: block;
   margin-top: 5px;
   margin-bottom: 10px;
-  padding: 20px;
+  padding: 25px;
   background-color: white;
   box-shadow: grey 0px 0px 2px 0px;
   text-align: left;
@@ -333,11 +339,12 @@ a {
   display: inline-block;
   width: 663px;
   margin-top: 10px;
-  padding: 15px 50px;
+  padding: 15px 53px;
 }
 .term-title-and-stats {
   padding-top: 10px;
   padding-bottom: 6px;
+  position: relative;
 }
 .term-title {
   padding-top: 2px;
@@ -345,9 +352,11 @@ a {
   float: left;
   color: black;
   font-size: 35px;
+
 }
 .tags-container {
   text-align: left;
+  margin-top: 2px;
 }
 .tags-input {
   display: inline-block;
@@ -366,6 +375,7 @@ a {
   display: inline-block;
   margin-top: 10px;
   margin-bottom: 0px;
+  position: relative;
 }
 .tags-add {
   width: 29px;
@@ -542,6 +552,14 @@ a {
   left: -100px;
   top: 18%;
 }
+.like-container.term {
+  top: 0%;
+}
+.like-container.term.small {
+  position: absolute;
+  left: -60px;
+  top: 15%;
+}
 .like_class {
   width: 75px;
   height: 75px;
@@ -555,6 +573,20 @@ a {
 }
 .likes-count {
   text-align: center;
+}
+.likes-count.voters {
+  color: #9c9c9c;
+  font-size: 12px;
+  line-height: 10px;
+}
+.likes-count.ups {
+  color: #4b9c4c;
+  font-size: 12px;
+}
+.likes-count.downs {
+  color: #ff5c5c;
+  font-size: 12px;
+  
 }
 .explanation-post-form {
   display: inline-block;
@@ -1037,11 +1069,16 @@ a {
   font-size: 12px;
   font-style: italic;
 }
-.tag-suggestions {
+.tag-suggestions-parent{
   position: absolute;
-  left: 181px;
-  width: 200px;
   z-index: 1000;
+  left:0;
+  width: 100%;
+
+}
+.tag-suggestions {
+  width: 200px;
+  display: inline-block;
 }
 .tag-suggestions-border {
   margin-top: -2px;
@@ -1120,6 +1157,12 @@ a {
 .term-sorting-button.views {
   color: black;
 }
+.term-sorting-button.ups{
+  color: #4b9c4c;
+}
+.term-sorting-button.downs{
+  color: #ff5c5c;
+}
 .favor-button {
   display: inline-block;
   margin-top: 9px;
@@ -1141,9 +1184,23 @@ a {
   background-position: 50% 50%;
   background-size: 35px;
   background-repeat: no-repeat;
+  cursor: pointer;
 }
 .upvote.upvoted {
   background-image: url('../images/caret-up-pressed@2x.png');
+}
+.upvote.topic-upvoted{
+  background-image: url('../images/caret-up-positive@2x.png');
+}
+.upvote.small {
+  width: 55px;
+  height: 15px;
+  background-image: url('../images/caret-up-unpressed@2x.png');
+  background-size: 22px;
+  cursor: pointer;
+}
+.upvote.small.small-upvoted{
+  background-image: url('../images/caret-up-positive@2x.png');
 }
 .downvote {
   width: 75px;
@@ -1152,9 +1209,23 @@ a {
   background-position: 50% 50%;
   background-size: 36px;
   background-repeat: no-repeat;
+  cursor: pointer;
 }
 .downvote.downvoted {
   background-image: url('../images/caret-down-pressed@2x.png');
+}
+.downvote.topic-downvoted{
+  background-image: url('../images/caret-down-negative@2x.png');
+}
+.downvote.small {
+  width: 55px;
+  height: 15px;
+  background-image: url('../images/caret-down-unpressed@2x.png');
+  background-size: 22px;
+  cursor: pointer;
+}
+.downvote.small.small-downvoted{
+  background-image: url('../images/caret-down-negative@2x.png');
 }
 .sign-in-block.sign-post {
   position: relative;
@@ -1416,9 +1487,6 @@ a {
   .delete-account-block {
     width: 568px;
   }
-  .tag-suggestions {
-    left: 174px;
-  }
   .tag-suggestion-help-text {
     display: none;
   }
@@ -1639,9 +1707,6 @@ a {
     margin-top: 60px;
     padding-right: 20px;
     padding-left: 20px;
-  }
-  .tag-suggestions {
-    left: 50px;
   }
   .term-sorting {
     right: 3px;

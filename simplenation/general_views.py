@@ -30,13 +30,13 @@ def index(request):
 					terms_for_explainers = terms_for_explainers.filter(tags__name__in = [pressed_tag.name])
 				context_dict['pressed_tags'] = pressed_tags
 			else:
-				terms_for_explainers = Term.objects.order_by('-views')[:40]
+				terms_for_explainers = Term.objects.order_by('-created_at')[:40]
 		else:
 			tags = Tag.objects.annotate(term_count = Count('taggit_taggeditem_items')).order_by('-term_count')[:15]
 			for tag in tags:
 				current_session.tags.add(tag)
 			current_session.save()
-			terms_for_explainers = Term.objects.order_by('-views')[:40]
+			terms_for_explainers = Term.objects.order_by('-created_at')[:40]
 
 
 		if not session_registry:
@@ -56,7 +56,7 @@ def index(request):
 		for tag in tags:
 			session.tags.add(tag)
 		session.save()
-		terms_for_explainers = Term.objects.order_by('-views')[:40]
+		terms_for_explainers = Term.objects.order_by('-created_at')[:40]
 
 
 	context_dict['terms_for_explainers'] = terms_for_explainers

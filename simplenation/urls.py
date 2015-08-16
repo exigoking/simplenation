@@ -36,8 +36,9 @@ urlpatterns = patterns('',
 	url(r'^tag_deselect/$', term_views.tag_deselect, name='tag_deselect'),
 	url(r'^search_tags/$', term_views.search_tags, name='search_tags'),
 	url(r'^single_tag_view/(?P<tag_slug>[\w\-]+)/$', term_views.single_tag_view, name='single_tag_view'),
+	url(r'^add_term_like/$', term_views.add_term_like, name='add_term_like'),
+	url(r'^remove_term_like/$', term_views.remove_term_like, name='remove_term_like'),
 
-	
 	# Calls to Explanation Controller
 	url(r'^edit_exp/$', explanation_views.edit_exp, name='edit_exp'),
 	url(r'^add_like/$', explanation_views.add_like, name='add_like'),

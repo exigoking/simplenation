@@ -526,4 +526,15 @@ def send_email(email_data, subject_template_name, email_template_name):
       return False
 
 
+def convert_to_small_representation(value):
+   if value < 1000:
+      return value
+   elif value >= 1000 and value < 1000000:
+       return str(round(value/float(1000),1)) + "k"
+   elif value >= 1000000 and value <1000000000:
+       return str(round(value/float(1000000),1)) + "m"
+   elif value >= 1000000000 :
+       return str(round(value/float(1000000000),1)) + "b"
+
+
 

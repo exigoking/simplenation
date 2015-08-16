@@ -335,9 +335,10 @@ function chosen_tags_list(currently_pressed_tag){
 		$('.tag-choose').each(function(){
 				if ($(this).css('background-color') == 'rgb(0, 145, 194)') {
 					if($(this).attr('data-tagname') != currently_pressed_tag){
-						count = count + 1;
+						
 						var tagname = $(this).attr('data-tagname');
 						tag_choose_list['tag_name_' + count] = tagname;
+						count = count + 1;
 					}
 					else {
 						;
@@ -348,9 +349,10 @@ function chosen_tags_list(currently_pressed_tag){
 					if($(this).attr('data-tagname') == currently_pressed_tag){
 
 						if(duplicate_prevent_count == 0){
-							count = count + 1;
+							
 							var tagname = $(this).attr('data-tagname');
 							tag_choose_list['tag_name_' + count] = tagname;
+							count = count + 1;
 							duplicate_prevent_count = duplicate_prevent_count + 1;
 						} 
 						else {
@@ -367,49 +369,27 @@ function chosen_tags_list(currently_pressed_tag){
 
 
 // Tag Filter: Sends a list of chosen tags to the server. Receives filtered terms and modifies main container.
-// Note: only filters up to 5 tags.
+// Note: filters up to infinite number of tags.
 function tag_filter(count, tag_choose_list){
 	var static_src = $('.static-src').attr("href");
 	
-	$('.terms-filtered-container').html('<img src="'+ static_src +'images/loader.gif" width="30" height="30">');
-
-	if(count == 0)
-			{
-
-			var obj = { 'number_of_tags':count }
-			$.ajax({
-		           type: "POST",
-		           url: domain + "/tag_select/",
-		           contentType: 'application/json; charset=utf-8',
-		           data: JSON.stringify(obj),
-		           success: function(data) {
-							$('.terms-filtered-container').html(data);
-		            },
-		            error: function(rs, e) {
-		      
-		                   alert(rs.responseText);
-		            }
-			});
-			}
-			else if (count > 0 && count<=5)
-			{
+	$('.terms-filtered-container').html('<img src="'+ static_src +'images/loader.gif" width="30" height="30">');	
 			
-			var obj = { 'number_of_tags':count, 'tag_choose_list': tag_choose_list }
+	var obj = { 'number_of_tags':count, 'tag_choose_list': tag_choose_list }
 
-			$.ajax({
-		           type: "POST",
-		           url: domain + "/tag_select/",
-		           contentType: 'application/json; charset=utf-8',
-		           data: JSON.stringify(obj),
-		           success: function(data) {
-							$('.terms-filtered-container').html(data);
-		            },
-		            error: function(rs, e) {
-		      
-		                   alert(rs.responseText);
-		            }
-			});
-			}
+	$.ajax({
+           type: "POST",
+           url: domain + "/tag_select/",
+           contentType: 'application/json; charset=utf-8',
+           data: JSON.stringify(obj),
+           success: function(data) {
+					$('.terms-filtered-container').html(data);
+            },
+            error: function(rs, e) {
+                   alert(rs.responseText);
+            }
+	});
+			
 
 }
 	
@@ -519,7 +499,52 @@ function remove_favourites(favoree_id)
       });
 }
 
-	
+
+// Add like: Sends a request to add new like to a term
+function add_term_like(term_id, signal)
+{
+
+	var obj={'term_id':term_id, 'signal':signal}
+
+	jQuery.ajax({
+		           type: "POST",
+		           url: domain + "/add_term_like/",
+		           contentType: 'application/json; charset=utf-8',
+		           data: JSON.stringify(obj),
+		           success: function(data) {
+		           		$('#likes-count-term-up-'+term_id).html(data['upvotes']);
+						$('#likes-count-term-down-'+term_id).html(data['downvotes']);
+
+		            },
+		            error: function(rs, e) {
+		                   alert(rs.responseText);
+		            }
+      });
+
+}
+
+// Remove like: Sends a request to remove like from a term
+function remove_term_like(term_id, signal)
+{
+	var obj = {'term_id':term_id, 'signal':signal }
+
+	jQuery.ajax({
+		           type: "POST",
+		           url: domain + "/remove_term_like/",
+		           contentType: 'application/json; charset=utf-8',
+		           data: JSON.stringify(obj),
+		           success: function(data) {
+							$('#likes-count-term-up-'+term_id).html(data['upvotes']);
+							$('#likes-count-term-down-'+term_id).html(data['downvotes']);
+						
+		            },
+		            error: function(rs, e) {
+		                   alert(rs.responseText);
+		            }
+      });
+
+}
+
 // Add like: Sends a request to add new like to an explanation
 function add_like(explanation_id, signal)
 {

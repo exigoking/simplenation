@@ -12,7 +12,7 @@
         	<h5>Your Topic</h5>
         	<p class="guidelines-list-head">Please add something that:</p>
         	<ul class="guidelines-list">
-        		<li>people can review, explain or blog about (e.g. <em>Dota 2</em>)</li>
+        		<li>people can review, vote on or blog about (e.g. <em>Dota 2</em>)</li>
         		<li>does NOT contain a question, call for action or too obvious stuff (e.g. <em>house</em>)</li>
         	</ul>
         </div>
@@ -27,7 +27,7 @@
             </form>
           </div>
         {% else %}
-          <p class="post-not-registered-text" style="border: 0px; margin-top:10px;">To add a new article  <a class="log-in" href="{% url 'signin' %}?next={{ request.get_full_path|urlencode }}">Log in</a>  or  <a class="sign-up" href="{% url 'register' %}?next={{ request.get_full_path|urlencode }}">Sign up</a>.</p>
+          <p class="post-not-registered-text" style="border: 0px; margin-top:10px;">To add a new topic  <a class="log-in" href="{% url 'signin' %}?next={{ request.get_full_path|urlencode }}">Log in</a>  or  <a class="sign-up" href="{% url 'register' %}?next={{ request.get_full_path|urlencode }}">Sign up</a>.</p>
         {% endif %}
       </div>
 {% endblock %}

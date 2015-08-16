@@ -1,9 +1,33 @@
 <!DOCTYPE html>
 {% load staticfiles %}
+{% load call_tag %}
 		{% if terms_tag_filtered %}
   			{% for term in terms_tag_filtered %}
 		    	<div class="w-clearfix term-filtered">
 		      		<div class="term-label-and-tags">
+		      			<div class="like-container term small">
+		      				{% if user.is_authenticated %}
+			      				{% if term|args:user|call:"upvoted" %}
+			      					<div id="likes-upvote-term-{{term.id}}" class="upvote term small small-upvoted" data-signal="up" data-termid="{{term.id}}"></div>
+			      				{% else %}
+			      					<div id="likes-upvote-term-{{term.id}}" class="upvote term small" data-signal="up" data-termid="{{term.id}}"></div>
+			      				{% endif %}
+			      				<div id="likes-count-term-up-{{term.id}}" class="likes-count ups">{{ term.upvote_count| humanize_numbers}}</div><div class="likes-count ups-hidden" style="display:none;">{{term.upvote_count}}</div>
+			      				<div class="likes-count voters">------</div>
+			      				<div id="likes-count-term-down-{{term.id}}" class="likes-count downs">{{ term.downvote_count|humanize_numbers }}</div><div class="likes-count downs-hidden" style="display:none;">{{term.downvote_count}}</div>
+			      				{% if term|args:user|call:"downvoted" %}
+			      					<div id="likes-downvote-term-{{term.id}}" class="downvote term small small-downvoted" data-signal="down" data-termid="{{term.id}}"></div>
+			      				{% else %}
+			      					<div id="likes-downvote-term-{{term.id}}" class="downvote term small" data-signal="down" data-termid="{{term.id}}"></div>
+			      				{% endif %}
+			      			{% else %}
+			      				<div id="likes-upvote-term-{{term.id}}" class="upvote term small not-registered" data-signal="up" data-termid="{{term.id}}"></div>
+			      				<div id="likes-count-term-up-{{term.id}}" class="likes-count ups">{{ term.upvote_count|humanize_numbers}}</div><div class="likes-count ups-hidden" style="display:none;">{{term.upvote_count}}</div>
+			      				<div class="likes-count voters">------</div>
+			      				<div id="likes-count-term-down-{{term.id}}" class="likes-count downs">{{ term.downvote_count|humanize_numbers }}</div><div class="likes-count downs-hidden" style="display:none;">{{term.downvote_count}}</div>
+			      				<div id="likes-downvote-term-{{term.id}}" class="downvote term small not-registered" data-signal="down" data-termid="{{term.id}}"></div>
+			      			{% endif %}
+		      			</div>
 		        		<div class="term-name"><a class="term-list-link" href="{% url 'term' term.slug %}">{{ term.name }}</a></div>
 		        		{% if term.iterable_tags %}
 		        		<div class="term-tags">

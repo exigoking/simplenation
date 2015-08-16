@@ -30,6 +30,14 @@ $(document).ready(function(){
 		{
 			$('.term-sorting-button').removeClass("views");
 		}
+		if (!currentElement.hasClass("ups"))
+		{
+			$('.term-sorting-button').removeClass("ups");
+		}
+		if (!currentElement.hasClass("downs"))
+		{
+			$('.term-sorting-button').removeClass("downs");
+		}
 
  	});
 
@@ -189,6 +197,19 @@ $(document).ready(function(){
 			if(currentElement.text() == "posts"){
 				currentElement.addClass("top");
 				sortUsingNestedTextDescending($('.terms-filtered-container'), ".term-filtered", "div.term-stats-number.explanations");
+			}
+			else if(currentElement.text() == "votes"){
+				if (currentElement.hasClass("ups")){
+					currentElement.removeClass("ups");
+					currentElement.addClass("downs");
+					sortUsingNestedTextDescending($('.terms-filtered-container'), ".term-filtered", "div.likes-count.downs-hidden");
+			
+				}
+				else{
+					currentElement.removeClass("downs");
+					currentElement.addClass("ups");
+					sortUsingNestedTextDescending($('.terms-filtered-container'), ".term-filtered", "div.likes-count.ups-hidden");
+				}
 			}
 			else{
 				currentElement.addClass("views");
@@ -411,15 +432,20 @@ $(document).ready(function(){
 			var tagname = $('#tags-input-new').val();
 			var termid = $(this).attr('data-termid');
 			var signal = $(this).attr('data-signal');
+			var static_src = $('.static-src').attr("href");
+			$('.add-tags-form-wrapper').append('<img class="tag-add-loader" src="'+static_src+'images/loader.gif" width="15" height="15">');
+	
 			if (tagname){	
 				$.ajax({
 				           type: "GET",
 				           url: domain + "/add_tags_to_term/",
 				           data: { 'term_id': termid, 'tag_name': tagname, 'signal':signal}, //'csrfmiddlewaretoken': '{{csrf_token}}'},
 				           success: function(data) {
+				           			//$('.tag-add-loader').remove()
 									$('.tags-container').load(location.href + ' .tags-container');
 				            },
 				            error: function(rs, e) {
+				            		$('.tag-add-loader').remove()
 				                   alert(rs.responseText);
 				            }
 				});
@@ -492,55 +518,166 @@ $(document).ready(function(){
 		
 	});
 
+	$('.term-title-and-stats').on('click', '.upvote.term', function(){
+		var signal = $(this).attr('data-signal');
+		//voting on _terms @ main page
+	  	var term_id = $(this).attr('data-termid');
+	  	if($(this).hasClass("topic-upvoted")) {
+		  	
+			$('#likes-upvote-term-'+term_id).removeClass('topic-upvoted');
+			remove_term_like(term_id, signal);
+		  } else if ($(this).hasClass("not-registered")){
+		  	$.growl.warning({ title: "Please Log In", message: "You need to sign in to vote." });
 
+		  } else {
+			$('#likes-upvote-term-'+term_id).addClass('topic-upvoted');
+			$('#likes-downvote-term-'+term_id).removeClass('topic-downvoted');
+			add_term_like(term_id, signal);
+		  } 
+	});
+
+	$('.term-title-and-stats').on('click', '.downvote.term', function(){
+		var signal = $(this).attr('data-signal');
+		//voting on _terms @ main page
+	  	var term_id = $(this).attr('data-termid');
+	  	if($(this).hasClass("topic-downvoted")) {
+			$('#likes-downvote-term-'+term_id).removeClass('topic-downvoted');
+			remove_term_like(term_id, signal);
+		} 
+		else if ($(this).hasClass("not-registered")){
+		  	$.growl.warning({ title: "Please Log In", message: "You need to sign in to vote." });
+
+		} 
+		else {
+			$('#likes-downvote-term-'+term_id).addClass('topic-downvoted');
+			$('#likes-upvote-term-'+term_id).removeClass('topic-upvoted');
+			add_term_like(term_id, signal);
+		}
+	});
+
+	$('.container-tag-filtered-terms-index').on('click', '.upvote.term.small', function(){
+		var signal = $(this).attr('data-signal');
+		//voting on _terms @ main page
+	  	var term_id = $(this).attr('data-termid');
+	  	if($(this).hasClass("small-upvoted")) {
+		  	
+			$('#likes-upvote-term-'+term_id).removeClass('small-upvoted');
+			remove_term_like(term_id, signal);
+		  } else if ($(this).hasClass("not-registered")){
+		  	$.growl.warning({ title: "Please Log In", message: "You need to sign in to vote." });
+
+		  } else {
+			$('#likes-upvote-term-'+term_id).addClass('small-upvoted');
+			$('#likes-downvote-term-'+term_id).removeClass('small-downvoted');
+			add_term_like(term_id, signal);
+		  } 
+	});
+
+	$('.container-tag-filtered-terms-index').on('click', '.downvote.term.small', function(){
+		var signal = $(this).attr('data-signal');
+		//voting on _terms @ main page
+	  	var term_id = $(this).attr('data-termid');
+	  	if($(this).hasClass("small-downvoted")) {
+			$('#likes-downvote-term-'+term_id).removeClass('small-downvoted');
+			remove_term_like(term_id, signal);
+		} 
+		else if ($(this).hasClass("not-registered")){
+		  	$.growl.warning({ title: "Please Log In", message: "You need to sign in to vote." });
+
+		} 
+		else {
+			$('#likes-downvote-term-'+term_id).addClass('small-downvoted');
+			$('#likes-upvote-term-'+term_id).removeClass('small-upvoted');
+			add_term_like(term_id, signal);
+		}
+	});
+	
+	$('.explanations-container-parent').on('click', '.upvote', function(){
+		var signal = $(this).attr('data-signal');
+		//voting on _terms
+		 if ($(this).hasClass("term")){
+		  	var term_id = $(this).attr('data-termid');
+		  	if($(this).hasClass("small-upvoted")) {
+			  	
+				$('#likes-upvote-term-'+term_id).removeClass('small-upvoted');
+				remove_term_like(term_id, signal);
+			  } else if ($(this).hasClass("not-registered")){
+			  	$.growl.warning({ title: "Please Log In", message: "You need to sign in to vote." });
+
+			  } else {
+				$('#likes-upvote-term-'+term_id).addClass('small-upvoted');
+				$('#likes-downvote-term-'+term_id).removeClass('small-downvoted');
+				add_term_like(term_id, signal);
+			  }
+		 }
+		 //voting on _explanations
+		 else{ 
+		 	  var explanation_id = $(this).attr('data-expid');
+			  if($(this).hasClass("upvoted")) {
+			  	
+				$('#likes-upvote-'+explanation_id).removeClass('upvoted');
+				remove_like(explanation_id, signal);
+			  } else if ($(this).hasClass("not-registered")){
+			  	$.growl.warning({ title: "Please Log In", message: "You need to sign in to vote." });
+
+			  } else {
+			  	
+				$('#likes-upvote-'+explanation_id).addClass('upvoted');
+				$('#likes-downvote-'+explanation_id).removeClass('downvoted');
+				add_like(explanation_id, signal);
+			  }
+		   }
+
+	});
+
+	$('.explanations-container-parent').on('click', '.downvote', function(){
+
+		
+		var signal = $(this).attr('data-signal');
+		//voting on _terms
+		 if ($(this).hasClass("term")){
+		  	var term_id = $(this).attr('data-termid');
+		  	if($(this).hasClass("small-downvoted")) {
+				$('#likes-downvote-term-'+term_id).removeClass('small-downvoted');
+				remove_term_like(term_id, signal);
+			  } 
+			  else if ($(this).hasClass("not-registered")){
+			  	$.growl.warning({ title: "Please Log In", message: "You need to sign in to vote." });
+
+			  } 
+			  else {
+				$('#likes-downvote-term-'+term_id).addClass('small-downvoted');
+				$('#likes-upvote-term-'+term_id).removeClass('small-upvoted');
+				add_term_like(term_id, signal);
+			  }
+		 }
+		 //voting on _explanations
+		 else 
+		 {
+		 	var explanation_id = $(this).attr('data-expid');
+			var likes_count = parseInt($('#likes-count-'+explanation_id).text(), 10);
+		  	if($(this).hasClass("downvoted")) {
+				$('#likes-downvote-'+explanation_id).removeClass('downvoted');
+				remove_like(explanation_id, signal);
+		  	} 
+		  	else if ($(this).hasClass("not-registered")){
+		  		$.growl.warning({ title: "Please Log In", message: "You need to sign in to vote." });
+
+		  	} 
+		  	else {
+				if (likes_count > 0){
+					$('#likes-downvote-'+explanation_id).addClass('downvoted');
+					$('#likes-upvote-'+explanation_id).removeClass('upvoted');
+					add_like(explanation_id, signal);
+				}
+				else{
+					$.growl.warning({message:'Vote count is already 0.'});
+				}
+		  	}
+		}
+	});
 
 	
-	$('.like-container').on('click', '.upvote', function(){
-
-		var explanation_id = $(this).attr('data-expid');
-		var signal = $(this).attr('data-signal');
-		
-		  if($(this).hasClass("upvoted")) {
-		  	
-			$('#likes-upvote-'+explanation_id).removeClass('upvoted');
-			remove_like(explanation_id, signal);
-		  } else if ($(this).hasClass("not-registered")){
-		  	$.growl.warning({ title: "Please Log In", message: "You need to sign in to vote." });
-
-		  } else {
-		  	
-			$('#likes-upvote-'+explanation_id).addClass('upvoted');
-			$('#likes-downvote-'+explanation_id).removeClass('downvoted');
-			add_like(explanation_id, signal);
-		  }
-
-	});
-
-	$('.like-container').on('click', '.downvote', function(){
-
-		var explanation_id = $(this).attr('data-expid');
-		var signal = $(this).attr('data-signal');
-		var likes_count = parseInt($('#likes-count-'+explanation_id).text(), 10);
-		  if($(this).hasClass("downvoted")) {
-		  	
-			$('#likes-downvote-'+explanation_id).removeClass('downvoted');
-			remove_like(explanation_id, signal);
-		  } else if ($(this).hasClass("not-registered")){
-		  	$.growl.warning({ title: "Please Log In", message: "You need to sign in to vote." });
-
-		  } else {
-		  	
-			if (likes_count > 0){
-				$('#likes-downvote-'+explanation_id).addClass('downvoted');
-				$('#likes-upvote-'+explanation_id).removeClass('upvoted');
-				add_like(explanation_id, signal);
-			}
-			else{
-				$.growl.warning({message:'Vote count is already 0.'});
-			}
-		  }
-
-	});
 
 	// Logic to handle Report Inappropriate on the front end
 	$('.reports_class').each(function(){

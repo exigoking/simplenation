@@ -1,6 +1,7 @@
 {% extends 'simplenation/base.html' %}
 
 {% load staticfiles %}
+{% load call_tag %}
 
 
 {% block title %}{{ term_name }}{% endblock %}
@@ -9,6 +10,29 @@
   {% if term_exists %}
   	<div class="term-header-container">
       	<div class="w-clearfix term-title-and-stats">
+          <div class="like-container term">
+                  {% if user.is_authenticated %}
+                    {% if term|args:user|call:"upvoted" %}
+                      <div id="likes-upvote-term-{{term.id}}" class="upvote term topic-upvoted" data-signal="up" data-termid="{{term.id}}"></div>
+                    {% else %}
+                      <div id="likes-upvote-term-{{term.id}}" class="upvote term" data-signal="up" data-termid="{{term.id}}"></div>
+                    {% endif %}
+                    <div id="likes-count-term-up-{{term.id}}" class="likes-count ups">{{ term.upvote_count|humanize_numbers}}</div>
+                    <div class="likes-count voters">------</div>
+                    <div id="likes-count-term-down-{{term.id}}" class="likes-count downs">{{ term.downvote_count|humanize_numbers }}</div>
+                    {% if term|args:user|call:"downvoted" %}
+                      <div id="likes-downvote-term-{{term.id}}" class="downvote term topic-downvoted" data-signal="down" data-termid="{{term.id}}"></div>
+                    {% else %}
+                      <div id="likes-downvote-term-{{term.id}}" class="downvote term" data-signal="down" data-termid="{{term.id}}"></div>
+                    {% endif %}
+                  {% else %}
+                    <div id="likes-upvote-term-{{term.id}}" class="upvote term not-registered" data-signal="up" data-termid="{{term.id}}"></div>
+                    <div id="likes-count-term-up-{{term.id}}" class="likes-count ups">{{ term.upvote_count|humanize_numbers}}</div>
+                    <div class="likes-count voters">------</div>
+                    <div id="likes-count-term-down-{{term.id}}" class="likes-count downs">{{ term.downvote_count|humanize_numbers }}</div>
+                    <div id="likes-downvote-term-{{term.id}}" class="downvote term not-registered" data-signal="down" data-termid="{{term.id}}"></div>
+                  {% endif %}
+            </div>
       		<a class="term-title" href="{% url 'term' term.slug %}">{{ term.name }}</a>
       		{% if user.is_authenticated %}
         			<a class="w-inline-block challenge-dialog-opener" href="#" data-termid="{{term.id}}"></a>
@@ -88,6 +112,7 @@
   	{% endif %}
   	{% if explanations %}
   	<div class="explanations-container-parent">
+      <h5 style="text-align:left;color:lightgrey;">Reviews</h5>
   		{% for explanation in explanations %}
       	<div class="w-clearfix exp-container-parent" id='exp-container-{{explanation.id}}' data-expid='{{ explanation.id }}'>
         		<div class="exp-body" id="exp-body-{{explanation.id}}" data-expid="{{explanation.id}}">

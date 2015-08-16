@@ -28,7 +28,7 @@ import json
  
 
 
-@login_required
+@login_required 
 def edit_exp(request):
 
 	if request.method == 'POST':

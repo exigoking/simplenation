@@ -1,9 +1,10 @@
 from django.contrib import admin
-from simplenation.models import Term, Definition, Author, Picture, Notification, Favourite, Like, Report, Challenge, Session, Like
+from simplenation.models import Term, Definition, Author, Picture, Notification, Favourite, Like, Report, Challenge, Session, Like, TermVote
 
 
 class TermAdmin(admin.ModelAdmin):
 	prepopulated_fields = {'slug':('name',)}
+	list_display = ('name','author', 'upvotes', 'downvotes', 'created_at')
 
 class AuthorAdmin(admin.ModelAdmin):
 	prepopulated_fields = {'slug':('user',)}
@@ -29,6 +30,9 @@ class SessionAdmin(admin.ModelAdmin):
 class LikeAdmin(admin.ModelAdmin):
 	list_display = ('user', 'definition', 'upvote', 'downvote')
 
+class TermVoteAdmin(admin.ModelAdmin):
+	list_display = ('user', 'term', 'upvote', 'downvote')
+
 admin.site.register(Term, TermAdmin)
 admin.site.register(Definition, DefinitionAdmin)
 admin.site.register(Author, AuthorAdmin)
@@ -38,3 +42,4 @@ admin.site.register(Favourite, FavouriteAdmin)
 admin.site.register(Challenge, ChallengeAdmin)
 admin.site.register(Session, SessionAdmin)
 admin.site.register(Like, LikeAdmin)
+admin.site.register(TermVote, TermVoteAdmin)

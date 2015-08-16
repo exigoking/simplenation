@@ -1,11 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
-from simplenation.models import Term, Author, Definition, Like, Report, Favourite, Notification, Picture, Session, PressedTag
+from simplenation.models import Term, Author, Definition, Like, Report, Favourite, Notification, Picture, Session, PressedTag, TermVote
 from simplenation.forms import UserForm, ProfileForm, DefinitionForm, TermForm, PasswordResetRequestForm, SetPasswordForm, PictureForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from simplenation.addons import last_posted_date, profanityFilter, deleted_user_profile
+from simplenation.addons import last_posted_date, profanityFilter, deleted_user_profile, convert_to_small_representation
 from simplenation.user_views import log_user_while_post, register_user_while_post
 from taggit.models import Tag, TaggedItem
 from django.db.models import Count
@@ -30,7 +30,7 @@ from imagekit.processors import ResizeToFill
 from django.db.models import Count
 from simplenation.addons import send_email
 
-def term(request, term_name_slug):
+def term(request, term_name_slug): 
 	context_dict = {} 
 	reported = False
 	report_by_explanation_id = {}
@@ -278,16 +278,14 @@ def search_tags(request):
 		context_dict['no_tags_message'] = 'No tags found, sorry'
 		return HttpResponse('No tags found, sorry')
 
+	context_dict['user'] = request.user
 	html = render_to_string('simplenation/search_tags.html', context_dict)
 	return HttpResponse(html)
 
 
+
 def tag_select(request):
-	tag_name_1 = None
-	tag_name_2 = None
-	tag_name_3 = None
-	tag_name_4 = None
-	tag_name_5 = None
+	tag_name = None
 	number_of_tags = None
 	context_dict = {}
 	tag_choose_list = {}
@@ -296,151 +294,29 @@ def tag_select(request):
 	
 	number_of_tags = params['number_of_tags']
 	session_id = request.session.get('session_id')
+	context_dict['user'] = request.user
+
+	tag_choose_list = params['tag_choose_list']
+	if session_id:
+		session = Session.objects.get(id = session_id)
+		pressed_tags = PressedTag.objects.filter(session = session)
+		if pressed_tags:
+			pressed_tags.delete()
 
 	if number_of_tags == 0:
-
-		if session_id:
-			session = Session.objects.get(id = session_id)
-			pressed_tags = PressedTag.objects.filter(session = session)
-			if pressed_tags:
-				pressed_tags.delete()
 		terms_tag_filtered = Term.objects.all().order_by('-created_at')[:40]
-		html = render_to_string('simplenation/tag_filtering.html', {'terms_tag_filtered': terms_tag_filtered})
-
-		return HttpResponse(html)
-
-	elif number_of_tags == 1:
-		
-		tag_choose_list = params['tag_choose_list']
-		tag_name_1 = tag_choose_list['tag_name_1']
-		
-		tag_1 = Tag.objects.get(name = tag_name_1)
-		if session_id:
-			session = Session.objects.get(id = session_id)
-			pressed_tags = PressedTag.objects.filter(session = session)
-			if pressed_tags:
-				pressed_tags.delete()
-			session.pressed_tags.create(name=tag_1.name)
-			session.save()
-
-		terms_tag_filtered = Term.objects.filter(tags__name__in = [tag_name_1]).distinct()
-		html = render_to_string('simplenation/tag_filtering.html', {'terms_tag_filtered': terms_tag_filtered})
-		
-		return HttpResponse(html)
-
-	elif number_of_tags == 2:
-		
-		tag_choose_list = params['tag_choose_list']
-
-		tag_name_1 = tag_choose_list['tag_name_1']
-		tag_name_2 = tag_choose_list['tag_name_2']
-		
-		tag_1 = Tag.objects.get(name = tag_name_1)
-		tag_2 = Tag.objects.get(name = tag_name_2)
-		if session_id:
-			session = Session.objects.get(id = session_id)
-			pressed_tags = PressedTag.objects.filter(session = session)
-			if pressed_tags:
-				pressed_tags.delete()
-			session.pressed_tags.create(name=tag_1.name)
-			session.pressed_tags.create(name=tag_2.name)
-			session.save()
-
-		terms_tag_filtered = Term.objects.filter(tags__name__in = [tag_name_1]).filter(tags__name__in = [tag_name_2])
-		html = render_to_string('simplenation/tag_filtering.html', {'terms_tag_filtered': terms_tag_filtered})
-		
-		return HttpResponse(html)
-
-	elif number_of_tags == 3:
-		
-		tag_choose_list = params['tag_choose_list']
-		tag_name_1 = tag_choose_list['tag_name_1']
-		tag_name_2 = tag_choose_list['tag_name_2']
-		tag_name_3 = tag_choose_list['tag_name_3']
-		
-		tag_1 = Tag.objects.get(name = tag_name_1)
-		tag_2 = Tag.objects.get(name = tag_name_2)
-		tag_3 = Tag.objects.get(name = tag_name_3)
-		if session_id:
-			session = Session.objects.get(id = session_id)
-			pressed_tags = PressedTag.objects.filter(session = session)
-			if pressed_tags:
-				pressed_tags.delete()
-			session.pressed_tags.create(name=tag_1.name)
-			session.pressed_tags.create(name=tag_2.name)
-			session.pressed_tags.create(name=tag_3.name)
-			session.save()
-
-		terms_tag_filtered = Term.objects.filter(tags__name__in = [tag_name_1]).filter(tags__name__in = [tag_name_2]).filter(tags__name__in = [tag_name_3])
-		html = render_to_string('simplenation/tag_filtering.html', {'terms_tag_filtered': terms_tag_filtered})
-		
-		return HttpResponse(html)
-	elif number_of_tags == 4:
-		tag_choose_list = params['tag_choose_list']
-		
-		tag_name_1 = tag_choose_list['tag_name_1']
-		tag_name_2 = tag_choose_list['tag_name_2']
-		tag_name_3 = tag_choose_list['tag_name_3']
-		tag_name_4 = tag_choose_list['tag_name_4']
-
-		tag_1 = Tag.objects.get(name = tag_name_1)
-		tag_2 = Tag.objects.get(name = tag_name_2)
-		tag_3 = Tag.objects.get(name = tag_name_3)
-		tag_4 = Tag.objects.get(name = tag_name_4)
-		if session_id:
-			session = Session.objects.get(id = session_id)
-			pressed_tags = PressedTag.objects.filter(session = session)
-			if pressed_tags:
-				pressed_tags.delete()
-			session.pressed_tags.create(name=tag_1.name)
-			session.pressed_tags.create(name=tag_2.name)
-			session.pressed_tags.create(name=tag_3.name)
-			session.pressed_tags.create(name=tag_4.name)
-			session.save()
-
-		terms_tag_filtered = Term.objects.filter(tags__name__in = [tag_name_1]).filter(tags__name__in = [tag_name_2]).filter(tags__name__in = [tag_name_3]).filter(tags__name__in = [tag_name_4])
-		html = render_to_string('simplenation/tag_filtering.html', {'terms_tag_filtered': terms_tag_filtered})
-		
-		return HttpResponse(html)
-	elif number_of_tags == 5:
-		tag_choose_list = params['tag_choose_list']
-
-		tag_name_1 = tag_choose_list['tag_name_1']
-		tag_name_2 = tag_choose_list['tag_name_2']
-		tag_name_3 = tag_choose_list['tag_name_3']
-		tag_name_4 = tag_choose_list['tag_name_4']
-		tag_name_5 = tag_choose_list['tag_name_5']
-
-		tag_1 = Tag.objects.get(name = tag_name_1)
-		tag_2 = Tag.objects.get(name = tag_name_2)
-		tag_3 = Tag.objects.get(name = tag_name_3)
-		tag_4 = Tag.objects.get(name = tag_name_4)
-		tag_5 = Tag.objects.get(name = tag_name_5)
-		if session_id:
-			session = Session.objects.get(id = session_id)
-			pressed_tags = PressedTag.objects.filter(session = session)
-			if pressed_tags:
-				pressed_tags.delete()
-			session.pressed_tags.create(name=tag_1.name)
-			session.pressed_tags.create(name=tag_2.name)
-			session.pressed_tags.create(name=tag_3.name)
-			session.pressed_tags.create(name=tag_4.name)
-			session.pressed_tags.create(name=tag_5.name)
-			session.save()
-
-		terms_tag_filtered = Term.objects.filter(tags__name__in = [tag_name_1]).filter(tags__name__in = [tag_name_2]).filter(tags__name__in = [tag_name_3]).filter(tags__name__in = [tag_name_4]).filter(tags__name__in = [tag_name_5])
-		html = render_to_string('simplenation/tag_filtering.html', {'terms_tag_filtered': terms_tag_filtered})
-		
-		return HttpResponse(html)
 	else:
-		return HttpResponse('No words matching your tag filter')
+		terms_tag_filtered = Term.objects.filter(tags__name__in = [tag_choose_list['tag_name_0']]).order_by('-created_at')
 
+	for i in range(0,number_of_tags):
+		terms_tag_filtered = terms_tag_filtered.filter(tags__name__in = [tag_choose_list['tag_name_'+str(i)]])
+		session.pressed_tags.create(name=tag_choose_list['tag_name_'+str(i)])
 
-	context_dict['terms_for_explainers'] = terms_tag_filtered
+	session.save()
+	context_dict['terms_tag_filtered'] = terms_tag_filtered
+	html = render_to_string('simplenation/tag_filtering.html', context_dict)
+	return HttpResponse(html)
 
-	
-	return render(request, 'simplenation/index.html', context_dict)
-	
 
 
 def tag_deselect(request):
@@ -491,6 +367,7 @@ def add_term(request):
 		term_form = TermForm()
 	
 	context_dict['term_form'] = term_form
+	context_dict['user'] = request.user
 	return render(request, 'simplenation/add_term.html', context_dict)
 
 
@@ -511,9 +388,125 @@ def single_tag_view(request, tag_slug):
 	context_dict['tag'] = tag
 	context_dict['terms_for_explainers'] = terms_for_explainers
 	context_dict['number_of_terms'] = number_of_terms
+	context_dict['user'] = request.user
 
 	return render(request, 'simplenation/single_tag.html', context_dict)
 
+@login_required
+def add_term_like(request):
+
+	term_id = None
+	up = False
+	down = False
+	context_dict = {}
+
+	if request.method == 'POST':
+		params=json.loads(request.body)
+		term_id = params['term_id']
+		signal = params['signal']
+
+
+	if term_id:
+
+		term = Term.objects.get(id = term_id)
+
+		if not TermVote.objects.has_voted(request.user, term):
+			termvote = TermVote()
+			termvote.user = request.user
+			termvote.term = term
+
+			if signal == 'up':
+				termvote.upvote = True
+				termvote.downvote = False
+				term.upvotes = term.upvotes + 1
+				up = True
+
+			elif signal == 'down':
+				termvote.downvote = True
+				termvote.upvote = False
+				term.downvotes = term.downvotes + 1
+				down = True
+
+			termvote.save()
+			term.save()
+ 	
+		else:
+			termvote = TermVote.objects.get(user = request.user, term=term)
+			if termvote.upvote:
+				if signal == 'down':
+					termvote.downvote = True
+					termvote.upvote = False
+					term.downvotes = term.downvotes + 1
+					term.upvotes = term.upvotes - 1
+					down = True
+
+			elif termvote.downvote:
+				if signal == 'up':
+					termvote.upvote = True
+					termvote.downvote = False
+					term.upvotes = term.upvotes + 1
+					term.downvotes = term.downvotes - 1
+					up = True
+					
+			termvote.save()
+			term.save()
+		context_dict['downvotes'] = convert_to_small_representation(term.downvotes)
+		context_dict['upvotes'] = convert_to_small_representation(term.upvotes)
+		context_dict['up'] = up
+		context_dict['down'] = down
+			
+	else:
+		context_dict['success']=False
+		return HttpResponse(json.dumps(context_dict),content_type="application/json")
+
+	context_dict['success'] = True
+	return HttpResponse(json.dumps(context_dict),content_type="application/json")
+
+
+@login_required
+def remove_term_like(request):
+
+	term_id = None
+	up = False
+	down = False
+	context_dict ={}
+
+	if request.method == 'POST':
+		params=json.loads(request.body)
+		term_id = params['term_id']
+		signal = params['signal']
+
+	if term_id:
+		term = Term.objects.get(id = term_id)
+		termvote = TermVote.objects.get(user = request.user, term = term)
+		if termvote:
+			termvote.delete()
+			if signal == "up":
+				term.upvotes = term.upvotes - 1
+				up = True
+				
+			elif signal == "down":
+				term.downvotes = term.downvotes - 1
+				down = True
+				
+			term.save()
+			context_dict['downvotes'] = convert_to_small_representation(term.downvotes)
+			context_dict['upvotes'] = convert_to_small_representation(term.upvotes)
+			context_dict['up'] = up
+			context_dict['down'] = down
+			context_dict['success'] = True
+			
+
+		else:
+			context_dict['success'] = False
+			context_dict['no_success_message'] = "Already removed a vote."
+			
+
+	else:
+		context_dict['success'] = False
+		context_dict['no_success_message'] = "Invalid Form."
+
+	return HttpResponse(json.dumps(context_dict),content_type="application/json")
 
 
 
