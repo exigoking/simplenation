@@ -503,7 +503,13 @@ function remove_favourites(favoree_id)
 // Add like: Sends a request to add new like to a term
 function add_term_like(term_id, signal)
 {
-
+	var static_src = $('.static-src').attr("href");
+	if (signal == "up"){
+		$('#likes-count-term-up-'+term_id).html('<img src="'+static_src+'images/loader.gif" width="10" height="10">');
+	}
+	else{
+		$('#likes-count-term-down-'+term_id).html('<img src="'+static_src+'images/loader.gif" width="10" height="10">');
+	}		
 	var obj={'term_id':term_id, 'signal':signal}
 
 	jQuery.ajax({
@@ -525,7 +531,16 @@ function add_term_like(term_id, signal)
 
 // Remove like: Sends a request to remove like from a term
 function remove_term_like(term_id, signal)
-{
+{	
+	var static_src = $('.static-src').attr("href");
+	if (signal == "up"){
+		$('#likes-count-term-up-'+term_id).html('<img src="'+static_src+'images/loader.gif" width="10" height="10">');
+	}
+	else{
+		$('#likes-count-term-down-'+term_id).html('<img src="'+static_src+'images/loader.gif" width="10" height="10">');
+	}
+	
+	
 	var obj = {'term_id':term_id, 'signal':signal }
 
 	jQuery.ajax({
