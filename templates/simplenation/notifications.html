@@ -13,22 +13,20 @@
 	    	{% for notification in notifications %}
 		    	{% if notification.typeof == 'challenge_notification'%}
 		    	<p class="notification-text-element">
-		    		<a class="author-title notifications" href="{% url 'profile' notification.sender.author.slug %}">{{ notification.sender.username }}</a> has <strong>challenged</strong> you to explain <a class="term-name-notifications" href="{% url 'term' notification.term.slug %}">{{ notification.term.name }}</a>. <span class="created-time-notifications">{{ notification.humanized_created_at }}</span>
+		    		<a class="author-title notifications" href="{% url 'profile' notification.sender.author.slug %}">{{ notification.sender.username }}</a> has <strong>asked</strong> you to write about <a class="term-name-notifications" href="{% url 'term' notification.term.slug %}">{{ notification.term.name }}</a>. <span class="created-time-notifications">{{ notification.humanized_created_at }}</span>
 		    	</p>
 		    	{% elif notification.typeof == 'explanation_notification' %}
 		    	<p class="notification-text-element">
-		    		<a class="author-title notifications" href="{% url 'profile' notification.sender.author.slug %}">{{ notification.sender.username }}</a> has <strong>explained</strong> <a class="term-name-notifications" href="{% url 'term' notification.term.slug %}">{{ notification.term.name }}</a>. <span class="created-time-notifications">{{ notification.humanized_created_at }}</span>
+		    		<a class="author-title notifications" href="{% url 'profile' notification.sender.author.slug %}">{{ notification.sender.username }}</a> has <strong>posted to</strong> <a class="term-name-notifications" href="{% url 'term' notification.term.slug %}">{{ notification.term.name }}</a>. <span class="created-time-notifications">{{ notification.humanized_created_at }}</span>
 		   	 	</p>
 		   	 	{% elif notification.typeof == 'like_notification' %}
 		    	<p class="notification-text-element">
-		    		<a class="author-title notifications" href="{% url 'profile' notification.sender.author.slug %}">{{ notification.sender.username }}</a> has <strong>liked</strong> your explanation for <a class="term-name-notifications" href="{% url 'term' notification.definition.term.slug %}">{{ notification.definition.term.name }}</a>. <span class="created-time-notifications">{{ notification.humanized_created_at }}</span>
+		    		<a class="author-title notifications" href="{% url 'profile' notification.sender.author.slug %}">{{ notification.sender.username }}</a> has <strong>liked</strong> your review for <a class="term-name-notifications" href="{% url 'term' notification.definition.term.slug %}">{{ notification.definition.term.name }}</a>. <span class="created-time-notifications">{{ notification.humanized_created_at }}</span>
 		    	</p>
 		    	{% elif notification.typeof == 'term_creation' %}
 		    	<p class="notification-text-element">
-		    		{% if user.id != notification.sender.id %}
-		    			<a class="author-title notifications" href="{% url 'profile' notification.sender.author.slug %}">{{ notification.sender.username }}</a> has <strong>created</strong> new term: <a class="term-name-notifications" href="{% url 'term' notification.term.slug %}">{{ notification.term.name }}</a>. <span class="created-time-notifications">{{ notification.humanized_created_at }}</span>
-		    		{% else %}
-		    			<a class="author-title notifications" href="{% url 'profile' notification.sender.author.slug %}">You</a> have <strong>created</strong> new term: <a class="term-name-notifications" href="{% url 'term' notification.term.slug %}">{{ notification.term.name }}</a>. <span class="created-time-notifications">{{ notification.humanized_created_at }}</span>
+		    		{% if user.id == notification.sender.id %}
+		    			<a class="author-title notifications" href="{% url 'profile' notification.sender.author.slug %}">You</a> have <strong>opened</strong> new topic: <a class="term-name-notifications" href="{% url 'term' notification.term.slug %}">{{ notification.term.name }}</a>. <span class="created-time-notifications">{{ notification.humanized_created_at }}</span>
 		    		{% endif %}
 		    	</p>
 		    	{% endif %}

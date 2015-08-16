@@ -96,7 +96,7 @@ $(document).ready(function(){
 	                $('.challenge-dialog').dialog('close');
 	            });
         	},
-        	title: "Challenge favourites",
+        	title: "Ask to review",
 	});
 
 	$( ".challenge-dialog-opener" ).click(function() {
