@@ -31,6 +31,7 @@ urlpatterns = patterns('',
 	# Calls to Term Controller
 	url(r'^term/(?P<term_name_slug>[\w\-]+)/$', term_views.term, name = 'term'),
 	url(r'^add_term/$', term_views.add_term, name='add_term'),
+	url(r'^edit_term/(?P<term_name_slug>[\w\-]+)/$', term_views.edit_term, name='edit_term'),
 	url(r'^add_tags_to_term/$', term_views.add_tags_to_term, name='add_tags_to_term'),
 	url(r'^tag_select/$', term_views.tag_select, name='tag_select'),
 	url(r'^tag_deselect/$', term_views.tag_deselect, name='tag_deselect'),

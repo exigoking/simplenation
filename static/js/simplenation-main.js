@@ -100,7 +100,7 @@ $(document).ready(function(){
 	});
 
 	$( ".challenge-dialog-opener" ).click(function() {
-
+		   console.log("here");
 		   var term_id = $(this).attr('data-termid');
 	       dialog_opt.dialog( "open" );
 	       challengee_list(term_id);
@@ -182,40 +182,46 @@ $(document).ready(function(){
 		if (currentElement.hasClass("top")){
 			currentElement.removeClass("top");
 			currentElement.addClass("bottom");
-			sortUsingNestedTextAscending($('.terms-filtered-container'), ".term-filtered", "div.term-stats-number.explanations");
+			var sortByValue = 'posts';
+    		$('.grid').isotope({ sortBy: sortByValue, sortAscending: true });
 
 		}
-		else if(currentElement.hasClass("bottom")){
+		else if(currentElement.hasClass("bottom")){ 
 			currentElement.removeClass("bottom");
 			currentElement.addClass("top");
-			sortUsingNestedTextDescending($('.terms-filtered-container'), ".term-filtered", "div.term-stats-number.explanations");
+			var sortByValue = 'posts';
+    		$('.grid').isotope({ sortBy: sortByValue, sortAscending: false });
 		}
 		else if(currentElement.hasClass("views")){
-			sortUsingNestedTextDescending($('.terms-filtered-container'), ".term-filtered", "div.term-stats-number.term-views");
+			var sortByValue = 'views';
+    		$('.grid').isotope({ sortBy: sortByValue, sortAscending: false });
 		}
 		else {
 			if(currentElement.text() == "posts"){
 				currentElement.addClass("top");
-				sortUsingNestedTextDescending($('.terms-filtered-container'), ".term-filtered", "div.term-stats-number.explanations");
+				var sortByValue = 'posts';
+    			$('.grid').isotope({ sortBy: sortByValue, sortAscending: false });
 			}
 			else if(currentElement.text() == "votes"){
 				if (currentElement.hasClass("ups")){
 					currentElement.removeClass("ups");
 					currentElement.addClass("downs");
-					sortUsingNestedTextDescending($('.terms-filtered-container'), ".term-filtered", "div.likes-count.downs-hidden");
+					var sortByValue = 'downvotes';
+    				$('.grid').isotope({ sortBy: sortByValue, sortAscending: false });
 			
 				}
 				else{
 					currentElement.removeClass("downs");
 					currentElement.addClass("ups");
-					sortUsingNestedTextDescending($('.terms-filtered-container'), ".term-filtered", "div.likes-count.ups-hidden");
+					var sortByValue = 'upvotes';
+    				$('.grid').isotope({ sortBy: sortByValue, sortAscending: false });
 				}
 			}
 			else{
 				currentElement.addClass("views");
-				sortUsingNestedTextDescending($('.terms-filtered-container'), ".term-filtered", "div.term-stats-number.term-views");
+				var sortByValue = 'views';
+    			$('.grid').isotope({ sortBy: sortByValue, sortAscending: false });
 			}
-			
 		}
 
 	});
@@ -520,7 +526,7 @@ $(document).ready(function(){
 
 	$('.term-title-and-stats').on('click', '.upvote.term', function(){
 		var signal = $(this).attr('data-signal');
-		//voting on _terms @ main page
+		//voting on _terms @ term page
 	  	var term_id = $(this).attr('data-termid');
 	  	if($(this).hasClass("topic-upvoted")) {
 		  	
@@ -538,7 +544,7 @@ $(document).ready(function(){
 
 	$('.term-title-and-stats').on('click', '.downvote.term', function(){
 		var signal = $(this).attr('data-signal');
-		//voting on _terms @ main page
+		//voting on _terms @ term page
 	  	var term_id = $(this).attr('data-termid');
 	  	if($(this).hasClass("topic-downvoted")) {
 			$('#likes-downvote-term-'+term_id).removeClass('topic-downvoted');
@@ -594,39 +600,20 @@ $(document).ready(function(){
 	
 	$('.explanations-container-parent').on('click', '.upvote', function(){
 		var signal = $(this).attr('data-signal');
-		//voting on _terms
-		 if ($(this).hasClass("term")){
-		  	var term_id = $(this).attr('data-termid');
-		  	if($(this).hasClass("small-upvoted")) {
-			  	
-				$('#likes-upvote-term-'+term_id).removeClass('small-upvoted');
-				remove_term_like(term_id, signal);
-			  } else if ($(this).hasClass("not-registered")){
-			  	$.growl.warning({ title: "Please Log In", message: "You need to sign in to vote." });
+		//voting on _explanations
+	 	var explanation_id = $(this).attr('data-expid');
+		if($(this).hasClass("upvoted")) {
+		  	
+		$('#likes-upvote-'+explanation_id).removeClass('upvoted');
+			remove_like(explanation_id, signal);
+		} else if ($(this).hasClass("not-registered")){
+		  $.growl.warning({ title: "Please Log In", message: "You need to sign in to vote." });
 
-			  } else {
-				$('#likes-upvote-term-'+term_id).addClass('small-upvoted');
-				$('#likes-downvote-term-'+term_id).removeClass('small-downvoted');
-				add_term_like(term_id, signal);
-			  }
-		 }
-		 //voting on _explanations
-		 else{ 
-		 	  var explanation_id = $(this).attr('data-expid');
-			  if($(this).hasClass("upvoted")) {
-			  	
-				$('#likes-upvote-'+explanation_id).removeClass('upvoted');
-				remove_like(explanation_id, signal);
-			  } else if ($(this).hasClass("not-registered")){
-			  	$.growl.warning({ title: "Please Log In", message: "You need to sign in to vote." });
-
-			  } else {
-			  	
-				$('#likes-upvote-'+explanation_id).addClass('upvoted');
-				$('#likes-downvote-'+explanation_id).removeClass('downvoted');
-				add_like(explanation_id, signal);
-			  }
-		   }
+		} else {  	
+			$('#likes-upvote-'+explanation_id).addClass('upvoted');
+			$('#likes-downvote-'+explanation_id).removeClass('downvoted');
+			add_like(explanation_id, signal);
+		}
 
 	});
 
@@ -634,47 +621,28 @@ $(document).ready(function(){
 
 		
 		var signal = $(this).attr('data-signal');
-		//voting on _terms
-		 if ($(this).hasClass("term")){
-		  	var term_id = $(this).attr('data-termid');
-		  	if($(this).hasClass("small-downvoted")) {
-				$('#likes-downvote-term-'+term_id).removeClass('small-downvoted');
-				remove_term_like(term_id, signal);
-			  } 
-			  else if ($(this).hasClass("not-registered")){
-			  	$.growl.warning({ title: "Please Log In", message: "You need to sign in to vote." });
-
-			  } 
-			  else {
-				$('#likes-downvote-term-'+term_id).addClass('small-downvoted');
-				$('#likes-upvote-term-'+term_id).removeClass('small-upvoted');
-				add_term_like(term_id, signal);
-			  }
-		 }
 		 //voting on _explanations
-		 else 
-		 {
-		 	var explanation_id = $(this).attr('data-expid');
-			var likes_count = parseInt($('#likes-count-'+explanation_id).text(), 10);
-		  	if($(this).hasClass("downvoted")) {
-				$('#likes-downvote-'+explanation_id).removeClass('downvoted');
-				remove_like(explanation_id, signal);
-		  	} 
-		  	else if ($(this).hasClass("not-registered")){
-		  		$.growl.warning({ title: "Please Log In", message: "You need to sign in to vote." });
+	 	var explanation_id = $(this).attr('data-expid');
+		var likes_count = parseInt($('#likes-count-'+explanation_id).text(), 10);
+	  	if($(this).hasClass("downvoted")) {
+			$('#likes-downvote-'+explanation_id).removeClass('downvoted');
+			remove_like(explanation_id, signal);
+	  	} 
+	  	else if ($(this).hasClass("not-registered")){
+	  		$.growl.warning({ title: "Please Log In", message: "You need to sign in to vote." });
 
-		  	} 
-		  	else {
-				if (likes_count > 0){
-					$('#likes-downvote-'+explanation_id).addClass('downvoted');
-					$('#likes-upvote-'+explanation_id).removeClass('upvoted');
-					add_like(explanation_id, signal);
-				}
-				else{
-					$.growl.warning({message:'Vote count is already 0.'});
-				}
-		  	}
-		}
+	  	} 
+	  	else {
+			if (likes_count > 0){
+				$('#likes-downvote-'+explanation_id).addClass('downvoted');
+				$('#likes-upvote-'+explanation_id).removeClass('upvoted');
+				add_like(explanation_id, signal);
+			}
+			else{
+				$.growl.warning({message:'Vote count is already 0.'});
+			}
+	  	}
+		
 	});
 
 	
@@ -882,6 +850,26 @@ $(document).ready(function(){
 		
 
 	});
+
+	$('.add-term-form').on('change','.add-topic-picture', function(){
+
+		var ext = $(this).val().split('.').pop().toLowerCase();
+		if($.inArray(ext, ['png','jpg','jpeg']) == -1) {
+			$.growl.warning({title:"Not a picture", message: "Please upload pictures with extensions jpg, jpeg or png."});
+			$(this).val('');
+			preview_default_picture(this);
+		}
+		else{
+			$('.topic-picture-mask').show();
+			preview_profile_picture(this);
+		}
+		
+
+	});
+	$('.add-term-form').on('click','.topic-picture-mask',function(){
+		$('.add-topic-picture').click();
+	});
+
 
 	$('.sign-post').on('click','.side-sign-option', function(){
 		if (!$(this).hasClass("pressed")){

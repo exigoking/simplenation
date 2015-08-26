@@ -66,6 +66,7 @@ class Term(models.Model):
 	upvotes = models.IntegerField(default=0)
 	downvotes = models.IntegerField(default=0)
 	tags = TaggableManager(blank=True)
+	picture = models.ImageField(upload_to="term_pictures/", null = True)
 	
 	def save(self, *args, **kwargs):
 		self.slug = slugify(self.name)
@@ -132,6 +133,12 @@ class Term(models.Model):
 
 	def downvote_count(self):
 		return self.downvotes
+
+	def has_picture(self):
+		if self.picture:
+			return True
+		else:
+			return False
 	
 	def __unicode__(self):
 		return self.name

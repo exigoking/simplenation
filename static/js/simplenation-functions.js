@@ -188,7 +188,7 @@ function change_selection(current_suggestion_number, next_suggestion_number, inp
 		else{
 			var text = $("div[data-sugnumber='"+next_suggestion_number+"']").text();
 		}
-		console.log(text);
+		
 		inputElement.val(text);
 
 	}
@@ -214,7 +214,7 @@ function change_selection(current_suggestion_number, next_suggestion_number, inp
 		else{
 			var text = $("div[data-sugnumber='"+next_suggestion_number+"']").text();
 		}
-		console.log(text);
+		
 		inputElement.val(text);
 	}
 }
@@ -384,6 +384,7 @@ function tag_filter(count, tag_choose_list){
            data: JSON.stringify(obj),
            success: function(data) {
 					$('.terms-filtered-container').html(data);
+					isotopize();
             },
             error: function(rs, e) {
                    alert(rs.responseText);
@@ -716,6 +717,12 @@ function preview_profile_picture(input) {
     }
 }
 
+// Preview a default picture by changing src attribute
+function preview_default_picture(input) {
+	var static_src = $('.static-src').attr("href");
+    $('.profile-registration-img').attr('src', static_src+'images/imageholder.png');
+}
+
 
 function send_email_confirmation(){
 	var obj = {}
@@ -759,7 +766,18 @@ function ValidateCharacterLength() {
     return true;
 
 }
-
+function isotopize(){
+    	$('.grid').isotope({
+  			itemSelector: '.term-filtered',
+  			percentPosition: true,
+  			getSortData: {
+      			posts: '.term-stats-number.explanations parseInt',
+      			views: '.term-stats-number.term-views parseInt',
+      			upvotes: '.likes-count.ups-hidden parseInt',
+      			downvotes: '.likes-count.downs-hidden parseInt',
+   			}
+		});
+}
 
 // The following code handles csrf token retrieval
 // This function gets cookie with a given name

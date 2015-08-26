@@ -1,0 +1,57 @@
+{% extends 'simplenation/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Edit topic-{{ term.name }}{% endblock %}
+
+{% block body_block %}
+	{% if term %}
+		{% if user.is_authenticated %}
+			{% if user.username == author.user.username %}
+			<div class="sign-in-block"> 
+	    		<h3>Edit Your Topic</h3>
+	    		<div class="w-form">
+	     			<form class="w-clearfix add-term-form" id="edit_term" method="post" action="{% url 'edit_term' term.slug %}" enctype="multipart/form-data">
+	     				{% csrf_token %}
+	              
+			              <div class="form-error-msg">{{ errors }}</div>
+			              
+			              <input class="w-input add-term-input" type="text" name="name" value="{{ term.name }}">
+			              <div class="topic-picture-mask" style="cursor:pointer;">
+			              	{% if term.has_picture %}
+			                	<img class="profile-registration-img edit-profile-img" src="{{ term.picture.url }}" alt="" width="100%" height="100%" style="border-radius: 0px;"/>
+			                {% else %}
+			                	<img class="profile-registration-img edit-profile-img" src="{% static 'images/imageholder.png' %}" alt="" width="100%" height="100%" style="border-radius: 0px;"/>
+			                {% endif %}
+			              </div>
+			              <input class="add-topic-picture" id="picture" type="file" name="picture" style="margin-top:8px;display:none;">
+			              
+		        		  <a class="w-button sign-in-button cancel" href="{% url 'term' term.slug %}">Cancel</a>
+		        		  <input class="w-button sign-in-button" type="submit" value="Save">
+		        		  <input type="hidden" name="next" value="{{ next }}">     		
+	      			</form>
+	    		</div>
+			</div>
+			{% else %}
+				<div class="no-found-terms" style="margin-top:50px;">
+	    			<img src="{% static "images/confused.jpg" %}" width="100px">
+	    			<div class="no-found-terms-text">How are you even here?</div>
+	    		</div>
+			{% endif %}
+		{% else %}
+			<div class="no-found-terms" style="margin-top:50px;">
+				<img src="{% static "images/confused.jpg" %}" width="100px">
+				<div class="no-found-terms-text">Maybe after you sign in.</div>
+	    	</div>
+		{% endif %}
+	{% else %}
+		 <div class="no-found-terms" style="margin-top:50px;">
+        	<img src="{% static "images/no-article.png" %}" width="100px">
+        	<div class="no-found-terms-text">Topic does not exist.</div>
+   		 </div>
+	{% endif %}
+
+	
+{% endblock %}
+
+

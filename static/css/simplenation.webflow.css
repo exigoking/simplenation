@@ -14,7 +14,7 @@ h1 {
 }
 h2 {
   margin-top: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 10px; 
   font-size: 32px;
   line-height: 36px;
   font-weight: 700;
@@ -247,30 +247,32 @@ a {
 }
 .term-filtered {
   position: relative;
-  display: block;
-  margin-top: 5px;
-  margin-bottom: 10px;
-  padding: 25px;
+  display: inline-block;
+  width: 31.5%;
+  margin-top: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
   background-color: white;
-  box-shadow: grey 0px 0px 2px 0px;
+  box-shadow: grey 0px 0px 3px 0px;
   text-align: left;
+  border-radius: 5px;
 }
 .term-name {
   display: inline-block;
   margin-left: 0px;
-  margin-bottom: 7px;
   font-size: 22px;
   text-align: left;
+  line-height: 24px;
 }
 .term-stats {
-  float: right;
+  display: block;
+  text-align: center;
 }
 .term-stats-element {
-  width: 90px;
-  margin-left: 7px;
+  width: 43%;
   padding-top: 8px;
   padding-bottom: 8px;
-  float: left;
+  display: inline-block;
   text-align: center;
 }
 .term-stats-element.explanations {
@@ -290,14 +292,14 @@ a {
   color: white;
 }
 .term-label-and-tags {
-  max-width: 255px;
-  min-width: 0px;
-  float: left;
+  margin-bottom: 6px;
+  padding-top: 10px;
+  padding-right: 10px;
+  padding-left: 10px;
 }
 .term-tag {
   display: inline-block;
   margin-top: 3px;
-  margin-right: 3px;
   padding: 4px 7px 3px;
   background-color: rgba(0,145,194,0.75);
   color: white;
@@ -307,8 +309,9 @@ a {
   background-color:rgba(2,154,204,1);
 }
 .term-tag.delete {
-  margin-left: -5px;
+  margin-left: -2px;
 }
+
 .term-stats-label.explanations {
   color: white;
 }
@@ -342,8 +345,7 @@ a {
   padding: 15px 53px;
 }
 .term-title-and-stats {
-  padding-top: 10px;
-  padding-bottom: 6px;
+  padding-top: 5px;
   position: relative;
 }
 .term-title {
@@ -352,7 +354,9 @@ a {
   float: left;
   color: black;
   font-size: 35px;
-
+  line-height: 35px;
+  width: 80%;
+  text-align: left;
 }
 .tags-container {
   text-align: left;
@@ -553,7 +557,7 @@ a {
   top: 18%;
 }
 .like-container.term {
-  top: 0%;
+  top: 5px;
 }
 .like-container.term.small {
   position: absolute;
@@ -1032,6 +1036,7 @@ a {
 }
 .add-term-input {
   display: inline-block;
+  margin-bottom: 5px;
 }
 .add-term-button {
   border-radius: 3px;
@@ -1139,6 +1144,7 @@ a {
 .term-sorting-text {
   display: inline-block;
   margin-left: 10px;
+  margin-right: 4px;
   float: right;
   color: #b3b3b3;
   font-size: 12px;
@@ -1193,8 +1199,8 @@ a {
   background-image: url('../images/caret-up-positive@2x.png');
 }
 .upvote.small {
-  width: 55px;
-  height: 15px;
+  width: 100%;
+  height: 20px;
   background-image: url('../images/caret-up-unpressed@2x.png');
   background-size: 22px;
   cursor: pointer;
@@ -1218,8 +1224,8 @@ a {
   background-image: url('../images/caret-down-negative@2x.png');
 }
 .downvote.small {
-  width: 55px;
-  height: 15px;
+  width: 100%;
+  height: 20px;
   background-image: url('../images/caret-down-unpressed@2x.png');
   background-size: 22px;
   cursor: pointer;
@@ -1266,6 +1272,7 @@ a {
   color: #949494;
   font-size: 12px;
   font-weight: 700;
+  margin-left: 4px;
 }
 .term-guidelines {
   margin-right: 150px;
@@ -1295,6 +1302,59 @@ a {
 .heading-3 {
   margin-bottom: 0px;
 }
+.term-image {
+  width: 100%;
+  margin-bottom: 5px;
+  box-shadow: none;
+}
+.term-img {
+  width: 100%;
+}
+.vote-container {
+  margin-top: 6px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top: 1px solid #e8e8e8;
+
+}
+.vote-container-up {
+  width: 50%;
+  float: left;
+}
+.vote-container-element {
+  width: 50%;
+  float: left;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.grid{
+  text-align: left;
+}
+.term-avatar-block {
+  z-index: 1;
+  width: 90%;
+  margin-right: 10px;
+  float: left;
+  position: relative; 
+}
+.term-avatar-img {
+  border-radius: 5px;
+  width: 100%;
+}
+.term-name-and-tags {
+  width: 100%;
+  float: left;
+}
+.edit-term {
+  font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+  color: #c2c2c2;
+  font-size: 13px;
+  font-weight: 700;
+}
+.add-term-form {
+  margin-bottom: 100px;
+}
+
 @media (max-width: 991px) {
   .navbar {
     display: block;
@@ -1509,6 +1569,10 @@ a {
   .center-body-block {
     width: 568px;
   }
+  .term-filtered{
+    width: 47.5%;
+  }
+
 }
 @media (max-width: 479px) {
   .global-search {
@@ -1529,6 +1593,7 @@ a {
   }
   .term-filtered {
     text-align: center;
+    width: 90%;
   }
   .term-name {
     margin-bottom: 6px;
@@ -1722,5 +1787,16 @@ a {
     width: 320px;
     padding-right: 20px;
     padding-left: 20px;
+  }
+  .columns {
+    -webkit-column-count: 1;
+    -webkit-column-gap: 10px;
+    -webkit-column-fill: auto;
+    -moz-column-count: 1;
+    -moz-column-gap: 10px;
+    -moz-column-fill: auto;
+    column-count: 1;
+    column-gap: 15px;
+    column-fill: auto;
   }
 }

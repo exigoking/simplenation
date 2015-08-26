@@ -2,32 +2,10 @@
 {% load staticfiles %}
 {% load call_tag %}
 		{% if terms_tag_filtered %}
+			<div class="grid">
   			{% for term in terms_tag_filtered %}
 		    	<div class="w-clearfix term-filtered">
 		      		<div class="term-label-and-tags">
-		      			<div class="like-container term small">
-		      				{% if user.is_authenticated %}
-			      				{% if term|args:user|call:"upvoted" %}
-			      					<div id="likes-upvote-term-{{term.id}}" class="upvote term small small-upvoted" data-signal="up" data-termid="{{term.id}}"></div>
-			      				{% else %}
-			      					<div id="likes-upvote-term-{{term.id}}" class="upvote term small" data-signal="up" data-termid="{{term.id}}"></div>
-			      				{% endif %}
-			      				<div id="likes-count-term-up-{{term.id}}" class="likes-count ups">{{ term.upvote_count| humanize_numbers}}</div><div class="likes-count ups-hidden" style="display:none;">{{term.upvote_count}}</div>
-			      				<div class="likes-count voters">------</div>
-			      				<div id="likes-count-term-down-{{term.id}}" class="likes-count downs">{{ term.downvote_count|humanize_numbers }}</div><div class="likes-count downs-hidden" style="display:none;">{{term.downvote_count}}</div>
-			      				{% if term|args:user|call:"downvoted" %}
-			      					<div id="likes-downvote-term-{{term.id}}" class="downvote term small small-downvoted" data-signal="down" data-termid="{{term.id}}"></div>
-			      				{% else %}
-			      					<div id="likes-downvote-term-{{term.id}}" class="downvote term small" data-signal="down" data-termid="{{term.id}}"></div>
-			      				{% endif %}
-			      			{% else %}
-			      				<div id="likes-upvote-term-{{term.id}}" class="upvote term small not-registered" data-signal="up" data-termid="{{term.id}}"></div>
-			      				<div id="likes-count-term-up-{{term.id}}" class="likes-count ups">{{ term.upvote_count|humanize_numbers}}</div><div class="likes-count ups-hidden" style="display:none;">{{term.upvote_count}}</div>
-			      				<div class="likes-count voters">------</div>
-			      				<div id="likes-count-term-down-{{term.id}}" class="likes-count downs">{{ term.downvote_count|humanize_numbers }}</div><div class="likes-count downs-hidden" style="display:none;">{{term.downvote_count}}</div>
-			      				<div id="likes-downvote-term-{{term.id}}" class="downvote term small not-registered" data-signal="down" data-termid="{{term.id}}"></div>
-			      			{% endif %}
-		      			</div>
 		        		<div class="term-name"><a class="term-list-link" href="{% url 'term' term.slug %}">{{ term.name }}</a></div>
 		        		{% if term.iterable_tags %}
 		        		<div class="term-tags">
@@ -37,6 +15,13 @@
 		        		</div>
 		        		{% endif %}
 		      		</div>
+
+		      		{% if term.has_picture %}
+		      		<div class="term-image">
+		      			<img class="term-img" src="{{ term.picture.url }}">
+		      		</div>
+		      		{% endif %}
+
 		      		<div class="w-clearfix term-stats">
 		      			{% if term.has_explanations %}
 		       			<a href="{% url 'term' term.slug %}"><div class="term-stats-element explanations">
@@ -54,8 +39,39 @@
 		          			<div>Views</div>
 		        		</div>
 		      		</div>
+
+		      		<div class="vote-container">
+		      			{% if user.is_authenticated %}
+		      				<div class="vote-container-element">
+		      					{% if term|args:user|call:"upvoted" %}
+		      						<div id="likes-upvote-term-{{term.id}}" class="upvote term small small-upvoted" data-signal="up" data-termid="{{term.id}}"></div>
+		      					{% else %}
+		      						<div id="likes-upvote-term-{{term.id}}" class="upvote term small" data-signal="up" data-termid="{{term.id}}"></div>
+		      					{% endif %}
+		      					<div id="likes-count-term-up-{{term.id}}" class="likes-count ups">{{ term.upvote_count| humanize_numbers}}</div><div class="likes-count ups-hidden" style="display:none;">{{term.upvote_count}}</div>
+		      				</div>
+		      				<div class="vote-container-element">
+		      					<div id="likes-count-term-down-{{term.id}}" class="likes-count downs">{{ term.downvote_count|humanize_numbers }}</div><div class="likes-count downs-hidden" style="display:none;">{{term.downvote_count}}</div>
+		      					{% if term|args:user|call:"downvoted" %}
+			      					<div id="likes-downvote-term-{{term.id}}" class="downvote term small small-downvoted" data-signal="down" data-termid="{{term.id}}"></div>
+			      				{% else %}
+			      					<div id="likes-downvote-term-{{term.id}}" class="downvote term small" data-signal="down" data-termid="{{term.id}}"></div>
+			      				{% endif %}
+		      				</div>
+		      			{% else %}
+		      				<div class="vote-container-element">
+		      					<div id="likes-upvote-term-{{term.id}}" class="upvote term small not-registered" data-signal="up" data-termid="{{term.id}}"></div>
+		      					<div id="likes-count-term-up-{{term.id}}" class="likes-count ups">{{ term.upvote_count| humanize_numbers}}</div><div class="likes-count ups-hidden" style="display:none;">{{term.upvote_count}}</div>
+		      				</div>
+		      				<div class="vote-container-element">
+		      					<div id="likes-count-term-down-{{term.id}}" class="likes-count downs">{{ term.downvote_count|humanize_numbers }}</div><div class="likes-count downs-hidden" style="display:none;">{{term.downvote_count}}</div>
+		      					<div id="likes-downvote-term-{{term.id}}" class="downvote term small not-registered" data-signal="down" data-termid="{{term.id}}"></div>
+		      				</div>
+		      			{% endif %}
+		      		</div>	
 		    	</div>
     		{% endfor %}
+    		</div>
     	{% else %}
     		<div class="no-found-terms">
     			<img src="{% static "images/Empty-Set-Black@2x.png" %}" width="100px">

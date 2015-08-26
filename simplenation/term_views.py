@@ -5,7 +5,7 @@ from simplenation.forms import UserForm, ProfileForm, DefinitionForm, TermForm, 
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from simplenation.addons import last_posted_date, profanityFilter, deleted_user_profile, convert_to_small_representation
+from simplenation.addons import last_posted_date, profanityFilter, deleted_user_profile, convert_to_small_representation, get_or_none, clean_term_name
 from simplenation.user_views import log_user_while_post, register_user_while_post
 from taggit.models import Tag, TaggedItem
 from django.db.models import Count
@@ -349,6 +349,8 @@ def add_term(request):
 		if term_form.is_valid():
 			term = term_form.save(commit=False)
 			term.author = request.user.author
+			if 'picture' in request.FILES:
+				term.picture = request.FILES['picture']
 			term.save()
 			Notification(typeof = 'term_creation', sender = request.user, receiver = request.user, term = term).save()
 			
@@ -370,6 +372,42 @@ def add_term(request):
 	context_dict['user'] = request.user
 	return render(request, 'simplenation/add_term.html', context_dict)
 
+@login_required
+def edit_term(request, term_name_slug):
+	context_dict = {}
+	term = get_or_none(Term, slug=term_name_slug)
+	author = get_or_none(Author, user = request.user )
+
+	context_dict['term'] = term
+	context_dict['author'] = author
+	
+	if request.method == 'POST':
+		new_term_name = clean_term_name(request.POST['name'])
+		try:
+   			new_term = Term.objects.get(name=new_term_name)
+		except Term.DoesNotExist:
+   			new_term = None
+		
+		if not new_term:
+			term.name = new_term_name
+			if 'picture' in request.FILES:
+				term.picture = request.FILES['picture']
+			term.save()
+			return HttpResponseRedirect('/term/'+term.slug)
+		elif new_term.name == term.name:
+			if 'picture' in request.FILES:
+				term.picture = request.FILES['picture']
+			term.save()	
+			return HttpResponseRedirect('/term/'+term.slug)
+		elif new_term_name == '':
+			context_dict['errors'] = 'please do not send us blanks'
+		else:
+			context_dict['errors'] = 'topic already exists'
+	else:	
+		pass
+	
+	context_dict['user'] = request.user
+	return render(request, 'simplenation/edit_term.html', context_dict)
 
 def single_tag_view(request, tag_slug):
 	context_dict = {}

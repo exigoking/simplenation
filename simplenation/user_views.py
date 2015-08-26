@@ -75,7 +75,7 @@ def edit_profile(request, profile_name_slug):
 	context_dict['edited'] = False
 	author = Author.objects.get(slug = profile_name_slug)
 	context_dict['author'] = author
-	context_dict['profile_name'] = author.user.username
+	context_dict['profile_name'] = author.user.username 
 	context_dict['profile_email'] = author.user.email
 
 	if request.method == 'POST':		

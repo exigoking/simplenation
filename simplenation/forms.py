@@ -10,6 +10,7 @@ class TermForm(forms.ModelForm):
 	name = forms.TextInput(attrs={'placeholder':'topic'})
 	views = forms.IntegerField(widget=forms.HiddenInput(), initial=0, required=False)
 	slug = forms.CharField(widget=forms.HiddenInput(), required=False)
+	picture = forms.ImageField(required = False)
 	
 	class Meta:
 		model = Term

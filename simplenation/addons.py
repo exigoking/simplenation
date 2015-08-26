@@ -11,6 +11,7 @@ from django.template import loader
 from djangobook.settings import EMAIL_HOST_USER
 from django.shortcuts import render
 
+
 def last_posted_date(post_date):
    now = datetime.utcnow()
    naive_now = now.replace(tzinfo=None)
@@ -536,5 +537,25 @@ def convert_to_small_representation(value):
    elif value >= 1000000000 :
        return str(round(value/float(1000000000),1)) + "b"
 
+def clean_term_name(term_name):
+   name_elements = term_name.split()
+   cleaned_name_elements = []
+   if name_elements:
+      for element in name_elements:
+         if not element.isupper():
+            element = element.title()
+         cleaned_name_elements.append(element)
+      cleaned_name = " ".join(cleaned_name_elements)
+   else:
+      if term_name.isupper():
+         cleaned_name = term_name
+      else:
+         cleaned_name = term_name.title()
 
+   return cleaned_name
 
+def get_or_none(classmodel, **kwargs):
+    try:
+        return classmodel.objects.get(**kwargs)
+    except classmodel.DoesNotExist:
+        return None
