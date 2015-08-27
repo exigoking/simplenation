@@ -248,10 +248,10 @@ a {
 .term-filtered {
   position: relative;
   display: inline-block;
-  width: 31%;
+  width: 31.5%;
   margin-top: 10px;
-  margin-left: 4px;
-  margin-right: 4px;
+  margin-left: 5px;
+  margin-right: 5px;
   background-color: white;
   box-shadow: grey 0px 0px 4px 0px;
   text-align: left;

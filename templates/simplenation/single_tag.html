@@ -18,6 +18,7 @@
   			<text class="term-sorting-text">sort by <a id="term-sorting-button-exp" class="term-sorting-button">posts</a>, <a id="term-sorting-button-votes" class="term-sorting-button">votes</a> or <a id="term-sorting-button-view" class="term-sorting-button">views</a></text>
   		</div>
   		<div class="terms-filtered-container">
+  			<img class="main-loader" src="{% static "images/loader.gif" %}" width="30" height="30" style="display:none;">
   		{% if terms_for_explainers %}
   			<div class="grid">
   			{% for term in terms_for_explainers %}
