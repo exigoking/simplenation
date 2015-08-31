@@ -52,8 +52,6 @@ $(document).ready(function(){
 	if (authenticated){
 		are_new_notifications();
 	}
-	
-
 
 	$('.email-confirmation-bar').on('click', '.send-email-confirmation', function(){
 		var static_src = $('.static-src').attr("href");
@@ -177,50 +175,65 @@ $(document).ready(function(){
 
 
 	$('.term-sorting-text').on('click', '.term-sorting-button', function(e){
-
+		var tag_choose_list = chosen_tags_list_no_args();
+		var count = Object.keys(tag_choose_list).length;
 		var currentElement = $(this);
 		if (currentElement.hasClass("top")){
 			currentElement.removeClass("top");
 			currentElement.addClass("bottom");
 			var sortByValue = 'posts';
-    		$('.grid').isotope({ sortBy: sortByValue, sortAscending: true });
+			var sort_direction = '-';
+			universal_sort(count, tag_choose_list, sortByValue, sort_direction);
+    		//$('.grid').isotope({ sortBy: sortByValue, sortAscending: true });
 
 		}
 		else if(currentElement.hasClass("bottom")){ 
 			currentElement.removeClass("bottom");
 			currentElement.addClass("top");
 			var sortByValue = 'posts';
-    		$('.grid').isotope({ sortBy: sortByValue, sortAscending: false });
+			var sort_direction = '+';
+			universal_sort(count, tag_choose_list, sortByValue, sort_direction);
+    		//$('.grid').isotope({ sortBy: sortByValue, sortAscending: false });
 		}
 		else if(currentElement.hasClass("views")){
 			var sortByValue = 'views';
-    		$('.grid').isotope({ sortBy: sortByValue, sortAscending: false });
+			var sort_direction = '-';
+			universal_sort(count, tag_choose_list, sortByValue, sort_direction);
+    		//$('.grid').isotope({ sortBy: sortByValue, sortAscending: false });
 		}
 		else {
 			if(currentElement.text() == "posts"){
 				currentElement.addClass("top");
 				var sortByValue = 'posts';
-    			$('.grid').isotope({ sortBy: sortByValue, sortAscending: false });
+				var sort_direction = '+';
+				universal_sort(count, tag_choose_list, sortByValue, sort_direction);
+    			//$('.grid').isotope({ sortBy: sortByValue, sortAscending: false });
 			}
 			else if(currentElement.text() == "votes"){
 				if (currentElement.hasClass("ups")){
 					currentElement.removeClass("ups");
 					currentElement.addClass("downs");
-					var sortByValue = 'downvotes';
-    				$('.grid').isotope({ sortBy: sortByValue, sortAscending: false });
+					var sortByValue = 'votes';
+					var sort_direction = '-';
+					universal_sort(count, tag_choose_list, sortByValue, sort_direction);
+    				//$('.grid').isotope({ sortBy: sortByValue, sortAscending: false });
 			
 				}
 				else{
 					currentElement.removeClass("downs");
 					currentElement.addClass("ups");
-					var sortByValue = 'upvotes';
-    				$('.grid').isotope({ sortBy: sortByValue, sortAscending: false });
+					var sortByValue = 'votes';
+					var sort_direction = '+';
+					universal_sort(count, tag_choose_list, sortByValue, sort_direction);
+    				//$('.grid').isotope({ sortBy: sortByValue, sortAscending: false });
 				}
 			}
 			else{
 				currentElement.addClass("views");
 				var sortByValue = 'views';
-    			$('.grid').isotope({ sortBy: sortByValue, sortAscending: false });
+				var sort_direction = '-';
+				universal_sort(count, tag_choose_list, sortByValue, sort_direction);
+    			//$('.grid').isotope({ sortBy: sortByValue, sortAscending: false });
 			}
 		}
 
@@ -406,6 +419,67 @@ $(document).ready(function(){
 	});
 	
 
+	// Paginate on scroll
+	var inProgress = 0;
+	$(window).scroll(function() {
+		var scrollPostion = $(window).scrollTop() + $(window).height();
+		var hitPosition = $(document).height()-50;
+		
+   		if(scrollPostion > hitPosition) {
+   			
+       		var tag_choose_list = chosen_tags_list_no_args();
+			var count = Object.keys(tag_choose_list).length;
+			var current_page_number = get_page_number();
+			var total_number_of_pages = get_total_pages();
+			var next_page_number = current_page_number + 1;
+			var sort_key = get_sort_key();
+			var sort_direction = get_sort_direction();
+
+			
+			if (current_page_number == null){
+				return;
+			}
+			else if (total_number_of_pages < next_page_number){
+				return;
+			}
+			else if(inProgress == 0) {
+
+				var page_number = next_page_number;
+				var static_src = $('.static-src').attr("href");
+				inProgress = 1;
+				$('.terms-filtered-container').append('<img class="bottom-loader" src="'+ static_src +'images/loader.gif" width="30" height="30" style="margin-top:40px;margin-bottom:50px;">');		
+				var obj = { 'number_of_tags':count, 'tag_choose_list': tag_choose_list , 'page_number':page_number, 'sort_key':sort_key, 'sort_direction':sort_direction};
+
+				$.ajax({
+           			type: "POST",
+           			url: domain + "/paginate/",
+           			contentType: 'application/json; charset=utf-8',
+           			data: JSON.stringify(obj),
+           			success: function(data) {
+           					$('.bottom-loader').remove();
+           					if (data['success'] == false){
+           							;
+           					}
+           					else {
+								var page_number = $(data).filter(".page-numbers");
+								$(".page-numbers").text(page_number.text());
+								var $newItems = $(data);
+								$('.grid').isotope( 'insert', $newItems );
+           					}
+           					inProgress = 0;
+					
+            		},
+            		error: function(rs, e) {
+            				$('.bottom-loader').remove();
+                   			console.log(rs.responseText);
+                   			inProgress = 0;
+            		}
+				});
+			}
+			
+   		}
+	});
+
 	
 	$('.tag-choose-container').on('click', '.tag-unchoose', function(){
 	
@@ -422,7 +496,7 @@ $(document).ready(function(){
 								
 			            },
 			            error: function(rs, e) {
-			                   alert(rs.responseText);
+			                   console.log(rs.responseText);
 			            }
 				});
 
@@ -452,7 +526,7 @@ $(document).ready(function(){
 				            },
 				            error: function(rs, e) {
 				            		$('.tag-add-loader').remove()
-				                   alert(rs.responseText);
+				                   console.log(rs.responseText);
 				            }
 				});
 			}
@@ -485,7 +559,7 @@ $(document).ready(function(){
 							$('.tags-container').load(location.href + ' .tags-container');
 		            },
 		            error: function(rs, e) {
-		                   alert(rs.responseText);
+		                   console.log(rs.responseText);
 		            }
 		});
 
@@ -663,7 +737,7 @@ $(document).ready(function(){
 			                  
 			            },
 			            error: function(rs, e) {
-			                   alert(rs.responseText);
+			                   console.log(rs.responseText);
 			            }
           }); 
 		});
@@ -768,7 +842,7 @@ $(document).ready(function(){
 								location.reload();
 			            },
 			           error: function(rs, e) {
-			                   alert("save button error reponse " + rs.responseText);
+			                   console.log("save button error reponse " + rs.responseText);
 			            }
           		});
 
@@ -808,7 +882,7 @@ $(document).ready(function(){
 								location.reload();
 			            },
 			            error: function(rs, e) {
-			                   alert(rs.responseText);
+			                   console.log(rs.responseText);
 			            }
           		});
 

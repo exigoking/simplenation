@@ -62,7 +62,7 @@ function challenge(challengee_id, term_id){
 				
 		            },
 		            error: function(rs, e) {
-		                   alert(rs.responseText);
+		                   console.log(rs.responseText);
 		            }
 		});
 }
@@ -95,7 +95,7 @@ function challengee_list(term_id){
 				
 		            },
 		            error: function(rs, e) {
-		                   alert(rs.responseText);
+		                   console.log(rs.responseText);
 		            }
 		});
 
@@ -116,7 +116,7 @@ function recent_notifications(){
 						$('.notification-menu').html(data);
 	            },
 	            error: function(rs, e) {
-	                   alert(rs.responseText);
+	                   console.log(rs.responseText);
 	            }
 	});
 }
@@ -137,7 +137,7 @@ function are_new_notifications(){
 						}
 	            },
 	            error: function(rs, e) {
-	                   alert(rs.responseText);
+	                   console.log(rs.responseText);
 	            }
 	});
 
@@ -243,7 +243,7 @@ function autocomplete_search(search_item){
 		            },
 		            error: function(rs, e) {
 		            	   $('.global-search-loader').remove();
-		                   alert(rs.responseText);
+		                   console.log(rs.responseText);
 		            }
 		});
 
@@ -278,7 +278,7 @@ function autocomplete_tag_search(search_item){
 	            },
 	            error: function(rs, e) {
 	            	   $('.tag-search-loader').remove();
-	                   alert(rs.responseText);
+	                   console.log(rs.responseText);
 	            }
 	});
 
@@ -321,7 +321,7 @@ function tag_search(search_tag_item){
 
 		            },
 		            error: function(rs, e) {
-		                   alert(rs.responseText);
+		                   console.log(rs.responseText);
 		            }
 		});
 
@@ -366,7 +366,31 @@ function chosen_tags_list(currently_pressed_tag){
 		return tag_choose_list;
 
 }
+// Chosen tags: Identifies the tags that are pressed, returns a list of pressed tags.
+function chosen_tags_list_no_args(){
+		var tag_choose_list = {};
+		var count = 0;
+		if ($('.tag-choose').length){
+			$('.tag-choose').each(function(){
+				if ($(this).css('background-color') == 'rgb(0, 145, 194)') {
+						var tagname = $(this).attr('data-tagname');
+						tag_choose_list['tag_name_' + count] = tagname;
+						count = count + 1;
+				} 
+			});
+		}
+		else if ($('.term-tag').length){
+			var tagname = $('.term-tag.main').text();
+			tag_choose_list['tag_name_' + count] = tagname;
+			count = count + 1;
+		}
+		else {
+			;
+		}
+		
+		return tag_choose_list;
 
+}
 
 // Tag Filter: Sends a list of chosen tags to the server. Receives filtered terms and modifies main container.
 // Note: filters up to infinite number of tags.
@@ -387,17 +411,126 @@ function tag_filter(count, tag_choose_list){
 					isotopize();
             },
             error: function(rs, e) {
-                   alert(rs.responseText);
+                   console.log(rs.responseText);
+            }
+	});
+			
+
+}
+
+// Term sort: Sorts chosen container of elements.
+// Note: filters up to infinite number of tags.
+function universal_sort(count, tag_choose_list, sort_key, sort_direction){
+	var static_src = $('.static-src').attr("href");
+	
+	$('.terms-filtered-container').html('<img src="'+ static_src +'images/loader.gif" width="30" height="30">');	
+			
+	var obj = { 'number_of_tags':count, 'tag_choose_list': tag_choose_list, 'sort_key':sort_key, 'sort_direction':sort_direction }
+
+	$.ajax({
+           type: "POST",
+           url: domain + "/sort/",
+           contentType: 'application/json; charset=utf-8',
+           data: JSON.stringify(obj),
+           success: function(data) {
+					$('.terms-filtered-container').html(data);
+					isotopize();
+            },
+            error: function(rs, e) {
+                   console.log(rs.responseText);
             }
 	});
 			
 
 }
 	
+function paginate(count, tag_choose_list, page_number, sort_key, sort_direction){
+    var static_src = $('.static-src').attr("href");
 	
+	$('.terms-filtered-container').append('<img class="bottom-loader" src="'+ static_src +'images/loader.gif" width="30" height="30" style="margin-top:40px;margin-bottom:50px;">');		
+	var obj = { 'number_of_tags':count, 'tag_choose_list': tag_choose_list , 'page_number':page_number, 'sort_key':sort_key, 'sort_direction':sort_direction};
 
+	$.ajax({
+           type: "POST",
+           url: domain + "/paginate/",
+           contentType: 'application/json; charset=utf-8',
+           data: JSON.stringify(obj),
+           success: function(data) {
+           			$('.bottom-loader').remove();
+           			if (data['success'] == false){
+           				;
+           			}
+           			else {
+						var page_number = $(data).filter(".page-numbers");
+						$(".page-numbers").text(page_number.text());
+						var $newItems = $(data);
+						$('.grid').isotope( 'insert', $newItems );
+           			}
+					
+            },
+            error: function(rs, e) {
+            		$('.bottom-loader').remove();
+                   console.log(rs.responseText);
+            }
+	});
 
-		
+}
+
+function get_page_number(){
+	if ($('.page-numbers').length){
+		return parseInt($('.page-numbers').text(),10);
+	}
+	else {
+		return null;
+	}
+	
+}
+function get_total_pages(){
+	if ($('.page-count').length){
+		return parseInt($('.page-count').text(),10);
+	}
+	else{
+		return null;
+	}
+}
+
+function get_sort_key(){
+	var sort_key = null;
+	if($('.term-sorting-text').length){
+		var postElement = $('#term-sorting-button-exp');
+		var voteElement = $('#term-sorting-button-votes');
+		var viewElement = $('#term-sorting-button-view');
+		if (postElement.hasClass('top')||postElement.hasClass('bottom')){
+			sort_key = postElement.text();
+		}
+		else if(voteElement.hasClass('ups')||voteElement.hasClass('downs')){
+			sort_key = voteElement.text();
+		}
+		else if(viewElement.hasClass('views')){
+			sort_key = viewElement.text();
+		}
+	}
+	
+	return sort_key;
+	
+}
+function get_sort_direction(){
+	var sort_direction = null;
+	if($('.term-sorting-text').length){
+		var postElement = $('#term-sorting-button-exp');
+		var voteElement = $('#term-sorting-button-votes');
+		var viewElement = $('#term-sorting-button-view');
+		if (postElement.hasClass('top')||voteElement.hasClass('ups')||viewElement.hasClass('views')){
+			sort_direction = "+";
+		}
+		else if(postElement.hasClass('bottom')||voteElement.hasClass('downs')){
+			sort_key = "-";
+		}
+	}
+	
+	return sort_direction;
+	
+}
 // Update Favorites List: Requests the server for updated favorite list. Modifies the list in DOM.	
 function update_favoree_list(favoree_id, term_id){
 	var obj = { 'term_id' : term_id}
@@ -415,7 +548,7 @@ function update_favoree_list(favoree_id, term_id){
        						challengee_list(term_id);
 		            },
 		            error: function(rs, e) {
-		                   alert(rs.responseText);
+		                   console.log(rs.responseText);
 		            }
       });
 }
@@ -444,7 +577,7 @@ function add_favourites_to_challenge(favoree_id, term_id)
 						     
 		            },
 		            error: function(rs, e) {
-		                   alert(rs.responseText);
+		                   console.log(rs.responseText);
 		            }
       });
 }
@@ -468,7 +601,7 @@ function add_favourites(favoree_id)
 						     
 		            },
 		            error: function(rs, e) {
-		                   alert(rs.responseText);
+		                   console.log(rs.responseText);
 		            }
       });
 }
@@ -495,7 +628,7 @@ function remove_favourites(favoree_id)
 						  
 		            },
 		            error: function(rs, e) {
-		                   alert(rs.responseText);
+		                   console.log(rs.responseText);
 		            }
       });
 }
@@ -524,7 +657,7 @@ function add_term_like(term_id, signal)
 
 		            },
 		            error: function(rs, e) {
-		                   alert(rs.responseText);
+		                   console.log(rs.responseText);
 		            }
       });
 
@@ -555,7 +688,7 @@ function remove_term_like(term_id, signal)
 						
 		            },
 		            error: function(rs, e) {
-		                   alert(rs.responseText);
+		                   console.log(rs.responseText);
 		            }
       });
 
@@ -576,7 +709,7 @@ function add_like(explanation_id, signal)
 						   $('#likes-count-'+explanation_id).html(data);  
 		            },
 		            error: function(rs, e) {
-		                   alert(rs.responseText);
+		                   console.log(rs.responseText);
 		            }
       });
 
@@ -597,7 +730,7 @@ function remove_like(explanation_id, signal)
 						   $('#likes-count-'+explanation_id).html(data);  
 		            },
 		            error: function(rs, e) {
-		                   alert(rs.responseText);
+		                   console.log(rs.responseText);
 		            }
       });
 
@@ -617,7 +750,7 @@ function cancel_edition(explanation_id){
 			   $('#pictures-container-'+explanation_id).html(data);
        },
        error: function(rs, e) {
-               alert(rs.responseText);
+               console.log(rs.responseText);
        }
       });
 
@@ -651,7 +784,7 @@ function add_picture(explanation_id){
     		}
 		},
 		error: function(rs, e) {
-		    alert(rs.responseText);
+		    console.log(rs.responseText);
 		}
 	});
 
@@ -675,7 +808,7 @@ function remove_picture(explanation_id, picture_id){
        		   
        },
        error: function(rs, e) {
-               alert(rs.responseText);
+               console.log(rs.responseText);
        }
       });
 
@@ -743,7 +876,7 @@ function send_email_confirmation(){
 				}
        },
        error: function(rs, e) {
-       		   alert(rs.responseText);
+       		   console.log(rs.responseText);
        }
       });
 
@@ -767,7 +900,7 @@ function ValidateCharacterLength() {
 
 }
 function isotopize(){
-    	$('.grid').isotope({
+    	var $container = $('.grid').isotope({
   			itemSelector: '.term-filtered',
   			percentPosition: true,
   			getSortData: {
@@ -777,7 +910,12 @@ function isotopize(){
       			downvotes: '.likes-count.downs-hidden parseInt',
    			}
 		});
+
+		var iso = $container.data('isotope');
+  		$container.isotope( 'reveal', iso.items );
 }
+
+
 
 // The following code handles csrf token retrieval
 // This function gets cookie with a given name

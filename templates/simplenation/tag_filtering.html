@@ -1,9 +1,12 @@
 <!DOCTYPE html>
+{% load endless %}
 {% load staticfiles %}
 {% load call_tag %}
-		{% if terms_tag_filtered %}
+		{% if terms_for_explainers %}
 			<div class="grid">
-  			{% for term in terms_tag_filtered %}
+			<div class="page-numbers" style="display:none">{{ current_page_number }}</div>
+			<div class="page-count" style="display:none">{{ total_number_of_pages }}</div>
+  			{% for term in terms_for_explainers %}
 		    	<div class="w-clearfix term-filtered">
 		      		<div class="term-label-and-tags">
 		        		<div class="term-name"><a class="term-list-link" href="{% url 'term' term.slug %}">{{ term.name }}</a></div>

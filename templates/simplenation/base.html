@@ -32,7 +32,8 @@
     <script src="{% static "js/simplenation-functions.js" %}"></script>
     <script src="{% static "js/jquery.growl.js" %}"></script>
     <script src="{% static "js/autocomplete/src/jquery.autocomplete.js" %}" type="text/javascript"></script>
-
+    <script src="{% static "js/endless_pagination/js/endless-pagination.js" %}"></script>
+    
 
 
     <script src="{% static "gallery/js/Am2_SimpleSlider.js" %}"></script>
@@ -113,11 +114,8 @@
       <div class="terms-filtered-container">
         <img class="main-loader" src="{% static "images/loader.gif" %}" width="30" height="30" style="display:none;">
       {% if search_results %}
-      <div class="term-sorting">
-        <text class="term-sorting-text">sort by <a id="term-sorting-button-exp" class="term-sorting-button">posts</a>, <a id="term-sorting-button-votes" class="term-sorting-button">votes</a> or <a id="term-sorting-button-view" class="term-sorting-button">views</a></text>
-      </div>
         <div class="grid">
-        {% for term in terms_for_explainers %}
+        {% for term in search_results %}
           <div class="w-clearfix term-filtered">
               <div class="term-label-and-tags">
                 <div class="term-name"><a class="term-list-link" href="{% url 'term' term.slug %}">{{ term.name }}</a></div>
@@ -218,14 +216,14 @@
 		  {% block body_block %}{% endblock%}
 	  </div>
   {% endif %}
-		<div class="bottom-bar">
+		<!-- <div class="bottom-bar">
       <div class="site-related">
         <a class="bottom-bar-link" href="{% url 'about' %}">About</a>
         <a class="bottom-bar-link" href="{% url 'privacy' %}">Privacy</a>
         <a class="bottom-bar-link" href="{% url 'terms' %}">Terms of Service</a>
         <a class="bottom-bar-link" href="{% url 'rules' %}">Site Rules</a>
       </div>
-    </div>
+    </div> -->
 		
 
 	</body>

@@ -29,6 +29,8 @@ from datetime import datetime
 from imagekit.processors import ResizeToFill
 from django.db.models import Count
 from simplenation.addons import send_email
+from endless_pagination.decorators import page_template
+from django.core.paginator import Paginator
 
 def term(request, term_name_slug): 
 	context_dict = {} 
@@ -304,16 +306,22 @@ def tag_select(request):
 			pressed_tags.delete()
 
 	if number_of_tags == 0:
-		terms_tag_filtered = Term.objects.all().order_by('-created_at')[:40]
+		terms_tag_filtered = Term.objects.all().order_by('-created_at','pk')
 	else:
-		terms_tag_filtered = Term.objects.filter(tags__name__in = [tag_choose_list['tag_name_0']]).order_by('-created_at')
+		terms_tag_filtered = Term.objects.filter(tags__name__in = [tag_choose_list['tag_name_0']]).order_by('-created_at','pk')
 
 	for i in range(0,number_of_tags):
 		terms_tag_filtered = terms_tag_filtered.filter(tags__name__in = [tag_choose_list['tag_name_'+str(i)]])
 		session.pressed_tags.create(name=tag_choose_list['tag_name_'+str(i)])
 
 	session.save()
-	context_dict['terms_tag_filtered'] = terms_tag_filtered
+	paginator = Paginator(terms_tag_filtered, 20)
+	current_page = paginator.page(1)
+	terms_tag_filtered = current_page
+
+	context_dict['current_page_number'] = current_page.number
+	context_dict['total_number_of_pages'] = paginator.num_pages
+	context_dict['terms_for_explainers'] = terms_tag_filtered
 	html = render_to_string('simplenation/tag_filtering.html', context_dict)
 	return HttpResponse(html)
 
@@ -419,10 +427,16 @@ def single_tag_view(request, tag_slug):
 		session.tags.add(tag)
 		session.save()
 
-	terms_for_explainers = Term.objects.filter(tags__name__in = [tag.name]).distinct()
+	terms_for_explainers = Term.objects.filter(tags__name__in = [tag.name]).distinct().order_by('-created_at','pk')
 	number_of_terms = terms_for_explainers.count()
 	tags.append(tag)
 
+	paginator = Paginator(terms_for_explainers, 20)
+	current_page = paginator.page(1)
+	terms_for_explainers = current_page
+
+	context_dict['current_page_number'] = current_page.number
+	context_dict['total_number_of_pages'] = paginator.num_pages
 	context_dict['tag'] = tag
 	context_dict['terms_for_explainers'] = terms_for_explainers
 	context_dict['number_of_terms'] = number_of_terms

@@ -8,8 +8,10 @@ import json
 from django.template.loader import render_to_string
 from django.core.exceptions import ValidationError
 from datetime import datetime
+from endless_pagination.decorators import page_template
+from django.core.paginator import Paginator
 
-def index(request):
+def index(request, template = "simplenation/index.html", page_template = "simplenation/index_page.html"):
 	tags = []
 	context_dict = {}
 	session_registry = request.session.get('session_registry')
@@ -24,19 +26,19 @@ def index(request):
 			pressed_tags = current_session.pressed_tags.all()
 			if pressed_tags:
 				tag_name_1 = pressed_tags[0].name
-				terms_for_explainers = Term.objects.filter(tags__name__in = [tag_name_1])
+				terms_for_explainers = Term.objects.filter(tags__name__in = [tag_name_1]).order_by('-created_at','pk')
 				for pressed_tag in pressed_tags:
 					pressed_tag_names.append(pressed_tag.name)
 					terms_for_explainers = terms_for_explainers.filter(tags__name__in = [pressed_tag.name])
 				context_dict['pressed_tags'] = pressed_tags
 			else:
-				terms_for_explainers = Term.objects.order_by('-created_at')[:40]
+				terms_for_explainers = Term.objects.all().order_by('-created_at','pk')
 		else:
 			tags = Tag.objects.annotate(term_count = Count('taggit_taggeditem_items')).order_by('-term_count')[:15]
 			for tag in tags:
 				current_session.tags.add(tag)
 			current_session.save()
-			terms_for_explainers = Term.objects.order_by('-created_at')[:40]
+			terms_for_explainers = Term.objects.all().order_by('-created_at','pk')
 
 
 		if not session_registry:
@@ -56,15 +58,24 @@ def index(request):
 		for tag in tags:
 			session.tags.add(tag)
 		session.save()
-		terms_for_explainers = Term.objects.order_by('-created_at')[:40]
+		terms_for_explainers = Term.objects.all().order_by('-created_at','pk')
 
+	paginator = Paginator(terms_for_explainers, 20)
+	current_page = paginator.page(1)
+	terms_for_explainers = current_page
 
+	context_dict['current_page_number'] = current_page.number
+	context_dict['total_number_of_pages'] = paginator.num_pages
 	context_dict['terms_for_explainers'] = terms_for_explainers
 	context_dict['tags'] = tags
 	context_dict['pressed_tag_names'] = pressed_tag_names
 	context_dict['domain'] = domain
+	context_dict['page_template'] = page_template
 
-	return render(request, 'simplenation/index.html', context_dict)
+	if request.is_ajax():
+		template = page_template
+
+	return render(request, template, context_dict)
 
 
 
@@ -141,6 +152,100 @@ def search(request):
 	context_dict['search_active'] = search_active
 
 	return render(request, 'simplenation/index.html', context_dict)
+
+
+def paginate(request):
+	context_dict = {}
+	params = json.loads(request.body)
+	page_number = params['page_number']
+	number_of_tags = params['number_of_tags']
+	tag_choose_list = params['tag_choose_list']
+	sort_key = params['sort_key']
+	sort_direction = params['sort_direction']
+	if number_of_tags == 0:
+		terms = Term.objects.all().order_by('-created_at','pk')
+	else:
+		terms = Term.objects.filter(tags__name__in = [tag_choose_list['tag_name_0']]).order_by('-created_at','pk')
+		for i in range(0,number_of_tags):
+			terms = terms.filter(tags__name__in = [tag_choose_list['tag_name_'+str(i)]])
+
+	if sort_key == "posts":
+		if sort_direction == "+":
+			terms = terms.annotate(exp_count=Count('definition')).order_by('-exp_count','pk')
+		else:
+			terms = terms.annotate(exp_count=Count('definition')).order_by('exp_count','pk')
+	elif sort_key == "votes":
+		if sort_direction == "+":
+			terms = terms.order_by('-upvotes','pk')
+		else:
+			terms = terms.order_by('-downvotes','pk')
+	elif sort_key == "views":
+		terms = terms.order_by('-views','pk')
+	elif sort_key == "date":
+		terms = terms.order_by('-created_at','pk')
+	else:
+		pass
+
+	paginator = Paginator(terms, 20)
+
+	if int(page_number) > paginator.num_pages:
+		context_dict['success'] = False
+		context_dict['no_success_message'] = 'No more pages'
+		return HttpResponse(json.dumps(context_dict), content_type="application/json")
+
+	current_page = paginator.page(int(page_number))
+	terms = current_page
+	if int(page_number) > paginator.num_pages:
+		context_dict['terms_for_explainers'] = None
+	else:
+		context_dict['terms_for_explainers'] = terms
+
+	context_dict['current_page_number'] = current_page.number
+	context_dict['total_number_of_pages'] = paginator.num_pages
+	html = render_to_string('simplenation/paginated_results.html', context_dict)
+	return HttpResponse(html)
+
+def sort(request):
+	context_dict = {}
+	params = json.loads(request.body)
+	number_of_tags = params['number_of_tags']
+	tag_choose_list = params['tag_choose_list']
+	sort_key = params['sort_key']
+	sort_direction = params['sort_direction']
+	if number_of_tags == 0:
+		terms = Term.objects.all().order_by('-created_at','pk')
+	else:
+		terms = Term.objects.filter(tags__name__in = [tag_choose_list['tag_name_0']]).order_by('-created_at','pk')
+		for i in range(0,number_of_tags):
+			terms = terms.filter(tags__name__in = [tag_choose_list['tag_name_'+str(i)]])
+
+	if sort_key == "posts":
+		if sort_direction == "+":
+			terms = terms.annotate(exp_count=Count('definition')).order_by('-exp_count','pk')
+		else:
+			terms = terms.annotate(exp_count=Count('definition')).order_by('exp_count','pk')
+	elif sort_key == "votes":
+		if sort_direction == "+":
+			terms = terms.order_by('-upvotes','pk')
+		else:
+			terms = terms.order_by('-downvotes','pk')
+	elif sort_key == "views":
+		terms = terms.order_by('-views','pk')
+	elif sort_key == "date":
+		terms = terms.order_by('-created_at','pk')
+	else:
+		pass
+
+	paginator = Paginator(terms, 20)
+	current_page = paginator.page(1)
+	terms = current_page
+
+	context_dict['current_page_number'] = current_page.number
+	context_dict['total_number_of_pages'] = paginator.num_pages
+	context_dict['terms_for_explainers'] = terms
+	context_dict['user'] = request.user
+	html = render_to_string('simplenation/tag_filtering.html', context_dict)
+	return HttpResponse(html)
 
 def about(request):
 	context_dict ={}

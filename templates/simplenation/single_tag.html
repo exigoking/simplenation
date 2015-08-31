@@ -6,7 +6,7 @@
 {% block title %}Tagged Terms{% endblock %}i
 
 {% block body_block %}
-	<div class="tag-choose-container"><a class="term-tag" href="#">{{ tag.name }}</a>
+	<div class="tag-choose-container"><a class="term-tag main" href="{% url 'single_tag_view' tag.slug %}">{{ tag.name }}</a>
    		<p class="tagged-terms-stats">tagged topics: {{number_of_terms}} </p>
   	</div>
 
@@ -21,6 +21,8 @@
   			<img class="main-loader" src="{% static "images/loader.gif" %}" width="30" height="30" style="display:none;">
   		{% if terms_for_explainers %}
   			<div class="grid">
+  			<div class="page-numbers" style="display:none">{{ current_page_number }}</div>
+			<div class="page-count" style="display:none">{{ total_number_of_pages }}</div>
   			{% for term in terms_for_explainers %}
 		    	<div class="w-clearfix term-filtered">
 		      		<div class="term-label-and-tags">

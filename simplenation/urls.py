@@ -14,7 +14,8 @@ urlpatterns = patterns('',
 	url(r'^terms/$', general_views.terms, name = 'terms'),
 	url(r'^privacy/$', general_views.privacy, name = 'privacy'),
 	url(r'^rules/$', general_views.rules, name = 'rules'),
-
+	url(r'^paginate/$', general_views.paginate, name = 'paginate'),
+	url(r'^sort/$', general_views.sort, name = 'sort'),
 
 	# Calls to User Controller
 	url(r'^registration_form/$', user_views.register, name='register'),
