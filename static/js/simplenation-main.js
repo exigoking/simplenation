@@ -61,6 +61,8 @@ $(document).ready(function(){
 
 	});
 
+	
+
 	$('.exp-body').each(function(){
 		jQuery(this).linkify();
 	});
@@ -465,6 +467,7 @@ $(document).ready(function(){
 								$(".page-numbers").text(page_number.text());
 								var $newItems = $(data);
 								$('.grid').isotope( 'insert', $newItems );
+								isotopize();
            					}
            					inProgress = 0;
 					

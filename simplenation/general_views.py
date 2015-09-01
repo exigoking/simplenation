@@ -8,7 +8,6 @@ import json
 from django.template.loader import render_to_string
 from django.core.exceptions import ValidationError
 from datetime import datetime
-from endless_pagination.decorators import page_template
 from django.core.paginator import Paginator
 
 def index(request, template = "simplenation/index.html", page_template = "simplenation/index_page.html"):
@@ -202,6 +201,7 @@ def paginate(request):
 
 	context_dict['current_page_number'] = current_page.number
 	context_dict['total_number_of_pages'] = paginator.num_pages
+	context_dict['user'] = request.user
 	html = render_to_string('simplenation/paginated_results.html', context_dict)
 	return HttpResponse(html)
 

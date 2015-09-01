@@ -29,7 +29,6 @@ from datetime import datetime
 from imagekit.processors import ResizeToFill
 from django.db.models import Count
 from simplenation.addons import send_email
-from endless_pagination.decorators import page_template
 from django.core.paginator import Paginator
 
 def term(request, term_name_slug): 

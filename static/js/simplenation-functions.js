@@ -465,6 +465,8 @@ function paginate(count, tag_choose_list, page_number, sort_key, sort_direction)
 						$(".page-numbers").text(page_number.text());
 						var $newItems = $(data);
 						$('.grid').isotope( 'insert', $newItems );
+							
+
            			}
 					
             },
@@ -911,8 +913,14 @@ function isotopize(){
    			}
 		});
 
-		var iso = $container.data('isotope');
-  		$container.isotope( 'reveal', iso.items );
+    	var iso = $container.data('isotope');
+  		
+
+    	$container.imagesLoaded().progress( function() {
+  			$container.isotope('layout');
+  			//$container.isotope( 'reveal', iso.items );
+		});
+		
 }
 
 

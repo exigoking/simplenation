@@ -1,10 +1,10 @@
 $(document).ready(function(){
-	$('.term-filtered').hide();
-	$('.main-loader').show();
-
+	//$('.term-filtered').hide();
+	//$('.main-loader').show();
+	isotopize();
 	$(window).load(function(){
-		$('.main-loader').hide();
-		$('.term-filtered').show();
-    isotopize();
+		//$('.main-loader').hide();
+		//$('.term-filtered').show();
+    	
 	});
 });
