@@ -12,13 +12,13 @@
 				{% if tag.name in pressed_tag_names %}
 
 				<div id="tag-filter-{{ tag.id }}" class="tag-filtering">
-				    		<a id='tag-choose-{{ tag.id }}' class="tag-choose" data-tagid='{{tag.id}}' data-tagname='{{tag.name}}' href="#" style="background-color: rgb(0, 145, 194);">{{tag.name}}</a>
-				    		<a class="tag-unchoose" id="tag-unchoose-{{tag.id}}" data-tagname="{{tag.name}}" data-tagid="{{tag.id}}" href="#" style="background-color: rgb(0, 145, 194);">x</a>
+				    		<button id='tag-choose-{{ tag.id }}' class="tag-choose" data-tagid='{{tag.id}}' data-tagname='{{tag.name}}' style="background-color: rgb(0, 145, 194);border:0px;">{{tag.name}}</button>
+				    		<button class="tag-unchoose" id="tag-unchoose-{{tag.id}}" data-tagname="{{tag.name}}" data-tagid="{{tag.id}}" style="background-color: rgb(0, 145, 194);border:0px;">x</button>
 				    	</div>
 				    {% else %}
 				    <div id="tag-filter-{{ tag.id }}" class="tag-filtering">
-				    		<a id='tag-choose-{{ tag.id }}' class="tag-choose" data-tagid='{{tag.id}}' data-tagname='{{tag.name}}' href="#">{{tag.name}}</a>
-				    		<a class="tag-unchoose" id="tag-unchoose-{{tag.id}}" data-tagname="{{tag.name}}" data-tagid="{{tag.id}}" href="#">x</a>
+				    		<button id='tag-choose-{{ tag.id }}' class="tag-choose" data-tagid='{{tag.id}}' data-tagname='{{tag.name}}' style="border:0px;">{{tag.name}}</button>
+				    		<button class="tag-unchoose" id="tag-unchoose-{{tag.id}}" data-tagname="{{tag.name}}" data-tagid="{{tag.id}}" style="border:0px;">x</button>
 				    	</div>
 				{% endif %}
     		{% endfor %}

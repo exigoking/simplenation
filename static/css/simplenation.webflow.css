@@ -175,6 +175,7 @@ a {
   background-color: #c2c2c2;
   color: white;
   text-decoration: none;
+  outline: 0;
 }
 .tag-choose.not-chosen {
   background-color: #c2c2c2;
@@ -194,6 +195,7 @@ a {
   background-color: #c2c2c2;
   color: white;
   text-decoration: none;
+  outline: 0;
 }
 .tag-unchoose.not-chosen {
   background-color: #c2c2c2;
