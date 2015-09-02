@@ -144,7 +144,7 @@
               {{ explanation.body|linebreaks}}
               {% endautoescape %}
             </div>
-            <button id="see-more-{{explanation.id}}" class="see-more" style="display:none;border:0px;background-color:transparent;padding:0;color:lightgrey;" data-expid="{{explanation.id}}">Show more</button>
+            <button id="see-more-{{explanation.id}}" class="see-more" style="display:none;border:0px;background-color:transparent;padding:0;color:lightgrey;outline:0" data-expid="{{explanation.id}}">Show more</button>
             
         		{% autoescape off %}
         		<div class="edit_form" id="edit-text-{{ explanation.id }}" style="display:none">

@@ -556,7 +556,7 @@ a {
 .like-container {
   position: absolute;
   left: -100px;
-  top: 18%;
+  top: 10px;
 }
 .like-container.term {
   top: 5px;

@@ -17,18 +17,11 @@ $(document).ready(function() {
         
         var explanation_id = $(this).attr('data-expid');
 
-        if ($(this).text()=="Show less"){
-            
-            $(this).text('Show more');
-            $('#exp-full-body-'+explanation_id).hide();
-            $('#exp-body-'+explanation_id).show();
-        }
-        else {
-            
-            $(this).text('Show less');
-            $('#exp-body-'+explanation_id).hide();
-            $('#exp-full-body-'+explanation_id).show();
-        }
+        //if ($(this).text()=="Show less"){
+        
+        $('#exp-body-'+explanation_id).hide();
+        $('#exp-full-body-'+explanation_id).show();
+        $(this).remove();
 
     });
 });
