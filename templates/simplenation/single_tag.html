@@ -3,7 +3,7 @@
 {% load staticfiles %}
 {% load call_tag %}
 
-{% block title %}Tagged Terms{% endblock %}i
+{% block title %}{{ tag.name }}{% endblock %}
 
 {% block body_block %}
 	<div class="tag-choose-container"><a class="term-tag main" href="{% url 'single_tag_view' tag.slug %}">{{ tag.name }}</a>
