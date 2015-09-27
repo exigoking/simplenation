@@ -133,7 +133,7 @@
       <h5 style="text-align:left;color:lightgrey;">Reviews</h5>
   		{% for explanation in explanations %}
   		
-  		<div class="schema-markup">
+  		<div class="schema-markup" style="display:none;">
   		  <div itemscope itemtype="http://schema.org/Review">
           <a itemprop="url" href="{% url 'term' term.slug %}">
             <div itemprop="name"><strong>{{ explanation.term.name }} - Review</strong></div>
