@@ -132,6 +132,25 @@
   	<div class="explanations-container-parent">
       <h5 style="text-align:left;color:lightgrey;">Reviews</h5>
   		{% for explanation in explanations %}
+  		
+  		<div class="schema-markup" style="display:none;">
+  		  <div itemscope itemtype="http://schema.org/Review">
+          <a itemprop="url" href="{% url 'term' term.slug %}">
+            <div itemprop="name"><strong>{{ explanation.term.name }} - Review</strong></div>
+          </a>
+          <div itemprop="author" itemscope itemtype="http://schema.org/Person">
+            Written by: <span itemprop="name">{{ explanation.author.user.username }}</span>
+          </div>
+          <div itemprop="itemReviewed" itemscope itemtype="http://schema.org/Thing">
+            <span itemprop="name">{{ explanation.term.name }}</span>
+          </div>
+          <div><meta itemprop="datePublished" content="{{ explanation.last_posted }}">Date published: {{ explanation.last_posted }}</div>
+          <div itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+            <span itemprop="ratingValue"> {{ term.upvote_count }} ups and {{ term.downvote_count }} downs</span>
+          </div>
+        </div>
+      </div>
+
       	<div class="w-clearfix exp-container-parent" id='exp-container-{{explanation.id}}' data-expid='{{ explanation.id }}'>
         		<div class="exp-body" id="exp-body-{{explanation.id}}" data-expid="{{explanation.id}}">
               {% autoescape off %}
