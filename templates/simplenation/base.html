@@ -50,7 +50,12 @@
 
 	<body class="body" style="position:relative;">
 
-    
+    <div class="schema-markup" style="display:none">
+    	<div itemscope itemtype="http://schema.org/Organization">
+		<a itemprop="url" href="http://simplenations.com"><div itemprop="name"><strong>Simplenations</strong></div></a>
+		<div itemprop="description">Review and Discuss Everything</div>
+	</div>
+    </div>
     {% if user.is_authenticated %}
       <div class="login-status-check" style="display:none;" data-signal="Y"></div>
       {% if not user.author.active %}
